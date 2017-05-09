@@ -31,12 +31,11 @@ gem 'jbuilder', '~> 2.5'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
-gem 'pg'
 
 
 group :development, :test do
   # Use sqlite3 as the database for Active Record
-  #gem 'sqlite3'
+  gem 'sqlite3'
   # Use Puma as the app server
   gem 'puma', '~> 3.0'
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -52,5 +51,8 @@ group :development do
   gem 'spring-watcher-listen', '~> 2.0.0'
 end
 
+group :deployment do
+  gem 'pg' 
+end
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
