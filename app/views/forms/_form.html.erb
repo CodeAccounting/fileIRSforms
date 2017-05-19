@@ -1,17 +1,350 @@
-<%= form_for(form) do |f| %>
-  <% if form.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(form.errors.count, "error") %> prohibited this form from being saved:</h2>
+<div id="wrapper">
 
-      <ul>
-      <% form.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
+        <!-- Navigation -->
+        <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/">Government Forms</a>
 
-  <div class="actions">
-    <%= f.submit %>
-  </div>
-<% end %>
+            </div>
+            <!-- /.navbar-header -->
+            <button type="button" class="btn btn-primary header-button" onclick="document.getElementById('form1').submit();">Save Form</button>
+            <button type="button" class="btn btn-warning header-button">Cancel</button>
+            <button type="button" class="btn btn-danger header-button">Delete</button>
+
+            <ul class="nav navbar-top-links navbar-right">
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa fa-envelope fa-fw"></i> <i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-messages">
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <strong>John Smith</strong>
+                                    <span class="pull-right text-muted">
+                                        <em>Yesterday</em>
+                                    </span>
+                                </div>
+                                <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eleifend...</div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <strong>John Smith</strong>
+                                    <span class="pull-right text-muted">
+                                        <em>Yesterday</em>
+                                    </span>
+                                </div>
+                                <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eleifend...</div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <strong>John Smith</strong>
+                                    <span class="pull-right text-muted">
+                                        <em>Yesterday</em>
+                                    </span>
+                                </div>
+                                <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eleifend...</div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a class="text-center" href="#">
+                                <strong>Read All Messages</strong>
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        </li>
+                    </ul>
+                    <!-- /.dropdown-messages -->
+                </li>
+                <!-- /.dropdown -->
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa fa-tasks fa-fw"></i> <i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-tasks">
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <p>
+                                        <strong>Task 1</strong>
+                                        <span class="pull-right text-muted">40% Complete</span>
+                                    </p>
+                                    <div class="progress progress-striped active">
+                                        <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
+                                            <span class="sr-only">40% Complete (success)</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <p>
+                                        <strong>Task 2</strong>
+                                        <span class="pull-right text-muted">20% Complete</span>
+                                    </p>
+                                    <div class="progress progress-striped active">
+                                        <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 20%">
+                                            <span class="sr-only">20% Complete</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <p>
+                                        <strong>Task 3</strong>
+                                        <span class="pull-right text-muted">60% Complete</span>
+                                    </p>
+                                    <div class="progress progress-striped active">
+                                        <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%">
+                                            <span class="sr-only">60% Complete (warning)</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <p>
+                                        <strong>Task 4</strong>
+                                        <span class="pull-right text-muted">80% Complete</span>
+                                    </p>
+                                    <div class="progress progress-striped active">
+                                        <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 80%">
+                                            <span class="sr-only">80% Complete (danger)</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a class="text-center" href="#">
+                                <strong>See All Tasks</strong>
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        </li>
+                    </ul>
+                    <!-- /.dropdown-tasks -->
+                </li>
+                <!-- /.dropdown -->
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa fa-bell fa-fw"></i> <i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-alerts">
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <i class="fa fa-comment fa-fw"></i> New Comment
+                                    <span class="pull-right text-muted small">4 minutes ago</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <i class="fa fa-twitter fa-fw"></i> 3 New Followers
+                                    <span class="pull-right text-muted small">12 minutes ago</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <i class="fa fa-envelope fa-fw"></i> Message Sent
+                                    <span class="pull-right text-muted small">4 minutes ago</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <i class="fa fa-tasks fa-fw"></i> New Task
+                                    <span class="pull-right text-muted small">4 minutes ago</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <i class="fa fa-upload fa-fw"></i> Server Rebooted
+                                    <span class="pull-right text-muted small">4 minutes ago</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a class="text-center" href="#">
+                                <strong>See All Alerts</strong>
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        </li>
+                    </ul>
+                    <!-- /.dropdown-alerts -->
+                </li>
+                <!-- /.dropdown -->
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-user">
+                        <li><a href="#"><i class="fa fa-user fa-fw"></i> User Profile</a>
+                        </li>
+                        <li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
+                        </li>
+                        <li class="divider"></li>
+                        <li><a href="login.html"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                        </li>
+                    </ul>
+                    <!-- /.dropdown-user -->
+                </li>
+                <!-- /.dropdown -->
+            </ul>
+            <!-- /.navbar-top-links -->
+
+            <div class="navbar-default sidebar" role="navigation">
+                <div class="sidebar-nav navbar-collapse">
+                    <ul class="nav" id="side-menu">
+                        <li class="sidebar-search">
+                            <div class="input-group custom-search-form">
+                                <input type="text" class="form-control" placeholder="Search...">
+                                <span class="input-group-btn">
+                                <button class="btn btn-default" type="button">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </span>
+                            </div>
+                            <!-- /input-group -->
+                        </li>
+                        <li>
+                            <a href=""><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
+                        </li>
+                        <li>
+                            <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Forms<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="">Foreign Person’s U.S. Source Income Subject to Withholding</a>
+                                </li>
+                                <li>
+                                    <a href="">Transfer of Stock Acquired Through an Employee Stock Purchase Plan Under Section 423(c)</a>
+                                </li>
+                                <li>
+                                    <a href="">Employer's Annual Information Return of Tip Income and Allocated Tips</a>
+                                </li>
+                                <li>
+                                    <a href="">Form W-2G Certain Gambling Winnings</a>
+                                </li>
+                            </ul>
+                            <!-- /.nav-second-level -->
+                        </li>
+                        <li>
+                            <a href=""><i class="fa fa-table fa-fw"></i> test</a>
+                        </li>
+                        <li>
+                            <a href=""><i class="fa fa-edit fa-fw"></i> Option 2</a>
+                        </li>
+                        
+                        
+                    </ul>
+                </div>
+                <!-- /.sidebar-collapse -->
+            </div>
+            <!-- /.navbar-static-side -->
+        </nav>
+
+        <div id="page-wrapper">
+            <div class="row">
+                    <div class="header col-lg-12">
+                        <img width="100%" src="/
+media/form_header.png" />
+                    </div>
+                    <div class="rel col-lg-6">
+                        <img width="100%" src="/
+media/form1.png" />
+                        <form id="form1" action="/form/save">
+                          <input class="abs" style="top: 3%;left: 4%;width: 47%;" type="text" name="13e" placeholder="13e">
+                          <input class="abs" style="top: 1%;left: 77%;width: 19%;height: 3%;" type="text" name="13f" placeholder="13f">
+                          <input class="abs" style="top: 4.5%;left: 77%;width: 19%;height: 3%;" type="text" name="13g" placeholder="13g">
+                          <input class="abs" style="top: 1%;left: 1%;width: 1%;height:1%;" type="text" name="13h" placeholder="13h">
+                          <input class="abs" style="top: 1%;left: 1%;width: 1%;height:1%;" type="text" name="13i" placeholder="13i">
+                          <input class="abs" style="top: 1%;left: 1%;width: 1%;height:1%;" type="text" name="13j" placeholder="13j">
+                          <input class="abs" style="top: 1%;left: 1%;width: 1%;height:1%;" type="text" name="13k" placeholder="13k">
+                          <input class="abs" style="top: 1%;left: 1%;width: 1%;height:1%;" type="text" name="13l" placeholder="13l">
+                          <input class="abs" style="top: 1%;left: 1%;width: 1%;height:1%;" type="text" name="14a" placeholder="14a">
+                          <input class="abs" style="top: 1%;left: 1%;width: 1%;height:1%;" type="text" name="14b" placeholder="14b">
+                          <input class="abs" style="top: 1%;left: 1%;width: 1%;height:1%;" type="text" name="15" placeholder="15">
+                          <input class="abs" style="top: 1%;left: 1%;width: 1%;height:1%;" type="text" name="15a" placeholder="15a">
+                          <input class="abs" style="top: 1%;left: 1%;width: 1%;height:1%;" type="text" name="15b" placeholder="15a">
+                          <input class="abs" style="top: 1%;left: 1%;width: 1%;height:1%;" type="text" name="15c" placeholder="15c">
+                          <input class="abs" style="top: 1%;left: 1%;width: 1%;height:1%;" type="text" name="15d" placeholder="15d">
+                          <input class="abs" style="top: 1%;left: 1%;width: 1%;height:1%;" type="text" name="15e" placeholder="15e">
+                          <input class="abs" style="top: 1%;left: 1%;width: 1%;height:1%;" type="text" name="15f" placeholder="">
+                          <input class="abs" style="top: 1%;left: 1%;width: 1%;height:1%;" type="text" name="15g" placeholder="15f">
+                          <input class="abs" style="top: 1%;left: 1%;width: 1%;height:1%;" type="text" name="15h" placeholder="15h">
+                          <input class="abs" style="top: 1%;left: 1%;width: 1%;height:1%;" type="text" name="15i" placeholder="15i">
+                          <input class="abs" style="top: 1%;left: 1%;width: 1%;height:1%;" type="text" name="16a" placeholder="16a">
+                          <input class="abs" style="top: 1%;left: 1%;width: 1%;height:1%;" type="text" name="16b" placeholder="16b">
+                           <input class="abs" style="top: 1%;left: 1%;width: 1%;height:1%;" type="text" name="16c" placeholder="16c">
+                          <input class="abs" style="top: 1%;left: 1%;width: 1%;height:1%;" type="text" name="16d" placeholder="16d">
+                          <input class="abs" style="top: 1%;left: 1%;width: 1%;height:1%;" type="text" name="16e" placeholder="16e">
+                          <input class="abs" style="top: 1%;left: 1%;width: 1%;height:1%;" type="text" name="17a" placeholder="17a">
+                          <input class="abs" style="top: 1%;left: 1%;width: 1%;height:1%;" type="text" name="17b" placeholder="17b">
+                          <input class="abs" style="top: 1%;left: 1%;width: 1%;height:1%;" type="text" name="17c" placeholder="17c">
+                        </form>
+                        
+                    </div>
+                    <div class="col-lg-6">
+                        <img width="100%" src="/
+media/form2.png" />
+                    </div>
+            </div>
+            <!-- /.row -->
+        </div>
+        <!-- /#page-wrapper -->
+
+</div>
+<style>
+div.header {
+    padding-top:30px;
+    padding-bottom:15px;
+}
+div.rel {
+    position:relative;
+}
+input.abs {
+    display: block;
+    position: absolute;
+   /* border: none;*/
+    color: #1a34ad;
+    background:transparent;
+}
+.header-button {
+    margin: 8px 0;
+}
+</style>
+

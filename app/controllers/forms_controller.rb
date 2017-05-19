@@ -14,7 +14,7 @@ class FormsController < ApplicationController
 
   # GET /forms/new
   def new
-    @form = Form.new
+    # @fields = Field.new
   end
 
   # GET /forms/1/edit
@@ -24,15 +24,23 @@ class FormsController < ApplicationController
   # POST /forms
   # POST /forms.json
   def create
-    @form = Form.new(form_params)
+    params.each do |key,value|
+      @field = Field.new()
+      @field.field_name = key.to_s
+      @field.field_value = value.to_s
+      @field.user_id = 3
+      @field.form_id = 5
+      @field.save
+    end
+    
 
     respond_to do |format|
-      if @form.save
-        format.html { redirect_to @form, notice: 'Form was successfully created.' }
-        format.json { render :show, status: :created, location: @form }
+      if true #@field.save
+        #format.html { redirect_to :controller => "forms" , :action =>"new", :notice =>'Form was successfully created.' }
+        #format.json { render :show, status: :created, location: @form }
       else
-        format.html { render :new }
-        format.json { render json: @form.errors, status: :unprocessable_entity }
+        #format.html { render :new }
+        #format.json { render json: "forms#error", status: :unprocessable_entity }
       end
     end
   end
@@ -42,11 +50,11 @@ class FormsController < ApplicationController
   def update
     respond_to do |format|
       if @form.update(form_params)
-        format.html { redirect_to @form, notice: 'Form was successfully updated.' }
+        format.html { redirect_to @field, notice: 'Form was successfully updated.' }
         format.json { render :show, status: :ok, location: @form }
       else
         format.html { render :edit }
-        format.json { render json: @form.errors, status: :unprocessable_entity }
+        format.json { render json: @field.errors, status: :unprocessable_entity }
       end
     end
   end
