@@ -67,7 +67,7 @@ class FormsController < ApplicationController
       @form_fields[value.field_name] = value.field_value
     end
     @form_fields['unique_id'] = @form.first['unique_id']
-    redirect_to "/form/index"
+    redirect_to "/"
   end
 
   # PATCH/PUT /forms/1
