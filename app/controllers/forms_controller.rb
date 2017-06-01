@@ -1,47 +1,73 @@
-class FormsController < ApplicationController
-  before_action :set_form, only: [:show, :edit, :update, :destroy]
+require 'securerandom'
 
+class FormsController < ApplicationController
+
+  before_action :set_form, only: [:show, :edit, :update, :destroy]
+  
   # GET /forms
   # GET /forms.json
   def index
-    @forms = Form.all
+    @submissions = Field.find_by_sql("SELECT DISTINCT ON (unique_id) unique_id,updated_at FROM Fields")
+
   end
 
   # GET /forms/1
   # GET /forms/1.json
   def show
+    @form = Field.where(unique_id: params[:unique_id]).to_a
+    @form_fields = Hash.new
+    @form.each do |value|
+      @form_fields[value.field_name] = value.field_value
+    end
+    if params[:unique_id].present? 
+      @form_fields['unique_id'] = params[:unique_id]
+    else
+      @form_fields['unique_id'] = SecureRandom.uuid
+    end  
   end
 
   # GET /forms/new
   def new
     # @fields = Field.new
+    @form_fields = Hash.new
   end
 
   # GET /forms/1/edit
   def edit
   end
 
+  # GET /forms/1/all
+  def all
+  end
+
+
   # POST /forms
   # POST /forms.json
   def create
     params.each do |key,value|
-      @field = Field.new()
-      @field.field_name = key.to_s
-      @field.field_value = value.to_s
-      @field.user_id = 3
-      @field.form_id = 5
-      @field.save
-    end
-    
-
-    respond_to do |format|
-      if true #@field.save
-        #format.html { redirect_to :controller => "forms" , :action =>"new", :notice =>'Form was successfully created.' }
-        #format.json { render :show, status: :created, location: @form }
-      else
-        #format.html { render :new }
-        #format.json { render json: "forms#error", status: :unprocessable_entity }
+      if value.present? && !(['unique_id','controller','action'].include?(key))
+        found = Field.where(unique_id: params[:unique_id])
+        if found
+          @field = found
+        else
+          @field = Field.new()
+        end
+        @field.field_name = key.to_s
+        @field.field_value = value.to_s
+        @field.user_id = 3
+        @field.form_id = 5
+        @field.unique_id = params[:unique_id]
+        @field.save
       end
+    end
+    @form = Field.where(unique_id: '9fc89d9e-5bcd-4c66-9e60-3ffb93503a88').to_a
+    @form_fields = Hash.new
+    @form.each do |value|
+      @form_fields[value.field_name] = value.field_value
+    end
+    @form_fields['unique_id'] = @form.first['unique_id']
+    respond_to do |format|
+        format.html { render :show }
     end
   end
 
@@ -72,7 +98,7 @@ class FormsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_form
-      @form = Form.find(params[:id])
+      #@form = Form.find(params[:id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
