@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   root "forms#index"
-  get 'form/new' , to: "forms#new"
+  get 'form/new' , to: "forms#show"
   get 'form/save' , to: "forms#create"
   get 'form/all' , to: "forms#all"
   get 'form/show' , to: "forms#show"

@@ -14,14 +14,15 @@ class FormsController < ApplicationController
   # GET /forms/1
   # GET /forms/1.json
   def show
-    @form = Field.where(unique_id: params[:unique_id]).to_a
-    @form_fields = Hash.new
-    @form.each do |value|
-      @form_fields[value.field_name] = value.field_value
-    end
-    if params[:unique_id].present? 
+    if params.has_key?(:unique_id)
+      @form = Field.where(unique_id: params[:unique_id]).to_a
+      @form_fields = Hash.new
+      @form.each do |value|
+        @form_fields[value.field_name] = value.field_value
+      end
       @form_fields['unique_id'] = params[:unique_id]
     else
+      @form_fields = Hash.new
       @form_fields['unique_id'] = SecureRandom.uuid
     end  
   end
@@ -46,11 +47,11 @@ class FormsController < ApplicationController
   def create
     params.each do |key,value|
       if value.present? && !(['unique_id','controller','action'].include?(key))
-        found = Field.where(unique_id: params[:unique_id])
-        if found
-          @field = found
-        else
+        found = Field.where(unique_id: params[:unique_id], field_name: key.to_s, field_value: value.to_s )
+        if found.blank?
           @field = Field.new()
+        else
+          @field = found
         end
         @field.field_name = key.to_s
         @field.field_value = value.to_s
@@ -66,9 +67,7 @@ class FormsController < ApplicationController
       @form_fields[value.field_name] = value.field_value
     end
     @form_fields['unique_id'] = @form.first['unique_id']
-    respond_to do |format|
-        format.html { render :show }
-    end
+    redirect_to action: "index"
   end
 
   # PATCH/PUT /forms/1

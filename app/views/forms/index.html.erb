@@ -291,7 +291,7 @@
                             <% @submissions.each do |submission| %>
                               <tr>
                                 <td>
-                                  <%= link_to 'Form submitted at'+submission.updated_at.to_s, controller: "forms", action: "show", unique_id: submission.unique_id %>
+                                  <%= link_to 'Form submitted at '+submission.updated_at.to_s, controller: "forms", action: "show", unique_id: submission.unique_id %>
                                 </td>
                               </tr>
                             <% end %>
