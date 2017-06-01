@@ -66,7 +66,6 @@ class FormsController < ApplicationController
     @form.each do |value|
       @form_fields[value.field_name] = value.field_value
     end
-    @form_fields['unique_id'] = @form.first['unique_id']
     redirect_to "/"
   end
 
