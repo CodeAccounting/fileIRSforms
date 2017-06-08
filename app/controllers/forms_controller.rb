@@ -3,11 +3,14 @@ require 'securerandom'
 class FormsController < ApplicationController
 
   before_action :set_form, only: [:show, :edit, :update, :destroy]
-  
+  layout "formedit", only: [:show]
+  before_action :authenticate_user!
+
+
   # GET /forms
   # GET /forms.json
   def index
-    @submissions = Field.find_by_sql("SELECT DISTINCT ON (unique_id) unique_id,updated_at FROM Fields")
+    @submissions = Field.find_by_sql("SELECT DISTINCT ON (unique_id) unique_id,updated_at FROM Fields WHERE user_id= #{current_user.id}")
 
   end
 
@@ -55,7 +58,7 @@ class FormsController < ApplicationController
         end
         @field.field_name = key.to_s
         @field.field_value = value.to_s
-        @field.user_id = 3
+        @field.user_id = current_user.id
         @field.form_id = 5
         @field.unique_id = params[:unique_id]
         @field.save

@@ -17,3 +17,22 @@
  *= require_tree .
  *= require_self
  */
+div.header {
+    padding-bottom:15px;
+}
+div.rel {
+    position:relative;
+}
+input.abs {
+    display: block;
+    position: absolute;
+    border: none;
+    color: #1a34ad;
+    background:transparent;
+}
+.header-button {
+    margin: 8px 0;
+}
+#page-wrapper {
+    padding-top:15px;
+}
