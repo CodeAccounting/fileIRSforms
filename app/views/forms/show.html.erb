@@ -1,5 +1,13 @@
 <p id="notice"></p>
-<%= render 'form', form_fields: @form_fields %>
+<% if (params['formname'] == '3922') %>
+    <%= render 'form3922', form_fields: @form_fields %>
+<% elsif (params['formname'] == '8027') %>
+    <%= render 'form8027', form_fields: @form_fields %>
+<% elsif (params['formname'] == 'fw2g') %>
+    <%= render 'formfw2g', form_fields: @form_fields %>
+<% else %>
+    <%= render 'form', form_fields: @form_fields %>
+<% end %>
 
 <%# link_to 'Edit', edit_form_path(@form) %> |
 <%# link_to 'Back', forms_path %>
