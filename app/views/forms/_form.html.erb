@@ -18,7 +18,8 @@ media/form1.png" />
                           <input class="abs" style="top: 21%;left: 64%;width: 31%;height: 5%;" type="text" name="13l" value="<%= @form_fields['13l']%>">
                           <input class="abs" style="top: 29%;left: 5%;width: 90%;height: 4%;%" type="text" name="14a" value="<%= @form_fields['14a']%>">
                           <input class="abs" style="top: 36%;left: 5%;width: 45%;height: 4%;" type="text" name="14b" value="<%= @form_fields['14b']%>">
-                          <input <%= @form_fields['15']%> class="abs" style="top: 35%;left: 90%;width: 3%;height: 3%;" type="checkbox" name="15" value="checked">
+                          <input  type="hidden" name="15" value="unchecked">
+                          <input  class="abs" style="top: 35%;left: 90%;width: 3%;height: 3%;" type="checkbox" name="15" <%= @form_fields['15']%> value="checked">
                           <input class="abs" style="top: 43%;left: 5%;width: 51%;height: 5%;" type="text" name="15a" value="<%= @form_fields['15a']%>">
                           <input class="abs" style="top: 43%;left: 57%;width: 18%;height: 4.7%;" type="text" name="15b" value="<%= @form_fields['15b']%>">
                           <input class="abs" style="top: 43%;left: 77%;width: 18%;height: 5%;" type="text" name="15c" value="<%= @form_fields['15c']%>">
@@ -37,7 +38,7 @@ media/form1.png" />
                           <input class="abs" style="top: 94%;left: 42%;width: 29%;height: 5%;" type="text" name="17b" value="<%= @form_fields['17b']%>">
                           <input class="abs" style="top: 94%;left: 72%; width: 24%;height: 5%;" type="text" name="17c" value="<%= @form_fields['17c']%>">
                           <input type="hidden" name="unique_id" value="<%= @form_fields['unique_id'] %>">
-                          <input type="hidden" name="form_name" value="1042-s"> 
+                          <input type="hidden" name="form_id" value="1042-s"> 
                         </form>
                         
                     </div>

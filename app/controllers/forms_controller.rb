@@ -50,11 +50,15 @@ class FormsController < ApplicationController
   def create
     params.each do |key,value|
       if value.present? && !(['unique_id','controller','action'].include?(key))
+        # is this unnecessary ?
+        if value.kind_of?(Array)
+          value = value[0]
+        end 
         found = Field.where(unique_id: params[:unique_id], field_name: key.to_s, field_value: value.to_s )
         if found.blank?
           @field = Field.new()
         else
-          @field = found
+          @field = found.first
         end
         @field.field_name = key.to_s
         @field.field_value = value.to_s
