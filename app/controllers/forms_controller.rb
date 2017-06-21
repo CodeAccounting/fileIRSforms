@@ -89,10 +89,9 @@ class FormsController < ApplicationController
   # DELETE /forms/1
   # DELETE /forms/1.json
   def destroy
-    @form.destroy
+    Field.where(unique_id: params[:unique_id]).destroy_all
     respond_to do |format|
-      format.html { redirect_to forms_url, notice: 'Form was successfully destroyed.' }
-      format.json { head :no_content }
+      format.html { redirect_to '/', notice: 'Form was successfully deleted.' }
     end
   end
 

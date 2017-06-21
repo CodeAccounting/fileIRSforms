@@ -15,6 +15,11 @@
                               <tr>
                                 <td>
                                   <%= link_to 'Form '+submission.form_id.to_s+' submitted at '+submission.updated_at.to_s, controller: "forms", action: "show", unique_id: submission.unique_id, formname: submission.form_id %>
+                                   <%# link_to 'delete form', controller: "forms", action: "destroy", unique_id: submission.unique_id, class: 'delete_link' %>
+                                   <%= link_to 'form/'+submission.unique_id, method: :delete, data: {confirm: 'Are you sure?'}, class: 'link-delete', :remote => true do %>
+                                    <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                   <% end %>
+
                                 </td>
                               </tr>
                             <% end %>

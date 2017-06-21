@@ -36,3 +36,29 @@ input.abs {
 #page-wrapper {
     padding-top:15px;
 }
+@media all and (min-width: 960px) {
+    #form1 input.abs {
+        font-size: 14px;
+    }
+}
+ 
+@media all and (max-width: 959px) and (min-width: 600px) {
+    #form1 input.abs {
+        font-size: 12px;
+    }
+}
+ 
+@media all and (max-width: 599px) and (min-width: 320px) {
+    #form1 input.abs{
+        font-size: 10px;
+    }
+ 
+}
+
+.link-delete {
+    color: red;
+}
+.link-delete:hover {
+    color: #a00303;
+}
+

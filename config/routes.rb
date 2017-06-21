@@ -7,6 +7,7 @@ Rails.application.routes.draw do
   get 'form/show' , to: "forms#show"
   get 'form/show/:formname' , to: "forms#show"
   get 'form/index' , to: "forms#index"
+  delete 'form/:unique_id', to: "forms#destroy"
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end
