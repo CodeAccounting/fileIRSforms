@@ -62,3 +62,25 @@ input.abs {
     color: #a00303;
 }
 
+.instructions, .instructions:hover {
+    color: #a900e0;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration:none;
+}
+table tr td, table tr th{
+    vertical-align: top;
+    padding:5px;
+}
+td.rotate {
+    vertical-align: middle;
+    width:15%;
+}
+td.rotate span{
+    transform: rotate(-90deg);
+    transform-origin: top left;
+    display:block;
+}
+.small-desc {
+    font-size:0.8em;
+}
