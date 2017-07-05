@@ -84,3 +84,15 @@ td.rotate span{
 .small-desc {
     font-size:0.8em;
 }
+
+.list-group-item {
+    background:white;
+    border:none
+    ;
+}
+div.bhoechie-tab-menu div.list-group>a.active, div.bhoechie-tab-menu div.list-group>a.active .glyphicon, div.bhoechie-tab-menu div.list-group>a.active .fa {
+    background-color: #0066ff;
+}
+div.bhoechie-tab-menu div.list-group>a.active:after {
+     border-left: 10px solid #0066ff;
+}

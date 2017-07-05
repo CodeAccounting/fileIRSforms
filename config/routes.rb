@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   devise_for :users
   root "forms#index"
+  get 'home', to:"pages#home"
   get 'form/new' , to: "forms#show" 
   get 'form/save' , to: "forms#create"
   get 'form/all' , to: "forms#all"
