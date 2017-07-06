@@ -447,10 +447,10 @@ table.dataTable thead .sorting:after {
         }
 
         .metrostyle {
-            height: 100px;
-            width: 140px;
+            height: 136px;
+            width: 135px;
             float: left;
-            margin: 0 3px 0 0;
+            margin: 1px 9px 0 0;
             padding: 2px;
         }
 
@@ -464,7 +464,7 @@ table.dataTable thead .sorting:after {
         }
 
 
-        .orgmetro {
+        .orgmetro, .metro3922 {
             background-color: #d9dee2;
         }
 
@@ -472,18 +472,18 @@ table.dataTable thead .sorting:after {
             background-color: #272733;
         }
 
-        .reemetro {
+        .reemetro, .metrofw2g {
             background-color: #31a063;
         }
 
-        .eenmetro {
+        .eenmetro, .metro1042-s {
             background-color: #f3f3f3;
         }
         a.eenmetro span {
           color:black!important;
         }
 
-        .boometro {
+        .boometro, .metro8027{
             background-color: #cccbd0;
         }
 
@@ -580,4 +580,8 @@ div.bhoechie-tab-content{
 
 div.bhoechie-tab div.bhoechie-tab-content:not(.active){
   display: none;
+}
+
+div.bhoechie-tab {
+  padding-left:7px;
 }

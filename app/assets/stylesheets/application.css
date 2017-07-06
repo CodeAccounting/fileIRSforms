@@ -87,8 +87,8 @@ td.rotate span{
 
 .list-group-item {
     background:white;
-    border:none
-    ;
+    border:none;
+    padding:33px 15px;
 }
 div.bhoechie-tab-menu div.list-group>a.active, div.bhoechie-tab-menu div.list-group>a.active .glyphicon, div.bhoechie-tab-menu div.list-group>a.active .fa {
     background-color: #0066ff;
