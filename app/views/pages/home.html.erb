@@ -3,25 +3,55 @@
         <div class="rel col-lg-10 bhoechie-tab-container">
             <div class="rel col-lg-1 bhoechie-tab-menu">
               <div class="list-group">
-                <a href="#"  class="list-group-item active text-center">
+                <a href="#"  class="list-group-item text-center" onclick="
+        event.preventDefault();
+        $(this).siblings('a.active').removeClass('active');
+        $(this).addClass('active');
+        var index = $(this).index();
+        $('div.bhoechie-tab>div.bhoechie-tab-content').removeClass('active');
+        $('div.bhoechie-tab>div.bhoechie-tab-content').eq(index).addClass('active');">
                   2015
                 </a>
-                <a href="#"  class="list-group-item text-center">
+                <a href="#"  class="list-group-item text-center" onclick="             
+        event.preventDefault();
+        $(this).siblings('a.active').removeClass('active');
+        $(this).addClass('active');
+        var index = $(this).index();
+        $('div.bhoechie-tab>div.bhoechie-tab-content').removeClass('active');
+        $('div.bhoechie-tab>div.bhoechie-tab-content').eq(index).addClass('active');">
                   2016
                 </a>
-                <a href="#"  class="list-group-item text-center">
+                <a href="#"  class="list-group-item active text-center" onclick="
+        event.preventDefault();
+        $(this).siblings('a.active').removeClass('active');
+        $(this).addClass('active');
+        var index = $(this).index();
+        $('div.bhoechie-tab>div.bhoechie-tab-content').removeClass('active');
+        $('div.bhoechie-tab>div.bhoechie-tab-content').eq(index).addClass('active');">
                   2017
                 </a>
-                <a href="#"  class="list-group-item text-center">
+                <a href="#"  class="list-group-item text-center" onclick="
+        event.preventDefault();
+        $(this).siblings('a.active').removeClass('active');
+        $(this).addClass('active');
+        var index = $(this).index();
+        $('div.bhoechie-tab>div.bhoechie-tab-content').removeClass('active');
+        $('div.bhoechie-tab>div.bhoechie-tab-content').eq(index).addClass('active');">
                   2018
                 </a>
-                <a href="#"  class="list-group-item text-center">
+                <a href="#"  class="list-group-item text-center" onclick="
+        event.preventDefault();
+        $(this).siblings('a.active').removeClass('active');
+        $(this).addClass('active');
+        var index = $(this).index();
+        $('div.bhoechie-tab>div.bhoechie-tab-content').removeClass('active');
+        $('div.bhoechie-tab>div.bhoechie-tab-content').eq(index).addClass('active');">
                   2019
                 </a>
               </div>
             </div>
             <div class="rel col-lg-11  bhoechie-tab">
-                <div class="bhoechie-tab-content active">
+                <div class="bhoechie-tab-content">
                     <div class="row">
                             <div class="page">
                                 <div class="metr">
@@ -190,10 +220,23 @@
                         </div>
                     </div>
                 </div>
-                <div class="bhoechie-tab-content">
+                <div class="bhoechie-tab-content active">
                     <div class="row">
                         <div class="page">
-                            <div class="metr">
+                           <div class="metr">
+                                <% @submissions.each do |submission| %>
+                                  <%= link_to 'Form '+submission.form_id.to_s+' submitted at '+submission.updated_at.to_s, controller: "forms", action: "show", unique_id: submission.unique_id, formname: submission.form_id %>
+                                   <%# link_to 'delete form', controller: "forms", action: "destroy", unique_id: submission.unique_id, class: 'delete_link' %>
+                                   <%= link_to '/form/'+submission.unique_id, method: :delete, data: {confirm: 'Are you sure?'}, class: '', :remote => true do %>
+                                    <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                   <% end %>
+                                   <%= link_to controller: "forms", action: "show", unique_id: submission.unique_id, formname: submission.form_id, {class: 'metrostyle orgmetro'} do %>
+                                                 <span class="metro-icon fa fa-file" style=""></span>
+                                                 <span class="metro-type" style=""><%= submission.form_id.to_s %></span>
+                                                 <span class="metro-date" style=""><%= submission.updated_at.to_s %></span>
+                                   <% end %>
+
+                            <% end %>
                                              <a class="metrostyle orgmetro" style="cursor: pointer" href="/form/show">
 
                                                  <span class="metro-icon fa fa-file" style=""></span>
