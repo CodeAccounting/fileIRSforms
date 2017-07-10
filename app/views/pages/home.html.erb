@@ -106,11 +106,11 @@
                 </div>
                 <div class="bhoechie-tab-content active">
                     <div class="labels-container">
-                            <div class="m-label"><i class="fa fa-square" aria-hidden="true"></i> Label 1</div>
-                            <div class="m-label"><i class="fa fa-square" aria-hidden="true"></i> Label 2</div>
-                            <div class="m-label"><i class="fa fa-square" aria-hidden="true"></i> Label 3</div>
-                            <div class="m-label"><i class="fa fa-square" aria-hidden="true"></i> Label 4</div>
-                            <div class="m-label"><i class="fa fa-square" aria-hidden="true"></i> Label 5</div>
+                            <div class="m-label"><div class="square-box"></div><div class="square-label"> Label 1</div></div>
+                            <div class="m-label"><div class="square-box"></div><div class="square-label"> Label 2</div></div>
+                            <div class="m-label"><div class="square-box"></div><div class="square-label"> Label 3</div></div>
+                            <div class="m-label"><div class="square-box"></div><div class="square-label"> Label 4</div></div>
+                            <div class="m-label"><div class="square-box"></div><div class="square-label"> Label 5</div></div>
                     </div>
                     <div class="row">
                         
@@ -226,6 +226,23 @@ span.metro-date {
     padding: 15px;
 }
 .labels-container {
-    clear:both;
+    clear: both;
+    width: 100%;
+    display: inline-flex;
+}
+.square-box {
+    width: 13px;
+    height: 15px;
+    background: #9393b1;
+    float: left;
+    /* vertical-align: top; */
+    margin-top: 3px;
+    margin-right: 3px;
+}
+.square-label {
+    float: left;
+    padding-top: 0px;
+    font-size: 1.2em;
+    text-transform: uppercase;
 }
 </style>
