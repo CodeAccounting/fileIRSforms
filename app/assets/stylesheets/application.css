@@ -14,9 +14,11 @@
  *= require sb-admin-2.min
  *= require metisMenu.min
  *= require font-awesome.min
+ *= require font-awesome-animation.min
  *= require_tree .
  *= require_self
  */
+
 div.header {
     padding-bottom:15px;
 }
@@ -55,12 +57,19 @@ input.abs {
  
 }
 
-.link-delete {
-    color: red;
+.delete_link {
+    color: white;
+    display: block;
+    margin-left: -28px;
+    width: 10px;
+    float: left;
+    font-size: 20px;
+    padding-top: 5px;
 }
-.link-delete:hover {
-    color: #a00303;
+.delete_link:hover {
+    color:red;
 }
+
 
 .instructions, .instructions:hover {
     color: #a900e0;
@@ -86,7 +95,7 @@ td.rotate span{
 }
 
 .list-group-item {
-    background:white;
+    background: #f8f8f8;
     border:none;
     padding:33px 15px;
 }
@@ -95,4 +104,13 @@ div.bhoechie-tab-menu div.list-group>a.active, div.bhoechie-tab-menu div.list-gr
 }
 div.bhoechie-tab-menu div.list-group>a.active:after {
      border-left: 10px solid #0066ff;
+}
+
+.bhoechie-tab-content .row {
+    background-color: #f8f8f8;
+    min-height: 449px;
+}
+
+a.navbar-brand {
+    font-size:21px;
 }

@@ -51,191 +51,86 @@
               </div>
             </div>
             <div class="rel col-lg-11  bhoechie-tab">
-                <div class="bhoechie-tab-content">
-                    <div class="row">
-                            <div class="page">
-                                <div class="metr">
-                                             <a class="metrostyle orgmetro" style="cursor: pointer" href="/form/show">
+              <div class="bhoechie-tab-content">
+                <div class="row">
+                        <div class="page">
+                           <div class="metr">
+                                <% @submissions.each do |submission| %>
+                                  <% if (submission.updated_at.year == 2015) %>
+                                        <%# link_to 'Form '+submission.form_id.to_s+' submitted at '+submission.updated_at.to_s, controller: "forms", action: "show", unique_id: submission.unique_id, formname: submission.form_id %>
+                                         <%# link_to 'delete form', controller: "forms", action: "destroy", unique_id: submission.unique_id, class: 'delete_link' %>
+                                         
+                                         <%= link_to({controller: "forms", action: "show", unique_id: submission.unique_id, formname: submission.form_id}, {class: 'metrostyle metro'+submission.form_id.to_s}) do %>
+                                                       <span class="metro-icon fa fa-file" style=""></span>
+                                                       <span class="metro-type" style=""><%= submission.form_id.to_s %></span>
+                                                       <span class="metro-date" style=""><%= submission.updated_at.to_s %></span>      
+                                         <% end %>
+                                         <%= link_to '/form/'+submission.unique_id, method: :delete, data: {confirm: 'Are you sure?'}, class: 'delete_link', :remote => true do %>
+                                                            <i class="fa fa-times-circle faa-vertical animated-hover" aria-hidden="true"></i> 
+                                        <% end %>
+                                  <% end %>
 
-                                                 <span class="metro-icon fa fa-file" style=""></span>
-                                                 <span class="metro-type" style="">1042-S</span>
-                                                 <span class="metro-date" style="">2017-07-04 18:16:08 UTC</span>
-                                             </a>
+                                <% end %>
                                              
-                                             <a style="cursor: pointer" class="metrostyle   boometro" href="/form/show">
-                                                    <span class="metro-icon fa fa-file" style=""></span>
-                                                    <span class="metro-type">8027</span>   
-                                                    <span class="metro-date">2017-07-04 18:16:08 UTC </span>
-                                                </a>
-                                             <a class="metrostyle reemetro" style="cursor: pointer" href="/form/show">
-                                                 <span class="metro-icon fa fa-file" style="font-size: 2em; color: white; padding-left: 0.3em ; margin-top: 3px ;float:left"></span>
-                                                 <span class="metro-type">3922</span>
-                                                 <span class="metro-date">2017-07-04 18:16:08 UTC </span>
-                                             </a>
-                                             <a class="metrostyle yoometro" style="cursor: pointer" href="/form/show">
-
-                                                 <span class="metro-icon fa fa-file" style="font-size: 2em; color: white; padding-left: 0.3em; margin-top: 3px ;float:left"></span>
-                                                 <span class="metro-type">3922</span>
-                                                 <span class="metro-date">2017-07-04 18:16:08 UTC</span>
-                                             </a>
-                                             <a class="metrostyle yoometro" style="cursor: pointer" href="/form/show">
-
-                                                 <span class="metro-icon fa fa-file" style="font-size: 2em; color: white; padding-left: 0.3em; margin-top: 3px ;float:left"></span>
-                                                 <span class="metro-type">3922</span>
-                                                 <span class="metro-date">2017-07-04 18:16:08 UTC</span>
-                                             </a>
-                                </div>
-                                <div class="metr">
-                                               
-                                                <a style="cursor: pointer" class="metrostyle  reemetro" href="/form/show">
-
-                                                    <span class="metro-icon fa fa-file" style="font-size: 2em; color: white; padding-left: 0.3em; margin-top: 3px ;float:left"></span>
-                                                    <span class="metro-type">fw2g</span>
-                                                    <span class="metro-date">2017-07-04 18:16:08 UTC</span>
-                                                </a>
-                                              <a style="cursor: pointer" class="metrostyle   toometro" href="/form/show">
-                                                    <span class="metro-icon fa fa-file" style="font-size: 2em; color: white; padding-left: 0.3em; margin-top: 3px ;float:left"></span>
-                                                    <span class="metro-type">3922</span>
-                                                    <span class="metro-date">2017-07-04 18:16:08 UTC</span>
-                                                </a>
-                                                <a style="cursor: pointer" class="metrostyle yoometro" href="/form/show">
-
-                                                    <span class="metro-icon fa fa-file" style="font-size: 2em; color: white; padding-left: 0.3em; margin-top: 3px ;float:left"></span>
-                                                    <span class="metro-type">8027</span>
-                                                    <span class="metro-date">2017-07-04 18:16:08 UTC</span>
-                                                </a>
-                                               
-                                               <a style="cursor: pointer" class="metrostyle  toometro" href="/form/show">
-                                                    <span class="metro-icon fa fa-file" style="font-size: 2em; color: white; padding-left: 0.3em; margin-top: 3px ;float:left"></span>
-                                                    <span class="metro-type">1042-S</span>
-                                                    <span class="metro-date">2017-07-04 18:16:08 UTC</span>
-                                                </a>
-                                                <a style="cursor: pointer" class="metrostyle  orgmetro"  href="/form/show">
-                                                    <span class="metro-icon fa fa-file" style="font-size: 2em; color: white; padding-left: 0.3em; margin-top: 3px ;float:left"></span>
-                                                    <span class="metro-type">3922</span>
-                                                    <span class="metro-date">2017-07-04 18:16:08 UTC</span>
-                                                </a>
-                                </div>
-                                 <div class="metr">                          
-                                                <a style="cursor: pointer" class="metrostyle eenmetro" href="/form/show">
-                                                    <span class="metro-icon fa fa-file" style="font-size:2em;color:white;padding-left:0.3em;margin-top:3px ;float:left"></span>
-                                                    <span class="metro-type">fw2g</span>   
-                                                    <span class="metro-date">2017-07-04 18:16:08 UTC</span>
-                                                </a>
-                                                 <a class="metrostyle yoometro" style="cursor: pointer" href="/form/show">
-                                                    <span class="metro-icon fa fa-file" style="font-size: 2em; color: white; padding-left: 0.3em; margin-top: 3px ;float:left"></span>
-                                                    <span class="metro-type">1042-S</span>
-                                                    <span class="metro-date">2017-07-04 18:16:08 UTC </span>
-                                                </a>
-                                                <a class="metrostyle eenmetro" style="cursor: pointer" href="/form/show">
-
-                                                    <span class="metro-icon fa fa-file" style="font-size: 2em; color: white; padding-left: 0.3em; margin-top: 3px ;float:left"></span>
-                                                    <span class="metro-type">8027</span>
-                                                    <span class="metro-date">2017-07-04 18:16:08 UTC</span>
-                                                </a>
-                                                <a class="metrostyle  reemetro" style="cursor: pointer" href="/form/show">
-                                                    <span class="metro-icon fa fa-file" style="font-size: 2em; color: white; padding-left: 0.3em; margin-top: 3px ;float:left"></span>
-                                                    <span class="metro-type">1042-S</span>
-                                                    <span class="metro-date">2017-07-04 18:16:08 UTC </span>
-                                                </a>
-                                                 <a class="metrostyle orgmetro" style="cursor: pointer" href="/form/show">
-                                                    <span class="metro-icon fa fa-file" style=""></span>
-                                                    <span class="metro-type">13</span>
-                                                    <span class="metro-date">2017-07-04 18:16:08 UTC</span>
-                                                </a>
-                                    </div>
-                                    <div class="metr">          
-                                                 <a style="cursor: pointer" class="metrostyle  boometro" href="/form/show">
-                                                    <span class="metro-icon fa fa-file" style=""></span>
-                                                    <span class="metro-type">8027</span>   
-                                                    <span class="metro-date">2017-07-04 18:16:08 UTC </span>
-                                                </a>
-                                    </div>
-                                </div> 
-                        </div>
-                </div>
+                                             
+                            </div><!-- 1-->
+                        </div><!-- 2-->
+                    </div><!-- 3-->
+                </div><!-- 4-->
                 <!-- train section -->
                 <div class="bhoechie-tab-content">
                     <div class="row">
                         <div class="page">
-                            <div class="metr">                          
-                                                <a style="cursor: pointer" class="metrostyle eenmetro" href="/form/show">
-                                                    <span class="metro-icon fa fa-file" style="font-size:2em;color:white;padding-left:0.3em;margin-top:3px ;float:left"></span>
-                                                    <span class="metro-type">fw2g</span>   
-                                                    <span class="metro-date">2017-07-04 18:16:08 UTC</span>
-                                                </a>
-                                                 <a class="metrostyle yoometro" style="cursor: pointer" href="/form/show">
-                                                    <span class="metro-icon fa fa-file" style="font-size: 2em; color: white; padding-left: 0.3em; margin-top: 3px ;float:left"></span>
-                                                    <span class="metro-type">1042-S</span>
-                                                    <span class="metro-date">2017-07-04 18:16:08 UTC </span>
-                                                </a>
-                                                <a class="metrostyle eenmetro" style="cursor: pointer" href="/form/show">
+                           <div class="metr">
+                                <% @submissions.each do |submission| %>
+                                  <% if (submission.updated_at.year == 2016) %>
+                                        <%# link_to 'Form '+submission.form_id.to_s+' submitted at '+submission.updated_at.to_s, controller: "forms", action: "show", unique_id: submission.unique_id, formname: submission.form_id %>
+                                         <%# link_to 'delete form', controller: "forms", action: "destroy", unique_id: submission.unique_id, class: 'delete_link' %>
+                                         
+                                         <%= link_to({controller: "forms", action: "show", unique_id: submission.unique_id, formname: submission.form_id}, {class: 'metrostyle metro'+submission.form_id.to_s}) do %>
+                                                       <span class="metro-icon fa fa-file" style=""></span>
+                                                       <span class="metro-type" style=""><%= submission.form_id.to_s %></span>
+                                                       <span class="metro-date" style=""><%= submission.updated_at.to_s %></span>      
+                                         <% end %>
+                                         <%= link_to '/form/'+submission.unique_id, method: :delete, data: {confirm: 'Are you sure?'}, class: 'delete_link', :remote => true do %>
+                                                            <i class="fa fa-times-circle faa-vertical animated-hover" aria-hidden="true"></i> 
+                                        <% end %>
+                                  <% end %>
 
-                                                    <span class="metro-icon fa fa-file" style="font-size: 2em; color: white; padding-left: 0.3em; margin-top: 3px ;float:left"></span>
-                                                    <span class="metro-type">8027</span>
-                                                    <span class="metro-date">2017-07-04 18:16:08 UTC</span>
-                                                </a>
-                                                <a class="metrostyle  reemetro" style="cursor: pointer" href="/form/show">
-                                                    <span class="metro-icon fa fa-file" style="font-size: 2em; color: white; padding-left: 0.3em; margin-top: 3px ;float:left"></span>
-                                                    <span class="metro-type">1042-S</span>
-                                                    <span class="metro-date">2017-07-04 18:16:08 UTC </span>
-                                                </a>
-                                                 <a class="metrostyle orgmetro" style="cursor: pointer" href="/form/show">
-                                                    <span class="metro-icon fa fa-file" style=""></span>
-                                                    <span class="metro-type">13</span>
-                                                    <span class="metro-date">2017-07-04 18:16:08 UTC</span>
-                                                </a>
-                            </div>
-                            <div class="metr">
-                                             <a class="metrostyle orgmetro" style="cursor: pointer" href="/form/show">
-
-                                                 <span class="metro-icon fa fa-file" style=""></span>
-                                                 <span class="metro-type" style="">1042-S</span>
-                                                 <span class="metro-date" style="">2017-07-04 18:16:08 UTC</span>
-                                             </a>
+                                <% end %>
                                              
-                                             <a style="cursor: pointer" class="metrostyle   boometro" href="/form/show">
-                                                    <span class="metro-icon fa fa-file" style=""></span>
-                                                    <span class="metro-type">8027</span>   
-                                                    <span class="metro-date">2017-07-04 18:16:08 UTC </span>
-                                                </a>
-                                             <a class="metrostyle reemetro" style="cursor: pointer" href="/form/show">
-                                                 <span class="metro-icon fa fa-file" style="font-size: 2em; color: white; padding-left: 0.3em ; margin-top: 3px ;float:left"></span>
-                                                 <span class="metro-type">3922</span>
-                                                 <span class="metro-date">2017-07-04 18:16:08 UTC </span>
-                                             </a>
-                                             <a class="metrostyle yoometro" style="cursor: pointer" href="/form/show">
-
-                                                 <span class="metro-icon fa fa-file" style="font-size: 2em; color: white; padding-left: 0.3em; margin-top: 3px ;float:left"></span>
-                                                 <span class="metro-type">3922</span>
-                                                 <span class="metro-date">2017-07-04 18:16:08 UTC</span>
-                                             </a>
-                                             <a class="metrostyle yoometro" style="cursor: pointer" href="/form/show">
-
-                                                 <span class="metro-icon fa fa-file" style="font-size: 2em; color: white; padding-left: 0.3em; margin-top: 3px ;float:left"></span>
-                                                 <span class="metro-type">3922</span>
-                                                 <span class="metro-date">2017-07-04 18:16:08 UTC</span>
-                                             </a>
+                                             
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="bhoechie-tab-content active">
+                    <div class="labels-container">
+                            <div class="m-label"><i class="fa fa-square" aria-hidden="true"></i> Label 1</div>
+                            <div class="m-label"><i class="fa fa-square" aria-hidden="true"></i> Label 2</div>
+                            <div class="m-label"><i class="fa fa-square" aria-hidden="true"></i> Label 3</div>
+                            <div class="m-label"><i class="fa fa-square" aria-hidden="true"></i> Label 4</div>
+                            <div class="m-label"><i class="fa fa-square" aria-hidden="true"></i> Label 5</div>
+                    </div>
                     <div class="row">
+                        
                         <div class="page">
+                          
                            <div class="metr">
                                 <% @submissions.each do |submission| %>
-                                  <%# link_to 'Form '+submission.form_id.to_s+' submitted at '+submission.updated_at.to_s, controller: "forms", action: "show", unique_id: submission.unique_id, formname: submission.form_id %>
-                                   <%# link_to 'delete form', controller: "forms", action: "destroy", unique_id: submission.unique_id, class: 'delete_link' %>
-                                   <%# link_to '/form/'+submission.unique_id, method: :delete, data: {confirm: 'Are you sure?'}, class: '', :remote => true do %>
-                                   
-                              <!--      <i class="fa fa-trash-o" aria-hidden="true"></i> -->
-                                   <%# end %>
-                                   <%= link_to({controller: "forms", action: "show", unique_id: submission.unique_id, formname: submission.form_id}, {class: 'metrostyle metro'+submission.form_id.to_s}) do %>
-                                                 <span class="metro-icon fa fa-file" style=""></span>
-                                                 <span class="metro-type" style=""><%= submission.form_id.to_s %></span>
-                                                 <span class="metro-date" style=""><%= submission.updated_at.to_s %></span>
-                                   <% end %>
+                                  <% if (submission.updated_at.year == 2017) %>
+                                        <%# link_to 'Form '+submission.form_id.to_s+' submitted at '+submission.updated_at.to_s, controller: "forms", action: "show", unique_id: submission.unique_id, formname: submission.form_id %>
+                                         <%# link_to 'delete form', controller: "forms", action: "destroy", unique_id: submission.unique_id, class: 'delete_link' %>
+                                         
+                                         <%= link_to({controller: "forms", action: "show", unique_id: submission.unique_id, formname: submission.form_id}, {class: 'metrostyle metro'+submission.form_id.to_s}) do %>
+                                                       <span class="metro-icon fa fa-file" style=""></span>
+                                                       <span class="metro-type" style=""><%= submission.form_id.to_s %></span>
+                                                       <span class="metro-date" style=""><%= submission.updated_at.to_s %></span>      
+                                         <% end %>
+                                         <%= link_to '/form/'+submission.unique_id, method: :delete, data: {confirm: 'Are you sure?'}, class: 'delete_link', :remote => true do %>
+                                                            <i class="fa fa-times-circle faa-vertical animated-hover" aria-hidden="true"></i> 
+                                        <% end %>
+                                  <% end %>
 
                                 <% end %>
                                              
@@ -247,33 +142,25 @@
                 <div class="bhoechie-tab-content">
                     <div class="row">
                         <div class="page">
-                            <div class="metr">                          
-                                                <a style="cursor: pointer" class="metrostyle eenmetro" href="/form/show">
-                                                    <span class="metro-icon fa fa-file" style="font-size:2em;color:white;padding-left:0.3em;margin-top:3px ;float:left"></span>
-                                                    <span class="metro-type">fw2g</span>   
-                                                    <span class="metro-date">2017-07-04 18:16:08 UTC</span>
-                                                </a>
-                                                 <a class="metrostyle yoometro" style="cursor: pointer" href="/form/show">
-                                                    <span class="metro-icon fa fa-file" style="font-size: 2em; color: white; padding-left: 0.3em; margin-top: 3px ;float:left"></span>
-                                                    <span class="metro-type">1042-S</span>
-                                                    <span class="metro-date">2017-07-04 18:16:08 UTC </span>
-                                                </a>
-                                                <a class="metrostyle eenmetro" style="cursor: pointer" href="/form/show">
+                           <div class="metr">
+                                <% @submissions.each do |submission| %>
+                                  <% if (submission.updated_at.year == 2018) %>
+                                        <%# link_to 'Form '+submission.form_id.to_s+' submitted at '+submission.updated_at.to_s, controller: "forms", action: "show", unique_id: submission.unique_id, formname: submission.form_id %>
+                                         <%# link_to 'delete form', controller: "forms", action: "destroy", unique_id: submission.unique_id, class: 'delete_link' %>
+                                         
+                                         <%= link_to({controller: "forms", action: "show", unique_id: submission.unique_id, formname: submission.form_id}, {class: 'metrostyle metro'+submission.form_id.to_s}) do %>
+                                                       <span class="metro-icon fa fa-file" style=""></span>
+                                                       <span class="metro-type" style=""><%= submission.form_id.to_s %></span>
+                                                       <span class="metro-date" style=""><%= submission.updated_at.to_s %></span>      
+                                         <% end %>
+                                         <%= link_to '/form/'+submission.unique_id, method: :delete, data: {confirm: 'Are you sure?'}, class: 'delete_link', :remote => true do %>
+                                                            <i class="fa fa-times-circle faa-vertical animated-hover" aria-hidden="true"></i> 
+                                        <% end %>
+                                  <% end %>
 
-                                                    <span class="metro-icon fa fa-file" style="font-size: 2em; color: white; padding-left: 0.3em; margin-top: 3px ;float:left"></span>
-                                                    <span class="metro-type">8027</span>
-                                                    <span class="metro-date">2017-07-04 18:16:08 UTC</span>
-                                                </a>
-                                                <a class="metrostyle  reemetro" style="cursor: pointer" href="/form/show">
-                                                    <span class="metro-icon fa fa-file" style="font-size: 2em; color: white; padding-left: 0.3em; margin-top: 3px ;float:left"></span>
-                                                    <span class="metro-type">1042-S</span>
-                                                    <span class="metro-date">2017-07-04 18:16:08 UTC </span>
-                                                </a>
-                                                 <a class="metrostyle orgmetro" style="cursor: pointer" href="/form/show">
-                                                    <span class="metro-icon fa fa-file" style=""></span>
-                                                    <span class="metro-type">13</span>
-                                                    <span class="metro-date">2017-07-04 18:16:08 UTC</span>
-                                                </a>
+                                <% end %>
+                                             
+                                             
                             </div>
                         </div>
                     </div>
@@ -281,163 +168,64 @@
                 <div class="bhoechie-tab-content">
                     <div class="row">
                         <div class="page">
-                            <div class="metr">                          
-                                                <a style="cursor: pointer" class="metrostyle eenmetro" href="/form/show">
-                                                    <span class="metro-icon fa fa-file" style="font-size:2em;color:white;padding-left:0.3em;margin-top:3px ;float:left"></span>
-                                                    <span class="metro-type">fw2g</span>   
-                                                    <span class="metro-date">2017-07-04 18:16:08 UTC</span>
-                                                </a>
-                                                 <a class="metrostyle yoometro" style="cursor: pointer" href="/form/show">
-                                                    <span class="metro-icon fa fa-file" style="font-size: 2em; color: white; padding-left: 0.3em; margin-top: 3px ;float:left"></span>
-                                                    <span class="metro-type">1042-S</span>
-                                                    <span class="metro-date">2017-07-04 18:16:08 UTC </span>
-                                                </a>
-                                                <a class="metrostyle eenmetro" style="cursor: pointer" href="/form/show">
+                           <div class="metr">
+                                <% @submissions.each do |submission| %>
+                                  <% if (submission.updated_at.year == 2019) %>
+                                        <%# link_to 'Form '+submission.form_id.to_s+' submitted at '+submission.updated_at.to_s, controller: "forms", action: "show", unique_id: submission.unique_id, formname: submission.form_id %>
+                                         <%# link_to 'delete form', controller: "forms", action: "destroy", unique_id: submission.unique_id, class: 'delete_link' %>
+                                         
+                                         <%= link_to({controller: "forms", action: "show", unique_id: submission.unique_id, formname: submission.form_id}, {class: 'metrostyle metro'+submission.form_id.to_s}) do %>
+                                                       <span class="metro-icon fa fa-file" style=""></span>
+                                                       <span class="metro-type" style=""><%= submission.form_id.to_s %></span>
+                                                       <span class="metro-date" style=""><%= submission.updated_at.to_s %></span>      
+                                         <% end %>
+                                         <%= link_to '/form/'+submission.unique_id, method: :delete, data: {confirm: 'Are you sure?'}, class: 'delete_link', :remote => true do %>
+                                                            <i class="fa fa-times-circle faa-vertical animated-hover" aria-hidden="true"></i> 
+                                        <% end %>
+                                  <% end %>
 
-                                                    <span class="metro-icon fa fa-file" style="font-size: 2em; color: white; padding-left: 0.3em; margin-top: 3px ;float:left"></span>
-                                                    <span class="metro-type">8027</span>
-                                                    <span class="metro-date">2017-07-04 18:16:08 UTC</span>
-                                                </a>
-                                                <a class="metrostyle  reemetro" style="cursor: pointer" href="/form/show">
-                                                    <span class="metro-icon fa fa-file" style="font-size: 2em; color: white; padding-left: 0.3em; margin-top: 3px ;float:left"></span>
-                                                    <span class="metro-type">1042-S</span>
-                                                    <span class="metro-date">2017-07-04 18:16:08 UTC </span>
-                                                </a>
-                                                 <a class="metrostyle orgmetro" style="cursor: pointer" href="/form/show">
-                                                    <span class="metro-icon fa fa-file" style=""></span>
-                                                    <span class="metro-type">13</span>
-                                                    <span class="metro-date">2017-07-04 18:16:08 UTC</span>
-                                                </a>
-                            </div>
-                            <div class="metr">
-                                               
-                                                <a style="cursor: pointer" class="metrostyle  reemetro" href="/form/show">
-
-                                                    <span class="metro-icon fa fa-file" style="font-size: 2em; color: white; padding-left: 0.3em; margin-top: 3px ;float:left"></span>
-                                                    <span class="metro-type">fw2g</span>
-                                                    <span class="metro-date">2017-07-04 18:16:08 UTC</span>
-                                                </a>
-                                              <a style="cursor: pointer" class="metrostyle   toometro" href="/form/show">
-                                                    <span class="metro-icon fa fa-file" style="font-size: 2em; color: white; padding-left: 0.3em; margin-top: 3px ;float:left"></span>
-                                                    <span class="metro-type">3922</span>
-                                                    <span class="metro-date">2017-07-04 18:16:08 UTC</span>
-                                                </a>
-                                                <a style="cursor: pointer" class="metrostyle yoometro" href="/form/show">
-
-                                                    <span class="metro-icon fa fa-file" style="font-size: 2em; color: white; padding-left: 0.3em; margin-top: 3px ;float:left"></span>
-                                                    <span class="metro-type">8027</span>
-                                                    <span class="metro-date">2017-07-04 18:16:08 UTC</span>
-                                                </a>
-                                               
-                                               <a style="cursor: pointer" class="metrostyle  toometro" href="/form/show">
-                                                    <span class="metro-icon fa fa-file" style="font-size: 2em; color: white; padding-left: 0.3em; margin-top: 3px ;float:left"></span>
-                                                    <span class="metro-type">1042-S</span>
-                                                    <span class="metro-date">2017-07-04 18:16:08 UTC</span>
-                                                </a>
-                                                <a style="cursor: pointer" class="metrostyle  orgmetro" href="/form/show">
-                                                    <span class="metro-icon fa fa-file" style="font-size: 2em; color: white; padding-left: 0.3em; margin-top: 3px ;float:left"></span>
-                                                    <span class="metro-type">3922</span>
-                                                    <span class="metro-date">2017-07-04 18:16:08 UTC</span>
-                                                </a>
+                                <% end %>
+                                             
+                                             
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="bhoechie-tab-content">
-                    <div class="row">
-                        <div class="page">
-                            <div class="metr">
-                                               
-                                                <a style="cursor: pointer" class="metrostyle  reemetro" href="/form/show">
-
-                                                    <span class="metro-icon fa fa-file" style="font-size: 2em; color: white; padding-left: 0.3em; margin-top: 3px ;float:left"></span>
-                                                    <span class="metro-type">fw2g</span>
-                                                    <span class="metro-date">2017-07-04 18:16:08 UTC</span>
-                                                </a>
-                                              <a style="cursor: pointer" class="metrostyle   toometro" href="/form/show">
-                                                    <span class="metro-icon fa fa-file" style="font-size: 2em; color: white; padding-left: 0.3em; margin-top: 3px ;float:left"></span>
-                                                    <span class="metro-type">3922</span>
-                                                    <span class="metro-date">2017-07-04 18:16:08 UTC</span>
-                                                </a>
-                                                <a style="cursor: pointer" class="metrostyle yoometro" href="/form/show">
-
-                                                    <span class="metro-icon fa fa-file" style="font-size: 2em; color: white; padding-left: 0.3em; margin-top: 3px ;float:left"></span>
-                                                    <span class="metro-type">8027</span>
-                                                    <span class="metro-date">2017-07-04 18:16:08 UTC</span>
-                                                </a>
-                                               
-                                               <a style="cursor: pointer" class="metrostyle  toometro" href="/form/show">
-                                                    <span class="metro-icon fa fa-file" style="font-size: 2em; color: white; padding-left: 0.3em; margin-top: 3px ;float:left"></span>
-                                                    <span class="metro-type">1042-S</span>
-                                                    <span class="metro-date">2017-07-04 18:16:08 UTC</span>
-                                                </a>
-                                                <a style="cursor: pointer" class="metrostyle  orgmetro"  href="/form/show">
-                                                    <span class="metro-icon fa fa-file" style="font-size: 2em; color: white; padding-left: 0.3em; margin-top: 3px ;float:left"></span>
-                                                    <span class="metro-type">3922</span>
-                                                    <span class="metro-date">2017-07-04 18:16:08 UTC</span>
-                                                </a>
-                            </div>
-                            <div class="metr">                          
-                                                <a style="cursor: pointer" class="metrostyle eenmetro" href="/form/show">
-                                                    <span class="metro-icon fa fa-file" style="font-size:2em;color:white;padding-left:0.3em;margin-top:3px ;float:left"></span>
-                                                    <span class="metro-type">fw2g</span>   
-                                                    <span class="metro-date">2017-07-04 18:16:08 UTC</span>
-                                                </a>
-                                                 <a class="metrostyle yoometro" style="cursor: pointer" href="/form/show">
-                                                    <span class="metro-icon fa fa-file" style="font-size: 2em; color: white; padding-left: 0.3em; margin-top: 3px ;float:left"></span>
-                                                    <span class="metro-type">1042-S</span>
-                                                    <span class="metro-date">2017-07-04 18:16:08 UTC </span>
-                                                </a>
-                                                <a class="metrostyle eenmetro" style="cursor: pointer" href="/form/show">
-
-                                                    <span class="metro-icon fa fa-file" style="font-size: 2em; color: white; padding-left: 0.3em; margin-top: 3px ;float:left"></span>
-                                                    <span class="metro-type">8027</span>
-                                                    <span class="metro-date">2017-07-04 18:16:08 UTC</span>
-                                                </a>
-                                                <a class="metrostyle  reemetro" style="cursor: pointer" href="/form/show">
-                                                    <span class="metro-icon fa fa-file" style="font-size: 2em; color: white; padding-left: 0.3em; margin-top: 3px ;float:left"></span>
-                                                    <span class="metro-type">1042-S</span>
-                                                    <span class="metro-date">2017-07-04 18:16:08 UTC </span>
-                                                </a>
-                                                 <a class="metrostyle orgmetro" style="cursor: pointer" href="/form/show">
-                                                    <span class="metro-icon fa fa-file" style=""></span>
-                                                    <span class="metro-type">13</span>
-                                                    <span class="metro-date">2017-07-04 18:16:08 UTC</span>
-                                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                
             </div>
         </div>
   </div>
 </div>
     
 <style>
-
 span.metro-icon {
     font-size: 2em;
-    color: white;
     padding-left: 57px;
     padding-right: 27px;
     margin-top: 3px;
     float: left;
     display: block;
     width: 100%;
+    visibility:hidden;
 }
 span.metro-type {
-   color: white;
-    font-size: 1.8em;
+    font-size: 1.6em;
     float: left;
-    margin-top: 9px;
-    padding-left: 3px;
+    margin-top: 4px;
+    padding-left: 9px;
 }
 span.metro-date {
-    color: white;
     float: left;
-    margin-top: 5px;
-    margin-left: 5px;
+    margin-top: 18px;
+    margin-left: 11px;
     margin-right: 7px;
-    font-size: 10px;
+    font-size: 13px;
+}
+.m-label {
+    float: left;
+    padding: 15px;
+}
+.labels-container {
+    clear:both;
 }
 </style>
