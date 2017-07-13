@@ -24,12 +24,19 @@ class FormsController < ApplicationController
         @form_fields[value.field_name] = value.field_value
       end
       @form_fields['unique_id'] = params[:unique_id]
+      @form_fields['label'] = @form[0]['label']
     else
       @form_fields = Hash.new
       @form_fields['unique_id'] = SecureRandom.uuid
     end  
     #get labels 
-    @labels = Field.where(user_id: current_user.id).where.not(label: nil,label: "" ).pluck(:label,:label,:labelcolor).uniq
+    @labels = Field.where(user_id: current_user.id).where.not(label: nil,label: "" ).pluck(:label).uniq
+    @colors = Field.where(user_id: current_user.id).where.not(label: nil,label: "" ).pluck(:label,:labelcolor).uniq
+    @labels.push("other")
+    @colors_array = Hash.new
+    @colors.each do |color|
+        @colors_array[color[0]] = color[1]
+    end
   end
 
   # GET /forms/new
@@ -51,7 +58,7 @@ class FormsController < ApplicationController
   # POST /forms.json
   def create
     params.each do |key,value|
-      if value.present? && !(['unique_id','controller','action','label'].include?(key))
+      if value.present? && !(['unique_id','controller','action','label','label_other','label_color'].include?(key))
         # is this unnecessary ?
         if value.kind_of?(Array)
           value = value[0]
@@ -69,10 +76,10 @@ class FormsController < ApplicationController
         @field.unique_id = params[:unique_id]
         if params[:label] == 'other'
           @field.label = params[:label_other]
-          @field.labelcolor = params[:label_color]
         else 
           @field.label = params[:label]
         end
+        @field.labelcolor = params[:label_color]
         @field.save
       end
     end

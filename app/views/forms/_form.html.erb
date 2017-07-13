@@ -19,31 +19,49 @@
                     <div class="rel col-lg-6">
                        
                        <form id="form1" action="/form/save">
-                        <% @labels.push(["other","other",""]) %>
-                        <%= @labels.inspect%>
 <!-- Label part -->
                     <div id="label-container">
                       Label:
-                      <%= select_tag(:label, options_for_select(@labels),{id: "label"} )%>
+                      <%= select_tag(:label, options_for_select(@labels,@form_fields['label']),{id: "label"} )%>
                       <div id="label-other-container"> Please enter a new label and choose color:&nbsp;&nbsp;
-                          <input id="label-other"  type="text" name="label_other" value="<%= @form_fields['label']%>">
+                          <input id="label-other"  type="text" name="label_other" value="">
                           <a href="#" class="btn btn-default" id="cp4">&nbsp;&nbsp;</a>
                           <input id="label-color" type="hidden" name="label_color" value="#e4e4e4">
                       </div>
+                    </div>
+                    <div id="labels-colors">
+                        <% @colors_array.each do |color| %>
+                        <% if @form_fields['label'] == color[0] 
+                              @additional_style = ' display:block;' 
+                           else 
+                              @additional_style = ''
+                           end %>
+                        <div style="background:<%= color[1] %>;<%= @additional_style %>" id="color-<%= color[0].delete(' ') %>" class="color-box"></div>
+                        <% end %>
                     </div>
 <script>
 $(document).ready( function() { 
     if($('#label').val() == 'other'){
            $('#label-other-container').show();
        }
-
+    var labelname = $('#label').val().replace(/ /g, '');
+    $('#color-'+labelname).show();
+    var color = $('#color-'+labelname).css("background-color");
+    $('#label-color').val(color);
 
     $('#label').change(function(){
        if($(this).val() == 'other'){ //'.val()'
            $('#label-other-container').show();
-           return true;
        }
-       $('#label-other-container').hide();
+       else {
+         $('#label-other-container').hide();      
+       }
+       var labelname = $('#label').val().replace(/ /g, '');
+       $('.color-box').hide();
+       $('#color-'+labelname).show();
+       var color = $('#color-'+labelname).css("background-color");
+       $('#label-color').val(color);
+
     });
 });
 $(function() {
@@ -64,9 +82,21 @@ $(function() {
 }
 #label-container {
   margin: 20px 0;
+  float:left;
 }
 #fields-container {
   position: relative;
+}
+#labels-colors {
+  float: left;
+  padding: 20px;
+}
+.color-box {
+  background: #701f1f;
+  width: 20px;
+  height: 20px;
+  display:none;
+  border:1px solid silver;
 }
 </style>
 <!-- end label parts -->  
