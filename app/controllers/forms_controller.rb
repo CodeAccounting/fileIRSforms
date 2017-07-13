@@ -28,6 +28,8 @@ class FormsController < ApplicationController
       @form_fields = Hash.new
       @form_fields['unique_id'] = SecureRandom.uuid
     end  
+    #get labels 
+    @labels = Field.where(user_id: current_user.id).where.not(label: nil,label: "" ).pluck(:label,:label,:labelcolor).uniq
   end
 
   # GET /forms/new
@@ -49,12 +51,12 @@ class FormsController < ApplicationController
   # POST /forms.json
   def create
     params.each do |key,value|
-      if value.present? && !(['unique_id','controller','action'].include?(key))
+      if value.present? && !(['unique_id','controller','action','label'].include?(key))
         # is this unnecessary ?
         if value.kind_of?(Array)
           value = value[0]
         end 
-        found = Field.where(unique_id: params[:unique_id], field_name: key.to_s, field_value: value.to_s )
+        found = Field.where(unique_id: params[:unique_id], field_name: key.to_s )
         if found.blank?
           @field = Field.new()
         else
@@ -65,6 +67,12 @@ class FormsController < ApplicationController
         @field.user_id = current_user.id
         @field.form_id = params[:form_id]
         @field.unique_id = params[:unique_id]
+        if params[:label] == 'other'
+          @field.label = params[:label_other]
+          @field.labelcolor = params[:label_color]
+        else 
+          @field.label = params[:label]
+        end
         @field.save
       end
     end

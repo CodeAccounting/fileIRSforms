@@ -9,8 +9,7 @@
                     <div class="col-lg-3">
                     </div>
                     <div class="header col-lg-6">
-                        <img width="100%"  src="/
-media/form_header.png" />
+                        
                     </div> 
                     <div class="col-lg-3">
                     </div>
@@ -18,40 +17,100 @@ media/form_header.png" />
             <div class="row">
                     <div class="col-lg-3"></div>
                     <div class="rel col-lg-6">
-                        <img width="100%" src="/
-media/form1.png" />
+                       
                        <form id="form1" action="/form/save">
-                          <input class="abs" style="top: 3%;left: 4%;width: 47%;" type="text" name="13e" value="<%= @form_fields['13e']%>">
-                          <input class="abs" style="top: 1%;left: 77%;width: 19%;height: 3%;" type="text" name="13f" value="<%= @form_fields['13f']%>">
-                          <input class="abs" style="top: 4.5%;left: 77%;width: 19%;height: 3%;" type="text" name="13g" value="<%= @form_fields['13g']%>">
-                          <input class="abs" style="top: 10%;left: 4%;width: 32%;height: 8%;" type="text" name="13h" value="<%= @form_fields['13h']%>" >
-                          <input class="abs" style="top: 13%;left: 37%;width: 41%;eight: 5%;" type="text" name="13i" value="<%= @form_fields['13i']%>">
-                          <input class="abs" style="top: 12%;left: 79%;width: 15%;eight: 7%;" type="text" name="13j" value="<%= @form_fields['13j']%>">
-                          <input class="abs" style="top: 21%;left: 5%;width: 58%;height: 4%;" type="text" name="13k" value="<%= @form_fields['13k']%>">
-                          <input class="abs" style="top: 21%;left: 64%;width: 31%;height: 5%;" type="text" name="13l" value="<%= @form_fields['13l']%>">
-                          <input class="abs" style="top: 29%;left: 5%;width: 90%;height: 4%;%" type="text" name="14a" value="<%= @form_fields['14a']%>">
-                          <input class="abs" style="top: 36%;left: 5%;width: 45%;height: 4%;" type="text" name="14b" value="<%= @form_fields['14b']%>">
-                          <input  type="hidden" name="15" value="unchecked">
-                          <input  class="abs" style="top: 35%;left: 90%;width: 3%;height: 3%;" type="checkbox" name="15" <%= @form_fields['15']%> value="checked">
-                          <input class="abs" style="top: 43%;left: 5%;width: 51%;height: 5%;" type="text" name="15a" value="<%= @form_fields['15a']%>">
-                          <input class="abs" style="top: 43%;left: 57%;width: 18%;height: 4.7%;" type="text" name="15b" value="<%= @form_fields['15b']%>">
-                          <input class="abs" style="top: 43%;left: 77%;width: 18%;height: 5%;" type="text" name="15c" value="<%= @form_fields['15c']%>">
-                          <input class="abs" style="top: 48%;left: 52%;width: 43%;height: 3.5%;" type="text" name="15d" value="<%= @form_fields['15d']%>">
-                          <input class="abs" style="top: 52%;left: 53%;width: 43%;height: 2.9%;" type="text" name="15e" value="<%= @form_fields['15e']%>">
-                          <input class="abs" style="top: 58%;left: 4%;width: 27%;height: 4%;" type="text" name="15f" value="<%= @form_fields['15f']%>">
-                          <input class="abs" style="top: 58%;left: 32%;width: 63%;height: 4.5%;" type="text" name="15g" value="<%= @form_fields['15g']%>">
-                          <input class="abs" style="top: 65%;left: 4%;width: 92%;height: 5%;" type="text" name="15h" value="<%= @form_fields['15h']%>">
-                          <input class="abs" style="top: 72%;left: 4%;width: 92%;height: 5%;" type="text" name="15i" value="<%= @form_fields['15i']%>">
-                          <input class="abs" style="top: 79%;left: 4%;width: 59%;height: 5%;" type="text" name="16a" value="<%= @form_fields['16a']%>">
-                          <input class="abs" style="top: 79%;left: 64%;width: 31%;height: 5%;" type="text" name="16b" value="<%= @form_fields['16b']%>">
-                          <input class="abs" style="top: 87%;left: 4%;width: 47%;height: 4%;" type="text" name="16c" value="<%= @form_fields['16c']%>">
-                          <input class="abs" style="top: 87%;left: 52%;width: 21%;height: 4.5%;" type="text" name="16d" value="<%= @form_fields['16d']%>">
-                          <input class="abs" style="top: 87%;left: 74%;width: 22%;height: 4%;" type="text" name="16e" value="<%= @form_fields['16e']%>">
-                          <input class="abs" style="top: 94%;left: 4%;width: 37%;height: 5%;" type="text" name="17a" value="<%= @form_fields['17a']%>">
-                          <input class="abs" style="top: 94%;left: 42%;width: 29%;height: 5%;" type="text" name="17b" value="<%= @form_fields['17b']%>">
-                          <input class="abs" style="top: 94%;left: 72%; width: 24%;height: 5%;" type="text" name="17c" value="<%= @form_fields['17c']%>">
-                          <input type="hidden" name="unique_id" value="<%= @form_fields['unique_id'] %>">
-                          <input type="hidden" name="form_id" value="1042-s"> 
+                        <% @labels.push(["other","other",""]) %>
+                        <%= @labels.inspect%>
+<!-- Label part -->
+                    <div id="label-container">
+                      Label:
+                      <%= select_tag(:label, options_for_select(@labels),{id: "label"} )%>
+                      <div id="label-other-container"> Please enter a new label and choose color:&nbsp;&nbsp;
+                          <input id="label-other"  type="text" name="label_other" value="<%= @form_fields['label']%>">
+                          <a href="#" class="btn btn-default" id="cp4">&nbsp;&nbsp;</a>
+                          <input id="label-color" type="hidden" name="label_color" value="#e4e4e4">
+                      </div>
+                    </div>
+<script>
+$(document).ready( function() { 
+    if($('#label').val() == 'other'){
+           $('#label-other-container').show();
+       }
+
+
+    $('#label').change(function(){
+       if($(this).val() == 'other'){ //'.val()'
+           $('#label-other-container').show();
+           return true;
+       }
+       $('#label-other-container').hide();
+    });
+});
+$(function() {
+        $('#cp4').colorpicker().on('changeColor', function(e) {
+            $('#cp4')[0].style.backgroundColor = e.color.toString(
+                'rgba');
+            $('#label-color').val(e.color.toString(
+                'rgba'));
+        });
+    });
+</script>
+<style>
+#label-other {
+  width:140px;
+}
+#label-other-container {
+  display:none;
+}
+#label-container {
+  margin: 20px 0;
+}
+#fields-container {
+  position: relative;
+}
+</style>
+<!-- end label parts -->  
+                          <div>
+                            <img width="100%"  src="/
+media/form_header.png" />
+                          </div>
+                          <div id="fields-container">
+                             <img width="100%" src="/
+media/form1.png" />
+                              <input class="abs" style="top: 3%;left: 4%;width: 47%;" type="text" name="13e" value="<%= @form_fields['13e']%>">
+                              <input class="abs" style="top: 1%;left: 77%;width: 19%;height: 3%;" type="text" name="13f" value="<%= @form_fields['13f']%>">
+                              <input class="abs" style="top: 4.5%;left: 77%;width: 19%;height: 3%;" type="text" name="13g" value="<%= @form_fields['13g']%>">
+                              <input class="abs" style="top: 10%;left: 4%;width: 32%;height: 8%;" type="text" name="13h" value="<%= @form_fields['13h']%>" >
+                              <input class="abs" style="top: 13%;left: 37%;width: 41%;eight: 5%;" type="text" name="13i" value="<%= @form_fields['13i']%>">
+                              <input class="abs" style="top: 12%;left: 79%;width: 15%;eight: 7%;" type="text" name="13j" value="<%= @form_fields['13j']%>">
+                              <input class="abs" style="top: 21%;left: 5%;width: 58%;height: 4%;" type="text" name="13k" value="<%= @form_fields['13k']%>">
+                              <input class="abs" style="top: 21%;left: 64%;width: 31%;height: 4%;" type="text" name="13l" value="<%= @form_fields['13l']%>">
+                              <input class="abs" style="top: 29%;left: 5%;width: 90%;height: 4%;" type="text" name="14a" value="<%= @form_fields['14a']%>">
+                              <input class="abs" style="top: 36%;left: 5%;width: 45%;height: 34;" type="text" name="14b" value="<%= @form_fields['14b']%>">
+                              <input  type="hidden" name="15" value="unchecked">
+                              <input  class="abs" style="top: 35%;left: 90%;width: 3%;height: 3%;" type="checkbox" name="15" <%= @form_fields['15']%> value="checked">
+                              <input class="abs" style="top: 43%;left: 5%;width: 51%;height: 5%;" type="text" name="15a" value="<%= @form_fields['15a']%>">
+                              <input class="abs" style="top: 43%;left: 57%;width: 18%;height: 4.7%;" type="text" name="15b" value="<%= @form_fields['15b']%>">
+                              <input class="abs" style="top: 43%;left: 77%;width: 18%;height: 5%;" type="text" name="15c" value="<%= @form_fields['15c']%>">
+                              <input class="abs" style="top: 48%;left: 52%;width: 43%;height: 3.5%;" type="text" name="15d" value="<%= @form_fields['15d']%>">
+                              <input class="abs" style="top: 52%;left: 53%;width: 43%;height: 2.9%;" type="text" name="15e" value="<%= @form_fields['15e']%>">
+                              <input class="abs" style="top: 58%;left: 4%;width: 27%;height: 4%;" type="text" name="15f" value="<%= @form_fields['15f']%>">
+                              <input class="abs" style="top: 58%;left: 32%;width: 63%;height: 4.5%;" type="text" name="15g" value="<%= @form_fields['15g']%>">
+                              <input class="abs" style="top: 65%;left: 4%;width: 92%;height: 5%;" type="text" name="15h" value="<%= @form_fields['15h']%>">
+                              <input class="abs" style="top: 72%;left: 4%;width: 92%;height: 5%;" type="text" name="15i" value="<%= @form_fields['15i']%>">
+                              <input class="abs" style="top: 79%;left: 4%;width: 59%;height: 5%;" type="text" name="16a" value="<%= @form_fields['16a']%>">
+                              <input class="abs" style="top: 79%;left: 64%;width: 31%;height: 5%;" type="text" name="16b" value="<%= @form_fields['16b']%>">
+                              <input class="abs" style="top: 87%;left: 4%;width: 47%;height: 4%;" type="text" name="16c" value="<%= @form_fields['16c']%>">
+                              <input class="abs" style="top: 87%;left: 52%;width: 21%;height: 4.5%;" type="text" name="16d" value="<%= @form_fields['16d']%>">
+                              <input class="abs" style="top: 87%;left: 74%;width: 22%;height: 4%;" type="text" name="16e" value="<%= @form_fields['16e']%>">
+                              <input class="abs" style="top: 94%;left: 4%;width: 37%;height: 5%;" type="text" name="17a" value="<%= @form_fields['17a']%>">
+
+
+                              <input class="abs" style="top: 94%;left: 42%;width: 29%;height: 5%;" type="text" name="17b" value="<%= @form_fields['17b']%>">
+                              <input class="abs" style="top: 94%;left: 72%; width: 24%;height: 5%;" type="text" name="17c" value="<%= @form_fields['17c']%>">
+                              <input type="hidden" name="unique_id" value="<%= @form_fields['unique_id'] %>">
+                              <input type="hidden" name="form_id" value="1042-s"> 
+                          </div><!-- fields-container -->
                         </form>
                         
                     </div>

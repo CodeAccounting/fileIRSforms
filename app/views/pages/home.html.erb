@@ -106,11 +106,10 @@
                 </div>
                 <div class="bhoechie-tab-content active">
                     <div class="labels-container">
-                            <div class="m-label"><div class="square-box"></div><div class="square-label"> Label 1</div></div>
-                            <div class="m-label"><div class="square-box"></div><div class="square-label"> Label 2</div></div>
-                            <div class="m-label"><div class="square-box"></div><div class="square-label"> Label 3</div></div>
-                            <div class="m-label"><div class="square-box"></div><div class="square-label"> Label 4</div></div>
-                            <div class="m-label"><div class="square-box"></div><div class="square-label"> Label 5</div></div>
+                      <% @labels.each do |label| %>
+                            <div class="m-label"><div style='background:<%= label[1]%>' class="square-box"></div><div class="square-label"> <%= label[0] %></div></div>
+                      <% end %>
+                            
                     </div>
                     <div class="row">
                         
@@ -122,7 +121,7 @@
                                         <%# link_to 'Form '+submission.form_id.to_s+' submitted at '+submission.updated_at.to_s, controller: "forms", action: "show", unique_id: submission.unique_id, formname: submission.form_id %>
                                          <%# link_to 'delete form', controller: "forms", action: "destroy", unique_id: submission.unique_id, class: 'delete_link' %>
                                          
-                                         <%= link_to({controller: "forms", action: "show", unique_id: submission.unique_id, formname: submission.form_id}, {class: 'metrostyle metro'+submission.form_id.to_s}) do %>
+                                         <%= link_to({controller: "forms", action: "show", unique_id: submission.unique_id, formname: submission.form_id}, {class: 'metrostyle', style: 'background:'+ submission.labelcolor.to_s}) do %>
                                                        <span class="metro-icon fa fa-file" style=""></span>
                                                        <span class="metro-type" style=""><%= submission.form_id.to_s %></span>
                                                        <span class="metro-date" style=""><%= submission.updated_at.to_s %></span>      

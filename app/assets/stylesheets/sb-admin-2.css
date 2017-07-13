@@ -455,7 +455,7 @@ table.dataTable thead .sorting:after {
         }
 
             .metrostyle:hover {
-                background-color: #0066ff;
+                background-color: #0066ff!important;
             }
 
         .metrostylelarge {
