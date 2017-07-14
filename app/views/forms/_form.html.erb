@@ -39,66 +39,6 @@
                         <div style="background:<%= color[1] %>;<%= @additional_style %>" id="color-<%= color[0].delete(' ') %>" class="color-box"></div>
                         <% end %>
                     </div>
-<script>
-$(document).ready( function() { 
-    if($('#label').val() == 'other'){
-           $('#label-other-container').show();
-       }
-    var labelname = $('#label').val().replace(/ /g, '');
-    $('#color-'+labelname).show();
-    var color = $('#color-'+labelname).css("background-color");
-    $('#label-color').val(color);
-
-    $('#label').change(function(){
-       if($(this).val() == 'other'){ //'.val()'
-           $('#label-other-container').show();
-       }
-       else {
-         $('#label-other-container').hide();      
-       }
-       var labelname = $('#label').val().replace(/ /g, '');
-       $('.color-box').hide();
-       $('#color-'+labelname).show();
-       var color = $('#color-'+labelname).css("background-color");
-       $('#label-color').val(color);
-
-    });
-});
-$(function() {
-        $('#cp4').colorpicker().on('changeColor', function(e) {
-            $('#cp4')[0].style.backgroundColor = e.color.toString(
-                'rgba');
-            $('#label-color').val(e.color.toString(
-                'rgba'));
-        });
-    });
-</script>
-<style>
-#label-other {
-  width:140px;
-}
-#label-other-container {
-  display:none;
-}
-#label-container {
-  margin: 20px 0;
-  float:left;
-}
-#fields-container {
-  position: relative;
-}
-#labels-colors {
-  float: left;
-  padding: 20px;
-}
-.color-box {
-  background: #701f1f;
-  width: 20px;
-  height: 20px;
-  display:none;
-  border:1px solid silver;
-}
-</style>
 <!-- end label parts -->  
                           <div>
                             <img width="100%"  src="/

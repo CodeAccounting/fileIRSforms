@@ -2,10 +2,34 @@
 Download Instructions</a>
 
             <div class="row">
+              <form id="form1" action="/form/save">
+
+                   <div class="rel col-lg-10">
+<!-- Label part -->
+                    <div id="label-container">
+                      Label:
+                      <%= select_tag(:label, options_for_select(@labels,@form_fields['label']),{id: "label"} )%>
+                      <div id="label-other-container"> Please enter a new label and choose color:&nbsp;&nbsp;
+                          <input id="label-other"  type="text" name="label_other" value="">
+                          <a href="#" class="btn btn-default" id="cp4">&nbsp;&nbsp;</a>
+                          <input id="label-color" type="hidden" name="label_color" value="#e4e4e4">
+                      </div>
+                    </div>
+                    <div id="labels-colors">
+                        <% @colors_array.each do |color| %>
+                        <% if @form_fields['label'] == color[0] 
+                              @additional_style = ' display:block;' 
+                           else 
+                              @additional_style = ''
+                           end %>
+                        <div style="background:<%= color[1] %>;<%= @additional_style %>" id="color-<%= color[0].delete(' ') %>" class="color-box"></div>
+                        <% end %>
+                    </div>
+<!-- end label parts -->
+                   </div>
                     <div class="rel col-lg-10">
                         <img width="100%" src="/
 media/fw2g.png" />
-                       <form id="form1" action="/form/save">
                            <input class="abs" style="top: 9%;left: 3%;w;width: 43%;height: 21%;" name="payers_details" value="" placeholder="" type="text">
                           <input class="abs" style="top: 32%;left: 3%;width: 22%;height: 11%;/* display: block; */" name="payers_fdi" value="" placeholder="" type="text">
                           <input class="abs" style="top: 32%;left: 25%;w;width: 21.5%;height: 11%;/* display: block; */k;" name="payers_phone" value="" placeholder="" type="text">
@@ -44,9 +68,9 @@ media/fw2g.png" />
                           <input type="hidden" name="unique_id" value="<%= @form_fields['unique_id'] %>">
 
 
-                        </form>
                         
                     </div>
+                </form>
             </div>
             <!-- /.row -->
 <style>

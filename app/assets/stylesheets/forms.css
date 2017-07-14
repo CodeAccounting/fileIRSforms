@@ -1,0 +1,24 @@
+#label-other {
+  width:140px;
+}
+#label-other-container {
+  display:none;
+}
+#label-container {
+  margin: 20px 0;
+  float:left;
+}
+#fields-container {
+  position: relative;
+}
+#labels-colors {
+  float: left;
+  padding: 20px;
+}
+.color-box {
+  background: #701f1f;
+  width: 20px;
+  height: 20px;
+  display:none;
+  border:1px solid silver;
+}

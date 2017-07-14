@@ -1,10 +1,33 @@
 <a class="instructions" href="/media/i3921.pdf" target="_blank"><i class="fa fa-question-circle" ></i>  Download Instructions</a>
 <br/>
             <div class="row">
+              <form id="form1" action="/form/save">
+                    <div class="rel col-lg-12">
+<!-- Label part -->
+                      <div id="label-container">
+                        Label:
+                        <%= select_tag(:label, options_for_select(@labels,@form_fields['label']),{id: "label"} )%>
+                        <div id="label-other-container"> Please enter a new label and choose color:&nbsp;&nbsp;
+                            <input id="label-other"  type="text" name="label_other" value="">
+                            <a href="#" class="btn btn-default" id="cp4">&nbsp;&nbsp;</a>
+                            <input id="label-color" type="hidden" name="label_color" value="#e4e4e4">
+                        </div>
+                      </div>
+                      <div id="labels-colors">
+                          <% @colors_array.each do |color| %>
+                          <% if @form_fields['label'] == color[0] 
+                                @additional_style = ' display:block;' 
+                             else 
+                                @additional_style = ''
+                             end %>
+                          <div style="background:<%= color[1] %>;<%= @additional_style %>" id="color-<%= color[0].delete(' ') %>" class="color-box"></div>
+                          <% end %>
+                      </div>
+<!-- end label parts -->
+                    </div>
                     <div class="rel col-lg-12">
                         <img width="100%" src="/
 media/3922.png" />
-                       <form id="form1" action="/form/save">
                           <input class="abs" style="top: 7%;left: 10%;width: 38%;height: 6%;" type="text" name="corp_name" value="<%= @form_fields['corp_name']%>" placeholder="">
                           <input class="abs" style="top: 6%;left: 48.5%;width: 15.5%;height: 3%;" type="text" name="1" value="<%= @form_fields['1']%>" placeholder="">
                           <input class="abs" style="top: 10.2%;left: 48.5%;width: 15.5%;height: 3%;" type="text" name="2" value="<%= @form_fields['2']%>" placeholder="">
@@ -55,9 +78,9 @@ media/3922.png" />
                           <input type="hidden" name="unique_id" value="<%= @form_fields['unique_id'] %>">
 
 
-                        </form>
                         
                     </div>
+              </form>
             </div>
             <!-- /.row -->
 <style>
