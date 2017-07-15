@@ -6,25 +6,29 @@ Download Instructions</a>
 
                    <div class="rel col-lg-10">
 <!-- Label part -->
-                    <div id="label-container">
-                      Label:
-                      <%= select_tag(:label, options_for_select(@labels,@form_fields['label']),{id: "label"} )%>
-                      <div id="label-other-container"> Please enter a new label and choose color:&nbsp;&nbsp;
-                          <input id="label-other"  type="text" name="label_other" value="">
-                          <a href="#" class="btn btn-default" id="cp4">&nbsp;&nbsp;</a>
-                          <input id="label-color" type="hidden" name="label_color" value="#e4e4e4">
+                      <div id="label-container">
+                        Label:
+                        <%= select_tag(:label, options_for_select(@labels,@form_fields['label']),{id: "label"} )%>
+                        <div  id="label-other-container"> Please enter a new label and choose color:&nbsp;&nbsp;
+                            <div class="input-group">
+                              <input id="label-other"  class ="form-control" type="text" name="label_other" value="">
+                              <div class="input-group input-append color" data-color="rgb(255, 146, 180)" data-color-format="rgb" id="cp4">
+                                  <input type="text" class="form-control"  aria-describedby="basic-addon1" value="rgb(213,215,219)" name="label_color" readonly="readonly">
+                                  <span class=" add-on input-group-addon"><i style="background-color: rgb(213,215,219);"></i></span>
+                              </div>
+                            </div>
+                        </div>
                       </div>
-                    </div>
-                    <div id="labels-colors">
-                        <% @colors_array.each do |color| %>
-                        <% if @form_fields['label'] == color[0] 
-                              @additional_style = ' display:block;' 
-                           else 
-                              @additional_style = ''
-                           end %>
-                        <div style="background:<%= color[1] %>;<%= @additional_style %>" id="color-<%= color[0].delete(' ') %>" class="color-box"></div>
-                        <% end %>
-                    </div>
+                      <div id="labels-colors">
+                          <% @colors_array.each do |color| %>
+                          <% if @form_fields['label'] == color[0] 
+                                @additional_style = ' display:block;' 
+                             else 
+                                @additional_style = ''
+                             end %>
+                          <div style="background:<%= color[1] %>;<%= @additional_style %>" id="color-<%= color[0].delete(' ') %>" class="color-box"></div>
+                          <% end %>
+                      </div>
 <!-- end label parts -->
                    </div>
                     <div class="rel col-lg-10">
