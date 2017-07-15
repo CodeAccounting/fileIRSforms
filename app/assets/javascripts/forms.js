@@ -23,11 +23,11 @@ $('.forms.show').ready( function() {
 
     });
     //colorpicker
-     $('#cp4').colorpicker().on('changeColor', function(e) {
+     $('#cp4').colorpicker(); /*.on('changeColor', function(e) {
             $('#cp4')[0].style.backgroundColor = e.color.toString(
                 'rgba');
             $('#label-color').val(e.color.toString(
                 'rgba'));
-     });
+     });*/
 });
 

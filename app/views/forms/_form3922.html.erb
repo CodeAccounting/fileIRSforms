@@ -9,8 +9,7 @@
                         <%= select_tag(:label, options_for_select(@labels,@form_fields['label']),{id: "label"} )%>
                         <div id="label-other-container"> Please enter a new label and choose color:&nbsp;&nbsp;
                             <input id="label-other"  type="text" name="label_other" value="">
-                            <a href="#" class="btn btn-default" id="cp4">&nbsp;&nbsp;</a>
-                            <input id="label-color" type="hidden" name="label_color" value="#e4e4e4">
+                            <input  class="btn btn-default" value="#e4e4e4" id="cp4" name="label_color" />
                         </div>
                       </div>
                       <div id="labels-colors">
