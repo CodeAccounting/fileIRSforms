@@ -3,11 +3,11 @@
 <br/>
             <div class="row">
                 <form id="form1" action="/form/save">
-                    <div class="rel col-lg-10">
+                  <div class="rel col-lg-12">
 <!-- Label part -->
                       <div id="label-container">
                         Label:
-                        <%= select_tag(:label, options_for_select(@labels,@form_fields['label']),{id: "label"} )%>
+                        <%= select_tag(:label, options_for_select(@labels,@form_fields['label']),{id: "label", class: "form-control"} )%>
                         <div  id="label-other-container"> Please enter a new label and choose color:&nbsp;&nbsp;
                             <div class="input-group">
                               <input id="label-other"  class ="form-control" type="text" name="label_other" value="">
@@ -28,9 +28,11 @@
                           <div style="background:<%= color[1] %>;<%= @additional_style %>" id="color-<%= color[0].delete(' ') %>" class="color-box"></div>
                           <% end %>
                       </div>
+                      <div class="clear">&nbsp;</div>
 <!-- end label parts -->
-                    </div>
-                    <div class="rel col-lg-10">
+                    
+                    <div id="fields-container" class="form8027">
+
                         <img width="100%" src="/
 media/8027.png" />
                           
@@ -78,8 +80,8 @@ media/8027.png" />
                           <input name="form_id" value="8027" type="hidden"> 
                           <input name="unique_id" value="<%= @form_fields['unique_id'] %>" type="hidden">
 
-                        
                     </div>
+                  </div>
                 </form>
             </div>
             <!-- /.row -->

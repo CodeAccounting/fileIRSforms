@@ -1,13 +1,39 @@
 <p id="notice"></p>
-<% if (params['formname'] == '3922') %>
-    <%= render 'form3922', form_fields: @form_fields %>
-<% elsif (params['formname'] == '8027') %>
-    <%= render 'form8027', form_fields: @form_fields %>
-<% elsif (params['formname'] == 'fw2g') %>
-    <%= render 'formfw2g', form_fields: @form_fields %>
-<% else %>
-    <%= render 'form', form_fields: @form_fields %>
+<% 
+=begin
+ if (params['formname'] == '3922') 
+    render 'form3922', form_fields: @form_fields
+ elsif (params['formname'] == '8027') 
+    render 'form8027', form_fields: @form_fields 
+ elsif (params['formname'] == 'fw2g')
+    render 'formfw2g', form_fields: @form_fields 
+ else
+    render 'form', form_fields: @form_fields 
+ end 
+=end 
+%> 
+<% if (params['formname'] || '').include? "1099" %>
+    <div class="row">
+        <div class="col-lg-3">
+        </div>
+        <div class="header col-lg-6">
+            <!-- select form : -->
+            <div class="form-group">
+              <label for="form-type">Select form:</label>
+                  <% @form_types = [['1099-A', '1099a'], ['1099-B', '1099b'], ['1099-C','1099c'], ['1099-CAP','1099cap'], ['1099-DIV','1099div'], ['1099-G','1099g'], ['1099-H','1099h'], ['1099-INT','1099int'], ['1099-K','1099k'], ['1099-LTC','1099ltc'], ['1099-MISC','1099misc'], ['1099-OID','1099oid'], ['1099-PATR','1099patr'], ['1099-Q','1099q'], ['1099-R','1099r'], ['1099-S','1099s'], ['1099-SA','1099sa']] %>
+                  <%= select_tag(:form_type, options_for_select(@form_types,params['formname']),{id: "form-type",class: "form-control"} )%>          
+            </div>
+            
+                        
+        </div> 
+        <div class="col-lg-3">
+        </div>
+    </div>
 <% end %>
+<%= render :partial => "form"+params['formname'] rescue render :partial => 'form' %>
 
-<%# link_to 'Edit', edit_form_path(@form) %> |
+
+  
+
+<%# link_to 'Edit', edit_form_path(@form) %> 
 <%# link_to 'Back', forms_path %>

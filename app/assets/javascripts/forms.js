@@ -22,6 +22,12 @@ $('.forms.show').ready( function() {
        $('#label-color').val(color);
 
     });
+
+    $( "#form-type" ).on('change', function() {
+        var form_name = $('#form-type').val();
+        window.location.href = '/form/show/'+form_name;
+     });
+
     //colorpicker
      $('#cp4').colorpicker(); /*.on('changeColor', function(e) {
             $('#cp4')[0].style.backgroundColor = e.color.toString(
@@ -29,5 +35,8 @@ $('.forms.show').ready( function() {
             $('#label-color').val(e.color.toString(
                 'rgba'));
      });*/
+     
+     
+
 });
 

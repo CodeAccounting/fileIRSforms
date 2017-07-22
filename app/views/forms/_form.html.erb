@@ -5,24 +5,15 @@
 <a class="instructions" href="/media/iw2g.pdf" target="_blank"><i class="fa fa-question-circle" ></i>  Download Instructions</a>
 <br/>
 <br/>
+            
             <div class="row">
-                    <div class="col-lg-3">
-                    </div>
-                    <div class="header col-lg-6">
-                        
-                    </div> 
-                    <div class="col-lg-3">
-                    </div>
-            </div>
-            <div class="row">
-                    <div class="col-lg-3"></div>
-                    <div class="rel col-lg-6">
+                    <div class="rel col-lg-12">
                        
                        <form id="form1" action="/form/save">
 <!-- Label part -->
                       <div id="label-container">
                         Label:
-                        <%= select_tag(:label, options_for_select(@labels,@form_fields['label']),{id: "label"} )%>
+                        <%= select_tag(:label, options_for_select(@labels,@form_fields['label']),{id: "label", class: "form-control"} )%>
                         <div  id="label-other-container"> Please enter a new label and choose color:&nbsp;&nbsp;
                             <div class="input-group">
                               <input id="label-other"  class ="form-control" type="text" name="label_other" value="">
@@ -43,14 +34,11 @@
                           <div style="background:<%= color[1] %>;<%= @additional_style %>" id="color-<%= color[0].delete(' ') %>" class="color-box"></div>
                           <% end %>
                       </div>
+                      <div class="clear">&nbsp;</div>
 <!-- end label parts -->  
-                          <div>
-                            <img width="100%"  src="/
-media/form_header.png" />
-                          </div>
-                          <div id="fields-container">
-                             <img width="100%" src="/
-media/form1.png" />
+                        <img width="100%" class="header1042s" src="/media/form_header.png" />
+                          <div id="fields-container" class="form1042s">
+                             <img width="100%" src="/media/form1.png" />
                               <input class="abs" style="top: 3%;left: 4%;width: 47%;" type="text" name="13e" value="<%= @form_fields['13e']%>">
                               <input class="abs" style="top: 1%;left: 77%;width: 19%;height: 3%;" type="text" name="13f" value="<%= @form_fields['13f']%>">
                               <input class="abs" style="top: 4.5%;left: 77%;width: 19%;height: 3%;" type="text" name="13g" value="<%= @form_fields['13g']%>">
@@ -88,7 +76,6 @@ media/form1.png" />
                         </form>
                         
                     </div>
-                    <div class="col-lg-3"></div>
                     
             </div>
             <!-- /.row -->

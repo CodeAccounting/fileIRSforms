@@ -1,0 +1,43 @@
+<div class="row">
+                          <div class="rel col-lg-12">
+                             
+                             <form id="form1" action="/form/save">
+                        <!-- Label part -->
+                            <div id="label-container">
+                              Label:
+                              <%= select_tag(:label, options_for_select(@labels,@form_fields['label']),{id: "label", class: "form-control"} )%>
+                              <div  id="label-other-container"> Please enter a new label and choose color:&nbsp;&nbsp;
+                                  <div class="input-group">
+                                    <input id="label-other"  class ="form-control" type="text" name="label_other" value="">
+                                    <div class="input-group input-append color" data-color="rgb(213,215,219)" data-color-format="rgb" id="cp4">
+                                        <input type="text" class="form-control"  aria-describedby="basic-addon1" value="rgb(213,215,219)" name="label_color" readonly="readonly">
+                                        <span class=" add-on input-group-addon"><i style="background-color: rgb(213,215,219);"></i></span>
+                                    </div>
+                                  </div>
+                              </div>
+                            </div>
+                            <div id="labels-colors">
+                                <% @colors_array.each do |color| %>
+                                <% if @form_fields['label'] == color[0] 
+                                      @additional_style = ' display:block;' 
+                                   else 
+                                      @additional_style = ''
+                                   end %>
+                                <div style="background:<%= color[1] %>;<%= @additional_style %>" id="color-<%= color[0].delete(' ') %>" class="color-box"></div>
+                                <% end %>
+                            </div>
+                            <div class="clear">&nbsp;</div>
+                        <!-- end label parts -->  
+                                <div id="fields-container" class="form1099div">
+                                   <img width="100%" src="/media/1099div.png" />
+                                    <input class="abs" style="top: 0%;left: 0%;width: 0%;" type="text" name="" value="<%# @form_fields['13e']%>">
+                                    
+                                    <input type="hidden" name="unique_id" value="<%= @form_fields['unique_id'] %>">
+                                    <input type="hidden" name="form_id" value="1099"> 
+                                </div><!-- fields-container -->
+                              </form>
+                              
+                          </div>
+                          
+                  </div>
+                  <!-- /.row -->

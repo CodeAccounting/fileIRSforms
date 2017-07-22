@@ -4,11 +4,11 @@ Download Instructions</a>
             <div class="row">
               <form id="form1" action="/form/save">
 
-                   <div class="rel col-lg-10">
+                  <div class="rel col-lg-10">
 <!-- Label part -->
                       <div id="label-container">
                         Label:
-                        <%= select_tag(:label, options_for_select(@labels,@form_fields['label']),{id: "label"} )%>
+                        <%= select_tag(:label, options_for_select(@labels,@form_fields['label']),{id: "label", class: "form-control"} )%>
                         <div  id="label-other-container"> Please enter a new label and choose color:&nbsp;&nbsp;
                             <div class="input-group">
                               <input id="label-other"  class ="form-control" type="text" name="label_other" value="">
@@ -29,9 +29,10 @@ Download Instructions</a>
                           <div style="background:<%= color[1] %>;<%= @additional_style %>" id="color-<%= color[0].delete(' ') %>" class="color-box"></div>
                           <% end %>
                       </div>
+                      <div class="clear">&nbsp;</div>
 <!-- end label parts -->
-                   </div>
-                    <div class="rel col-lg-10">
+                      <div id="fields-container" class="formfw2g">
+
                         <img width="100%" src="/
 media/fw2g.png" />
                            <input class="abs" style="top: 9%;left: 3%;w;width: 43%;height: 21%;" name="payers_details" value="<%= @form_fields['payers_details']%>" placeholder="" type="text">
@@ -72,8 +73,8 @@ media/fw2g.png" />
                           <input type="hidden" name="unique_id" value="<%= @form_fields['unique_id'] %>">
 
 
-                        
-                    </div>
+                      </div>   
+                  </div>
                 </form>
             </div>
             <!-- /.row -->

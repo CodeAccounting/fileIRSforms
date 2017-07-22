@@ -8,12 +8,10 @@
   margin: 20px 0;
   float:left;
 }
-#fields-container {
-  position: relative;
-}
+
 #labels-colors {
   float: left;
-  padding: 20px;
+  padding: 47px 0 20px 10px;
 }
 .color-box {
   background: #701f1f;
@@ -24,4 +22,27 @@
 }
 .input-append.color {
   width:166px;
+}
+#fields-container {
+    position: relative;
+    max-width: 1200px;
+    min-width: 700px;
+}
+img.header1042s {
+    max-width: 700px;
+    min-width: 500px;
+}
+
+#fields-container.form1042s,
+#fields-container.form8027 {
+    max-width: 700px;
+    min-width: 500px;
+}
+
+#label-wrapper {
+    padding-bottom:50px;
+}
+
+.clear {
+  clear:both;
 }
