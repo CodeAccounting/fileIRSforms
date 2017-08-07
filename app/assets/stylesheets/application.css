@@ -28,7 +28,7 @@ div.rel {
 input.abs {
     display: block;
     position: absolute;
-    border: none;
+    border: 1px solid silver;
     color: #1a34ad;
     background:transparent;
 }
