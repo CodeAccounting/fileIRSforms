@@ -36,27 +36,65 @@
                         <img width="100%" src="/
 media/8027.png" />
                           
-                         <input class="abs" style="top: 8.3%;left: 18%;width: 59%;height: 2.1%;" name="name_of_e" value="" placeholder="" type="text">
-                          <input class="abs" style="top: 11.7%;left: 17.9%;width: 59.5%;height: 2.2%;" name="number_and_street" value="" placeholder="" type="text">
-                          <input class="abs" style="top: 15.2%;left: 18%;width: 59.5%;height: 2%;" name="city_state_zip" value="" placeholder="" type="text">
-                          <input class="abs" style="top: 8.5%;left: 78.5%;width: 21%;height: 2%;" name="employer_id" value="" placeholder="" type="text">
-                          <input class="abs" style="top: 25.6%;left: 2.5%;width: 75.5%;height: 2%;" name="employers_name" value="" placeholder="" type="text">
-                          <input class="abs" style="top: 28.8%;left: 2.5%;width: 64.8%;height: 2.2%;" name="number_and_street" value="" placeholder="" type="text">
-                          <input class="abs" style="top: 32.3%;left: 2.5%;height: 2%;width: 97%;" name="foreign_city_state_zip" value="" placeholder="" type="text">
+              
+
+                         <input class="abs" style="top: 8.3%;left: 18%;width: 59%;height: 2.1%;" name="name_of_e" value="<%= @form_fields['name_of_e']%>" placeholder="" type="text">
+                          <input class="abs" style="top: 11.7%;left: 17.9%;width: 59.5%;height: 2.2%;" name="number_and_street" value="<%= @form_fields['number_and_street']%>" placeholder="" type="text">
+                          <input class="abs" style="top: 15.2%;left: 18%;width: 59.5%;height: 2%;" name="city_state_zip" value="<%= @form_fields['city_state_zip']%>" placeholder="" type="text">
+                          <input class="abs" style="top: 8.5%;left: 78.5%;width: 21%;height: 2%;" name="employer_id" value="<%= @form_fields['employer_id']%>" placeholder="" type="text">
+                          <input class="abs" style="top: 25.6%;left: 2.5%;width: 75.5%;height: 2%;" name="employers_name" value="<%= @form_fields['employers_name']%>" placeholder="" type="text">
+                          <input class="abs" style="top: 28.8%;left: 2.5%;width: 64.8%;height: 2.2%;" name="number_and_street" value="<%= @form_fields['number_and_street']%>" placeholder="" type="text">
+                          <input class="abs" style="top: 32.3%;left: 2.5%;height: 2%;width: 97%;" name="foreign_city_state_zip" value="<%= @form_fields['foreign_city_state_zip']%>" placeholder="" type="text">
                           
-                          <input class="abs" style="top: 27.3%;left: 78.5%;width: 20.8%;height: 3.7%;" name="est_number" value="" placeholder="" type="text">
-                          <input class="abs" style="top: 28.8%;left: 68.3%;width: 9.5%;height: 2.2%;/*! border: 1px solid; */" name="apt_no" value="" placeholder="" type="text">
+                          <input class="abs" style="top: 27.3%;left: 78.5%;width: 20.8%;height: 3.7%;" name="est_number" value="<%= @form_fields['est_number']%>" placeholder="" type="text">
+                          <input class="abs" style="top: 28.8%;left: 68.3%;width: 9.5%;height: 2.2%;/*! border: 1px solid; */" name="apt_no" value="<%= @form_fields['apt_no']%>" placeholder="" type="text">
                           
-                          <input class="abs" style="top: 36.3%;left: 81%;width: 13.5%;height: 3.5%;/*! border: 1px solid blue; */" name="1" value="" placeholder="" type="text">        
-                          <input class="abs" style="top: 39.6%;left: 81%;width: 13.5%;height: 3.5%;" name="2" value="" placeholder="" type="text">
-                          <input class="abs" style="top: 43.1%;left: 81%;width: 13.5%;height: 3.5%;" name="3" value="" placeholder="" type="text">
-                          <input class="abs" style="top: 46.5%;left: 81%;width: 13.5%;height: 3.5%;" name="4a" value="" placeholder="" type="text">
-                          <input class="abs" style="top: 49.8%;left: 81%;width: 13.5%;height: 3.5%;" name="4b" value="" placeholder="" type="text">
-                          <input class="abs" style="top: 53.6%;left: 81%;width: 13.5%;height: 4.7%;" name="4c" value="" placeholder="" type="text">
-                          <input class="abs" style="top: 58.5%;left: 81%;width: 13.5%;height: 3.5%;" name="5" value="" placeholder="" type="text">
-                          <input class="abs" style="top: 62%;left: 81%;width: 13.5%;height: 3.5%;" name="6" value="" placeholder="" type="text">
-                          <input class="abs" style="top: 65.3%;left: 81%;width: 13.5%;height: 7%;" name="7" value="" placeholder="" type="text">
-                          
+                          <input class="abs" style="top: 36.3%;left: 81%;width: 13.5%;height: 3.5%;/*! border: 1px solid blue; */" name="1" value="<%= @form_fields['1']%>" placeholder="" type="text">        
+                          <input class="abs" style="top: 39.6%;left: 81%;width: 13.5%;height: 3.5%;" name="2" value="<%= @form_fields['2']%>" placeholder="" type="text">
+                          <input class="abs" style="top: 43.1%;left: 81%;width: 13.5%;height: 3.5%;" name="3" value="<%= @form_fields['3']%>" placeholder="" type="text">
+                          <input class="abs" style="top: 46.5%;left: 81%;width: 13.5%;height: 3.5%;" name="4a" value="<%= @form_fields['4a']%>" placeholder="" type="text">
+                          <input class="abs" style="top: 49.8%;left: 81%;width: 13.5%;height: 3.5%;" name="4b" value="<%= @form_fields['4b']%>" placeholder="" type="text">
+                          <input class="abs" style="top: 53.6%;left: 81%;width: 13.5%;height: 4.7%;" name="4c" value="<%= @form_fields['4c']%>" placeholder="" type="text">
+                          <input class="abs" style="top: 58.5%;left: 81%;width: 13.5%;height: 3.5%;" name="5" value="<%= @form_fields['5']%>" placeholder="" type="text">
+                          <input class="abs" style="top: 62%;left: 81%;width: 13.5%;height: 3.5%;" name="6" value="<%= @form_fields['6']%>" placeholder="" type="text">
+                          <input class="abs" style="top: 65.3%;left: 81%;width: 13.5%;height: 7%;" name="7" value="<%= @form_fields['7']%>" placeholder="" type="text">
+                          <input class="abs" style="top: 88.3%;left: 72%;width: 27.3%;height: 2.5%;" name="8" value="<%= @form_fields['8']%>" placeholder="" type="text">
+
+
+              <input name="amenden_return" value="unchecked" type="hidden">
+              <input class="abs" style="top:12%;left:14.2%;" name="amenden_return" <%= @form_fields['amenden_return']%> value="checked" type="checkbox">
+
+              <input name="final_return" value="unchecked" type="hidden">
+              <input class="abs" style="top:13.7%;left:14.2%;" name="final_return" <%= @form_fields['final_return']%> value="checked" type="checkbox">
+
+              <input name="type_of_establishment_1" value="unchecked" type="hidden">
+              <input class="abs" style="top:13.7%;left:79%;" name="type_of_establishment_1" <%= @form_fields['type_of_establishment_1']%> value="checked" type="checkbox">
+
+              <input name="type_of_establishment_2" value="unchecked" type="hidden">
+              <input class="abs" style="top:16.3%;left:79%;" name="type_of_establishment_2" <%= @form_fields['type_of_establishment_2']%> value="checked" type="checkbox">
+
+              <input name="type_of_establishment_3" value="unchecked" type="hidden">
+              <input class="abs" style="top:19.3%;left:79%;" name="type_of_establishment_3" <%= @form_fields['type_of_establishment_3']%> value="checked" type="checkbox">
+
+              <input name="type_of_establishment_4" value="unchecked" type="hidden">
+              <input class="abs" style="top:22.3%;left:79%;" name="type_of_establishment_4" <%= @form_fields['type_of_establishment_4']%> value="checked" type="checkbox">
+
+              <input name="accept_credit_cards_yes" value="unchecked" type="hidden">
+              <input class="abs" style="top:34.3%;left:57%;" name="accept_credit_cards_yes" <%= @form_fields['accept_credit_cards_yes']%> value="checked" type="checkbox">
+
+              <input name="accept_credit_cards_no" value="unchecked" type="hidden">
+              <input class="abs" style="top:34.3%;left:89.9%;" name="accept_credit_cards_no" <%= @form_fields['accept_credit_cards_no']%> value="checked" type="checkbox">
+
+              <input name="7_a" value="unchecked" type="hidden">
+              <input class="abs" style="top:77%;left:73.9%;" name="7_a" <%= @form_fields['7_a']%> value="checked" type="checkbox">
+
+              <input name="7_b" value="unchecked" type="hidden">
+              <input class="abs" style="top:82.1%;left:73.9%;" name="7_b" <%= @form_fields['7_b']%> value="checked" type="checkbox">
+
+              <input name="7_c" value="unchecked" type="hidden">
+              <input class="abs" style="top:85.7%;left:73.9%;" name="7_c" <%= @form_fields['7_c']%> value="checked" type="checkbox">
+
+              
                           <input name="form_id" value="8027" type="hidden"> 
                           <input name="unique_id" value="<%= @form_fields['unique_id'] %>" type="hidden">
 

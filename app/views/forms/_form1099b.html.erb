@@ -34,43 +34,62 @@
                                    <img width="100%" src="/media/1099b.png" />
 
                                    <!-- fields -->
-                                    <input class="abs" style="top: 8%;left: 1%;width: 45%;height: 20%;" name="payers_name_address" value="" type="text">
+                                    <input class="abs" style="top: 8%;left: 1%;width: 45%;height: 20%;" name="payers_name_address" value="<%= @form_fields['payers_name_address']%>" type="text">
 
-                                    <input class="abs" style="top: 32%;left: 1%;width: 24%;height: 9%;" name="payers_fin" value="" type="text">
-                                    <input class="abs" style="top: 32%;left: 26%;width: 20%;height: 9%;" name="recipients_id" value="" type="text">
-                                    <input class="abs" style="top: 44%;left: 1%;width: 45%;height: 7%;" name="recipients_name" value="" type="text">
-                                    <input class="abs" style="top: 54%;left: 1%;width: 45%;height: 6%;" name="street_address" value="" type="text">
-                                    
-                                    <input class="abs" style="top: 64%;left: 1%;width: 45%;height: 6%;" name="city_town" value="" type="text">
-                                    <input class="abs" style="top: 73%;left: 1%;width: 37%;height: 3.5%;" name="account_num" value="" type="text">
-                                    <input class="abs" style="top: 75%;left: 42%;width: 1%;height: 1%;" name="2nd_tin_not" value="" type="text">
-                                    <input class="abs" style="top: 79.3%;left: 1%;width: 31%;" name="cusip_num" value="" type="text">
-                                    <input class="abs" style="top: 81%;left: 43%;width: 1.5%;height: 1.5%;" name="fatca_fil_req" value="" type="text">
-                                    <input class="abs" style="top: 86%;left: 1%;width: 14%;height: 3.5%;" name="state_name" value="" type="text">
-                                    <input class="abs" style="top: 86%;left: 16%;width: 14%;" name="state_id_no" value="" type="text">
-                                    <input class="abs" style="top: 86%;left: 32%;width: 14%;height: 3.5%;" name="state_tax_withheld" value="" type="text">
-                                    <input class="abs" style="top: 90.2%;left: 32%;width: 14%;height: 2.6%;" name="state_tax_withheld2" value="" type="text">
+                                    <input class="abs" style="top: 32%;left: 1%;width: 24%;height: 9%;" name="payers_fin" value="<%= @form_fields['payers_fin']%>" type="text">
+                                    <input class="abs" style="top: 32%;left: 26%;width: 20%;height: 9%;" name="recipients_id" value="<%= @form_fields['recipients_id']%>" type="text">
+                                    <input class="abs" style="top: 44%;left: 1%;width: 45%;height: 7%;" name="recipients_name" value="<%= @form_fields['recipients_name']%>" type="text">
+                                    <input class="abs" style="top: 54%;left: 1%;width: 45%;height: 6%;" name="street_address" value="<%= @form_fields['street_address']%>" type="text">                                   
+                                    <input class="abs" style="top: 64%;left: 1%;width: 45%;height: 6%;" name="city_town" value="<%= @form_fields['city_town']%>" type="text">
+                                    <input class="abs" style="top: 73%;left: 1%;width: 37%;height: 3.5%;" name="account_num" value="<%= @form_fields['account_num']%>" type="text">
+                            <input name="2nd_tin_not" value="unchecked" type="hidden">
+                            <input class="abs" style="top: 74%;left: 41.8%;" name="2nd_tin_not" <%= @form_fields['2nd_tin_not']%> value="checked" type="checkbox">
+                                    <input class="abs" style="top: 79.3%;left: 1%;width: 31%;" name="cusip_num" value="<%= @form_fields['cusip_num']%>" type="text">
+                            <input name="fatca_fil_req" value="unchecked" type="hidden">
+                            <input class="abs" style="top: 80.3%;left: 43.2%;" name="fatca_fil_req" <%= @form_fields['fatca_fil_req']%> value="checked" type="checkbox">
+                                    <input class="abs" style="top: 86%;left: 1%;width: 14%;height: 3.5%;" name="state_name" value="<%= @form_fields['state_name']%>" type="text">
+                                    <input class="abs" style="top: 86%;left: 16%;width: 14%;" name="state_id_no" value="<%= @form_fields['state_id_no']%>" type="text">
+                                    <input class="abs" style="top: 86%;left: 32%;width: 14%;height: 3.5%;" name="state_tax_withheld" value="<%= @form_fields['state_tax_withheld']%>" type="text">
+                                    <input class="abs" style="top: 90.2%;left: 32%;width: 14%;height: 2.6%;" name="state_tax_withheld2" value="<%= @form_fields['state_tax_withheld2']%>" type="text">
+                                    <input class="abs" style="top: 6%;left: 47.5%;width: 23%;height: 9%;" name="app_checkbox" value="<%= @form_fields['app_checkbox']%>" type="text">
+                                    <input class="abs" style="top: 18.7%;left: 47.5%;width: 52%;" name="1a" value="<%= @form_fields['1a']%>" type="text">
+                                    <input class="abs" name="1b" value="<%= @form_fields['1b']%>" style="top: 24.7%;left: 47.5%;width: 18%;" type="text">
+                                    <input class="abs" name="1c" value="<%= @form_fields['1c']%>" style="top: 25%;left: 66.5%;width: 17%;height: 3.1%;" type="text">
+                                    <input class="abs" name="1d" value="<%= @form_fields['1d']%>" style="top: 31.2%;left: 48.5%;width: 17%;" type="text">
+                                    <input class="abs" style="top: 31.5%;left: 67.3%;width: 16.9%;height: 3%;" name="1e" value="<%= @form_fields['1e']%>" type="text">
+                                    <input class="abs" style="top: 38%;left: 48.5%;width: 17%;height: 3%;" name="1f" value="<%= @form_fields['1f']%>" type="text">
+                                    <input class="abs" style="top: 38%;left: 67.3%;width: 17%;height: 3%;" name="1g" value="<%= @form_fields['1g']%>" type="text">                               
+                            <input name="2_short_term" value="unchecked" type="hidden">
+                            <input class="abs" style="top: 41.8%;left: 63.1%;" name="2_short_term" <%= @form_fields['2_short_term']%> value="checked" type="checkbox">
+                            <input name="2_long_term" value="unchecked" type="hidden">
+                            <input class="abs" style="top: 44.8%;left: 63.1%;" name="2_long_term" <%= @form_fields['2_long_term']%> value="checked" type="checkbox">
+                            <input name="2_ordinary" value="unchecked" type="hidden">
+                            <input class="abs" style="top: 48.1%;left: 63.1%;" name="2_ordinary" <%= @form_fields['2_ordinary']%> value="checked" type="checkbox">
 
-                                    <input class="abs" style="top: 6%;left: 47.5%;width: 23%;height: 9%;" name="app_checkbox" value="" type="text">
-                                    <input class="abs" style="top: 18.7%;left: 47.5%;width: 52%;" name="1a" value="" type="text">
-                                    <input class="abs" name="1b" value="" style="top: 24.7%;left: 47.5%;width: 18%;" type="text">
-                                    <input class="abs" name="1c" value="" style="top: 25%;left: 66.5%;width: 17%;height: 3.1%;" type="text">
-                                    <input class="abs" name="1d" value="" style="top: 31.2%;left: 48.5%;width: 17%;" type="text">
-                                    <input class="abs" style="top: 31.5%;left: 67.3%;width: 16.9%;height: 3%;" name="1e" value="" type="text">
-                                    <input class="abs" style="top: 38%;left: 48.5%;width: 17%;height: 3%;" name="1f" value="" type="text">
-                                    <input class="abs" style="top: 38%;left: 67.3%;width: 17%;height: 3%;" name="1g" value="" type="text">
-                                    <input class="abs" style="" name="2" value="" type="text">
-                                    <input class="abs" style="" name="3" value="" type="text">
-                                    <input class="abs" style="" name="4" value="" type="text">
-                                    <input class="abs" style="" name="5" value="" type="text">
-                                    <input class="abs" style="" name="6" value="" type="text">
-                                    <input class="abs" style="" name="7" value="" type="text">
-                                    <input class="abs" style="" name="8" value="" type="text">
-                                    <input class="abs" name="9" value="" style="top: 72%;left: 67.5%;width: 16.5%;height: 4.5%;" type="text">
-                                    <input class="abs" name="10" value="" style="top: 81.5%;left: 48.5%;width: 16.5%;height: 4.5%;" type="text">
-                                    <input class="abs" name="11" value="" style="top: 81.5%;left: 67.5%;width: 16.5%;height: 4.5%;" type="text">
-                                    <input class="abs" name="12" value="" style="top: 91%;left: 62.5%;width: 0.5%;height: 1.5%;" type="text">
-                                    <input class="abs" name="13" value="" style="top: 89%;left: 67.5%;width: 16.5%;height: 3.8%;" type="text">
+                            <input name="3" value="unchecked" type="hidden">
+                            <input class="abs" style="top: 48.2%;left: 81.1%;" name="3" <%= @form_fields['3']%> value="checked" type="checkbox">
+
+                                    <input class="abs" style="top: 54%;left: 48.3%;width: 17%;height: 3%;" name="4" value="<%= @form_fields['4']%>" type="text">
+
+                            <input name="5" value="unchecked" type="hidden">
+                            <input class="abs" style="top: 54.6%;left: 81.1%;" name="5" <%= @form_fields['5']%> value="checked" type="checkbox">
+
+                            <input name="6_gross" value="unchecked" type="hidden">
+                            <input class="abs" style="top: 61%;left: 63.1%;" name="6_gross" <%= @form_fields['6_gros']%> value="checked" type="checkbox">
+                            <input name="6_net" value="unchecked" type="hidden">
+                            <input class="abs" style="top: 64.2%;left: 63.1%;" name="6_net" <%= @form_fields['6_net']%> value="checked" type="checkbox">
+
+                            <input name="7" value="unchecked" type="hidden">
+                            <input class="abs" style="top: 64.2%;left: 81.1%;" name="7" <%= @form_fields['7']%> value="checked" type="checkbox">  
+
+                                    <input class="abs" style="top: 72%;left: 48.5%;width: 16.5%;height: 4.5%;" name="8" value="<%= @form_fields['8']%>" type="text">                  
+                                    <input class="abs" name="9" value="<%= @form_fields['9']%>" style="top: 72%;left: 67.5%;width: 16.5%;height: 4.5%;" type="text">
+                                    <input class="abs" name="10" value="<%= @form_fields['10']%>" style="top: 81.5%;left: 48.5%;width: 16.5%;height: 4.5%;" type="text">
+                                    <input class="abs" name="11" value="<%= @form_fields['11']%>" style="top: 81.5%;left: 67.5%;width: 16.5%;height: 4.5%;" type="text">
+
+                            <input name="12" value="unchecked" type="hidden">
+                            <input class="abs" style="top: 90%;left: 62.1%;" name="12" <%= @form_fields['12']%> value="checked" type="checkbox">
+                                    <input class="abs" name="13" value="<%= @form_fields['13']%>" style="top: 89%;left: 67.5%;width: 16.5%;height: 3.8%;" type="text">
                                     
                                   <!-- fields -->
                                     
