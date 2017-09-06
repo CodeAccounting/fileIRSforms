@@ -1,0 +1,55 @@
+<div class="row">
+    <div class=" col-lg-3"></div>
+    <div class=" col-lg-6">
+      <br/>
+      <br/>
+      <div class="text-center">
+          <%= will_paginate @submissions, renderer: BootstrapPagination::Rails, class: "pagination pagination-centered"  %>
+      </div>
+      <div>
+        <table class="form_list">
+          <thead>
+          <tr>
+            <th style="text-align:center;">Unique ID</th>
+            <th style="text-align:center;">Updated At</th>
+            <th style="text-align:center;">Form Name</th>
+          </tr>
+          </thead>
+          <tbody>
+          <% @submissions.each do |submission| %>
+              <tr>
+                <td>
+                  <%= link_to({controller: "admin", action: "show", unique_id: submission.unique_id, formname: submission.form_id}) do %>
+                      <%= submission.unique_id %>  
+                  <% end %>
+                </td>
+                <td style="text-align:right;">
+                    <%= link_to({controller: "admin", action: "show", unique_id: submission.unique_id, formname: submission.form_id}) do %>
+                      <%= submission.updated_at.to_s %>  
+                    <% end %>
+                </td>
+                <td style="text-align:left;">
+                    <%= link_to({controller: "admin", action: "show", unique_id: submission.unique_id, formname: submission.form_id}) do %>
+                      <%= submission.form_id %>  
+                    <% end %>        
+                </td>
+              </tr>
+          <% end %>
+          </tbody>
+          </table>
+        </div>
+        <div class="text-center">
+          <%= will_paginate @submissions, renderer: BootstrapPagination::Rails, class: "pagination pagination-centered"  %>
+        </div>
+    </div>
+    <div class="header col-lg-3"></div>
+</div>
+    <style>
+    table.form_list a:focus, table.form_list a:hover {
+        color: inherit;
+        text-decoration: none;
+    }
+    table.form_list {
+      width:100%;
+    }
+    </style>

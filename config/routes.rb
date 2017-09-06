@@ -1,6 +1,9 @@
 Rails.application.routes.draw do
   devise_for :users
   root "pages#home"
+  get 'admin', to:"admin#index"
+  get 'admin/show', to:"admin#show"
+  get '/admin/export', to:"admin#export"
   get 'dashboard', to:"pages#home"
   get 'form/new' , to: "forms#show" 
   get 'form/save' , to: "forms#create"

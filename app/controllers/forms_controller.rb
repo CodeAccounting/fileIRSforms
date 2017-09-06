@@ -18,6 +18,7 @@ class FormsController < ApplicationController
   # GET /forms/1.json
   def show
     if params.has_key?(:unique_id)
+      @editing = true;
       @form = Field.where(unique_id: params[:unique_id]).to_a
       @form_fields = Hash.new
       @form.each do |value|
@@ -26,6 +27,7 @@ class FormsController < ApplicationController
       @form_fields['unique_id'] = params[:unique_id]
       @form_fields['label'] = @form[0]['label']
     else
+      @editing = false;
       @form_fields = Hash.new
       @form_fields['unique_id'] = SecureRandom.uuid
     end  
@@ -90,7 +92,6 @@ class FormsController < ApplicationController
     end
     redirect_to "/"
   end
-
   # PATCH/PUT /forms/1
   # PATCH/PUT /forms/1.json
   def update
