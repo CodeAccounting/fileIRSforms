@@ -1,7 +1,11 @@
 class AdminController < ApplicationController
+  before_filter :authenticate_user!
+  before_filter do 
+    redirect_to '/' unless current_user && current_user.admin?
+  end
   layout "adminshow", only: [:show]
   def index   
-    @submissions = Field.paginate_by_sql("SELECT DISTINCT ON (unique_id) unique_id, form_id , updated_at FROM Fields", page: params[:page], per_page: 3)
+    @submissions = Field.paginate_by_sql("SELECT DISTINCT ON (unique_id) unique_id, form_id , updated_at FROM Fields", page: params[:page], per_page: 10)
   end
   def show
     if params.has_key?(:unique_id)
