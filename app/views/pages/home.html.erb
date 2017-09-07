@@ -105,12 +105,18 @@
                     </div>
                 </div>
                 <div class="bhoechie-tab-content active">
+                    <div></div>
                     <div class="labels-container">
-                      <% @labels.each do |label| %>
-                            <div class="m-label"><div style='background:<%= label[1]%>' class="square-box"></div><div class="square-label"> <%= label[0] %></div></div>
-                      <% end %>
-                            
+                      <form action="/dashboard">
+                        <select name="label"  class="form-control" onchange="this.form.submit()">
+                              <option value="">Show all</option>
+                        <% @labels.each do |label| %>
+                              <option <%= 'selected' if (label[0]== @selected_label) %> value="<%= label[0] %>"><%= label[0] %></option>
+                        <% end %>
+                        </select> 
+                      </form>         
                     </div>
+                    <div></div>
                     <div class="row">
                         
                         <div class="page">
@@ -244,4 +250,13 @@ span.metro-date {
     font-size: 1.2em;
     text-transform: uppercase;
 }
+.labels-container {
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+.labels-container select { 
+    width:auto;
+}
+
+
 </style>
