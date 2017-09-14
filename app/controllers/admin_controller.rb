@@ -30,11 +30,14 @@ class AdminController < ApplicationController
     end
   end
   def export 
-    path = Rails.public_path.join('export.txt')
-    content = "data from the form"
-    File.open(path, "w+") do |f|
-        f.write(content)
+    @form = Field.where(unique_id: params[:unique_id]).to_a
+    @form_fields = Hash.new
+    @form.each do |value|
+        @form_fields[value.field_name] = value.field_value
     end
-    redirect_to "/admin"
+    data = helpers.addT(@form_fields)
+    send_data data,
+    :type => 'text/txt; charset=UTF-8;',
+    :disposition => "attachment; filename=export.txt"  
   end
 end
