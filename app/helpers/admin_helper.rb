@@ -47,9 +47,11 @@ module AdminHelper
         data_zip = " " if data_zip.blank?
         data_state = data_array[-2]
         data_state = " " if data_state.blank?
+        data_state = data_state[0..1] if data_state.length>2
         data_sliced = data.slice! data_zip
         data_city = data_sliced.slice! data_state  
-        data_city = " " if data_city.blank?               
+        data_city = " " if data_city.blank?
+        data_state = data_city[0..8] if data_state.length>9               
         returned_data += data_city + (" "*(40-(data_city.to_s.length))) #40 characters Requered
         returned_data += data_state + (" "*(2-(data_state.to_s.length))) #2 characters Requered
         returned_data += data_zip + (" "*(9-(data_zip.to_s.length))) #9 characters Requered
