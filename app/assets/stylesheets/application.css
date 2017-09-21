@@ -118,3 +118,6 @@ a.navbar-brand {
 .btn-default span {
     min-height: inherit!important;
 }
+form.submit_electronically_form {
+    display:inline;
+}

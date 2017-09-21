@@ -28,15 +28,18 @@
             <button type="button" onclick="history.back();" class="btn btn-warning header-button">Cancel</button>
             <button type="button" class="btn btn-primary header-button" onclick="document.getElementById('form1').submit();">Save Form</button>
             <button type="button" class="btn btn-default">Print Form</button>
-            <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-          data-key="<%= Rails.configuration.stripe[:publishable_key] %>"
-          data-description="Pay Submission Fee Via Stripe"
-          data-amount="500"
-          data-locale="auto"
-          data-label="Submit Electronically">
-           </script>
-           <script>$(".stripe-button-el").attr('class', 'btn btn-default');
-           </script>
+            <%= form_tag form_payment_path, :class => 'submit_electronically_form' do %>
+               <input type="hidden" name="unique_id" value="<%= @form_fields['unique_id'] %>"/>
+                <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+              data-key="<%= Rails.configuration.stripe[:publishable_key] %>"
+              data-description="Pay Submission Fee Via Stripe"
+              data-amount="500"
+              data-locale="auto"
+              data-label="Submit Electronically">
+               </script>
+               <script>$(".stripe-button-el").attr('class', 'btn btn-default');
+               </script>
+            <% end %>
             
 
             <ul class="nav navbar-top-links navbar-right">

@@ -133,7 +133,8 @@ class FormsController < ApplicationController
       :description => 'Rails Stripe customer',
       :currency    => 'usd'
     )
-
+    #flash.now[:notice] = "Thank you for submitting the form"
+    #render :action=>'show'
     rescue Stripe::CardError => e
     flash[:error] = e.message
     redirect_to form_checkout_path
