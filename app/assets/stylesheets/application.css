@@ -115,3 +115,6 @@ div.bhoechie-tab-menu div.list-group>a.active:after {
 a.navbar-brand {
     font-size:21px;
 }
+.btn-default span {
+    min-height: inherit!important;
+}

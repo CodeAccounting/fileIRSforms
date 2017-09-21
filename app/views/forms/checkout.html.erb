@@ -12,7 +12,9 @@
 
   <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
           data-key="<%= Rails.configuration.stripe[:publishable_key] %>"
-          data-description="A month's subscription"
+          data-description="Pay Submission Fee Using Stripe"
           data-amount="500"
-          data-locale="auto"></script>
+          data-locale="auto"
+          data-panel-label="Submit Electronically">
+  </script>
 <% end %>
