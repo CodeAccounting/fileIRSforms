@@ -6,6 +6,8 @@ Rails.application.routes.draw do
   get '/admin/export', to:"admin#export"
   get 'dashboard', to:"pages#home"
   get 'form/new' , to: "forms#show" 
+  get 'form/checkout' , to: "forms#checkout" 
+  post 'form/payment' , to: "forms#payment" 
   get 'form/save' , to: "forms#create"
   get 'form/all' , to: "forms#all"
   get 'form/show' , to: "forms#show"

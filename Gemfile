@@ -34,6 +34,8 @@ gem 'jbuilder', '~> 2.5'
 gem 'devise'
 gem 'jquery-turbolinks'
 gem 'will_paginate-bootstrap'
+gem 'stripe'
+
 
 
 

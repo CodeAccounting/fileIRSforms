@@ -115,6 +115,30 @@ class FormsController < ApplicationController
     end
   end
 
+  def checkout
+  end
+
+  def payment
+    # Amount in cents
+    @amount = 500
+
+    customer = Stripe::Customer.create(
+      :email => params[:stripeEmail],
+      :source  => params[:stripeToken]
+    )
+
+    charge = Stripe::Charge.create(
+      :customer    => customer.id,
+      :amount      => @amount,
+      :description => 'Rails Stripe customer',
+      :currency    => 'usd'
+    )
+
+    rescue Stripe::CardError => e
+    flash[:error] = e.message
+    redirect_to form_checkout_path
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_form
