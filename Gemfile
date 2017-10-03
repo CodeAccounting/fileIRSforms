@@ -35,6 +35,8 @@ gem 'devise'
 gem 'jquery-turbolinks'
 gem 'will_paginate-bootstrap'
 gem 'stripe'
+gem 'jquery-ui-rails'
+
 
 
 

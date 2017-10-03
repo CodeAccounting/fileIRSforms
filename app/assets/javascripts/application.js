@@ -14,6 +14,7 @@
 //= require jquery
 // require jquery.turbolinks
 //= require jquery_ujs
+//= require jquery-ui/widgets/datepicker
 // require turbolinks
 //= require jquery.readyselector
 //= require bootstrap.min

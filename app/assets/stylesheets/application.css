@@ -16,6 +16,7 @@
  *= require bootstrap.min
  *= require sb-admin-2.min
  *= require metisMenu.min
+ *= require jquery-ui/datepicker
  *= require_tree .
  *= require_self
  */
