@@ -420,6 +420,7 @@ module AdminHelper
         returned_data += data_account + (" "*(20-(data_account.to_s.length))) 
         returned_data += " "*4 #blanks #Payer’s Office Code - you can enter blanks
         returned_data += " "*10 #blanks
+      #TODO see how is this solved in Form bellow and make like that (to accept values with dollar sign etc )
         returned_data += "0"*12 #Payment Amount 1*
         returned_data += "0"*12 #Payment Amount 2*
         if (form_fields['2'])
@@ -520,6 +521,7 @@ module AdminHelper
         returned_data += '00000001' #8 total number of payees
         returned_data += ' '*6 #6 blanks
 
+        #TODO see how is this solved in Form bellow and make like that (to accept values with dollar sign etc )
         returned_data += "0"*18 #Payment Amount 1*
         returned_data += "0"*18 #Payment Amount 2*
         if (data_amount2)
@@ -781,13 +783,12 @@ module AdminHelper
         returned_data += "0"*12 #Payment Amount F*
         returned_data += "0"*12 #Payment Amount G*
         returned_data += " " #blank if US citizen otherwise enter 1
-# - ovde sam stao stranica 74
-        if (form_fields['borrowers_name'])
-            data_employees_name = form_fields['borrowers_name'].split.last(2).join(" ") 
+        if (form_fields['recipients_name'])
+            data_payee_name = form_fields['recipients_name'].split.last(2).join(" ") 
         else
-            data_employees_name = ''
+            data_payee_name = ''
         end
-        returned_data +=  data_employees_name + (" "*(40-(data_employees_name.to_s.length))) #40 First payee name line -employees_name
+        returned_data +=  data_payee_name + (" "*(40-(data_payee_name.to_s.length))) #40 First payee name line -employees_name
         returned_data += " "*40 #40 Second payee name line
         returned_data += " "*40 #40 blanks
         if (form_fields['street_address']) 
@@ -822,8 +823,83 @@ module AdminHelper
 
         returned_data += "00000003" #8 Record Sequence Number
         returned_data += " "*36 #36 blanks
-#these records are specifed for form 1099a 
-        returned_data += " "*3 #3 blanks
+#these records are specifed for form 1099b ovde sam stao stranica 77
+        if (form_fields['2nd_tin_not']='checked') 
+            data = form_fields['2nd_tin_not'];
+        else
+            data = ' ';
+        end
+        returned_data +=  data #1 second TIN Notice (Optional)  '2nd_tin_not'
+        if (form_fields['5']='checked') 
+            data = form_fields['5'];
+        else
+            data = ' ';
+        end
+        data = " "
+        if (form_fields['2_short_term']='checked' && form_fields['2_ordinary']='unchecked') 
+            data = '1';
+        end
+        if (form_fields['2_short_term']='checked' && form_fields['2_ordinary']='checked') 
+            data = '3';
+        end
+        if (form_fields['2_long_term']='checked' && form_fields['2_ordinary']='unchecked') 
+            data = '2';
+        end
+        if (form_fields['2_long_term']='checked' && form_fields['2_ordinary']='checked') 
+            data = '4';
+        end
+        returned_data +=  data #1 type of Gain or Loss Indicator '2_short_term, 2_long_term, 2_ordinary'
+
+        data =' '
+        if (form_fields['6_gross']='checked' && form_fields['6_net']='unchecked') 
+            data = '1';
+        end
+        if (form_fields['6_gross']='unchecked' && form_fields['6_net']='checked') 
+            data = '2';
+        end
+        returned_data +=  data #1 Gross Preceeds Indicator  '6_gross' ('6_net')
+        if (form_fields['1c']) 
+            data = form_fields['1c'];
+        else 
+            data = ' '*8;
+        end
+        returned_data += (" "*(8-(data.to_s.length)))+data #8 Date Sold or Disposed '1c'
+        if (form_fields['cusip_num']) 
+            data = form_fields['cusip_num'];
+        else 
+            data = ' '*13;
+        end
+        returned_data += (" "*(13-(data.to_s.length)))+data #13 CUSIP Number 'cusip_num'
+        #39 Description of Property
+        #8 Date Acquired
+        if (form_fields['7']='checked') 
+            data = form_fields['7'];
+        else
+            data = ' ';
+        end
+        returned_data +=  data #1 Loss Not Allowed Indicator  '7'
+        #1 Applicable check box of Form 8949
+        if (form_fields['12']='checked') 
+            data = form_fields['12'];
+        else
+            data = ' ';
+        end
+        returned_data +=  data #1 Applicable checkbox for Collectables  '12'
+        if (form_fields['fatca_fil_req']='checked') 
+            data = form_fields['fatca_fil_req'];
+        else
+            data = ' ';
+        end
+        returned_data +=  data #1 FATCA Filing Requirement Indicator  'fatca_fil_req'
+        returned_data += " "*43 #43 blanks
+        #60 Special Data Entries
+        #12 State Income Tax Withheld
+        #12 Local Income Tax Withheld
+        #2 Combined Federal/State Code
+        returned_data += " "*2 #2 blanks
+
+
+
         if (form_fields['5']='checked') 
             personal_liability = form_fields['1'];
         else
@@ -837,12 +913,14 @@ module AdminHelper
             acquisition = ' ';
         end
         returned_data +=  acquisition + (" "*(8-(acquisition.to_s.length))) #8 Date of Lender’s Acquisition or Knowledge of Abandonment
-        if (form_fields['6']) 
-            description_of_property = form_fields['6'].strip;
+        if (form_fields['1a']) 
+            description_of_property = form_fields['1a'].strip;
         else
             description_of_property = ' ';
         end
         returned_data += description_of_property.to_s + (" "*(39-(description_of_property.to_s.length))) #39
+
+        #----ovde sam stao stranica 89
         returned_data += " "*68 #68 blanks
         returned_data += " "*60 #60 special data entries or blanks 
         returned_data += " "*26 #26 blanks
@@ -852,31 +930,83 @@ module AdminHelper
         returned_data += '00000001' #8 total number of payees
         returned_data += ' '*6 #6 blanks
 
+        #payment amounts 234579ABCD 
         returned_data += "0"*18 #Payment Amount 1*
-        returned_data += "0"*18 #Payment Amount 2*
-        if (data_amount2)
-            returned_data += data_amount2 + (" "*(18-(data_amount2.to_s.length))) 
+        if (form_fields['1d'])
+            data_amount = sprintf('%.2f', form_fields['1d'])
+            data_amount = data_amount.tr('.', '')
+            returned_data += ("0"*(18-(data_amount.to_s.length)))+data_amount
         else 
-            returned_data += "0"*18 #Payment Amount 3*
+            returned_data += "0"*18 #Payment Amount 2, Proceeds (For forward contracts)
         end
-        if (data_amount4)
-            returned_data += data_amount4 + (" "*(18-(data_amount4.to_s.length))) 
+        if (form_fields['1e'])
+            data_amount = sprintf('%.2f', form_fields['1e'])
+            data_amount = data_amount.tr('.', '')
+            returned_data += ("0"*(18-(data_amount.to_s.length)))+data_amount
         else 
-            returned_data += "0"*18 #Payment Amount 4*
+            returned_data += "0"*18 #Payment Amount 3 Cost or other basis
         end
-        returned_data += "0"*18 #Payment Amount 5*
+        if (form_fields['4'])
+            data_amount = sprintf('%.2f', form_fields['4'])
+            data_amount = data_amount.tr('.', '')
+            returned_data += ("0"*(18-(data_amount.to_s.length)))+data_amount
+        else 
+            returned_data += "0"*18 #Payment Amount 4 Federal income tax withheld (backup withholding). Do not report negative amounts.
+        end
+        if (form_fields['1g'])
+            data_amount = sprintf('%.2f', form_fields['1g'])
+            data_amount = data_amount.tr('.', '')
+            returned_data += ("0"*(18-(data_amount.to_s.length)))+data_amount
+        else 
+            returned_data += "0"*18 #Payment Amount 5 Wash Sale Loss Disallowed
+        end
         returned_data += "0"*18 #Payment Amount 6*
-        returned_data += "0"*18 #Payment Amount 7*
-        returned_data += "0"*18 #Payment Amount 8*
-        returned_data += "0"*18 #Payment Amount 9*
-        returned_data += "0"*18 #Payment Amount A*
-        returned_data += "0"*18 #Payment Amount B*
-        returned_data += "0"*18 #Payment Amount C*
-        returned_data += "0"*18 #Payment Amount D*
+        if (form_fields['13'])
+            data_amount = sprintf('%.2f', form_fields['13'])
+            data_amount = data_amount.tr('.', '')
+            returned_data += ("0"*(18-(data_amount.to_s.length)))+data_amount
+        else 
+            returned_data += "0"*18 #Payment Amount 7 Bartering
+        end
+        returned_data += "0"*18 #Payment Amount 8* 
+        if (form_fields['8'])
+            data_amount = sprintf('%.2f', form_fields['8'])
+            data_amount = data_amount.tr('.', '')
+            returned_data += ("0"*(18-(data_amount.to_s.length)))+data_amount
+        else 
+            returned_data += "0"*18 #Payment Amount 9 Profit (or loss) realized in 2017 
+        end
+        if (form_fields['9'])
+            data_amount = sprintf('%.2f', form_fields['9'])
+            data_amount = data_amount.tr('.', '')
+            returned_data += ("0"*(18-(data_amount.to_s.length)))+data_amount
+        else 
+            returned_data += "0"*18 #Payment Amount A Unrealized profit (or loss) on open contracts 18/31/2016 
+        end
+        if (form_fields['10'])
+            data_amount = sprintf('%.2f', form_fields['10'])
+            data_amount = data_amount.tr('.', '')
+            returned_data += ("0"*(18-(data_amount.to_s.length)))+data_amount
+        else 
+            returned_data += "0"*18 #Payment Amount B Unrealized profit (or loss) on open contracts 12/31/2017
+        end
+        if (form_fields['11'])
+            data_amount = sprintf('%.2f', form_fields['11'])
+            data_amount = data_amount.tr('.', '')
+            returned_data += ("0"*(18-(data_amount.to_s.length)))+data_amount
+        else 
+            returned_data += "0"*18 #Payment Amount C Aggregate profit (or loss)
+        end
+        if (form_fields['1f'])
+            data_amount = sprintf('%.2f', form_fields['1f'])
+            data_amount = data_amount.tr('.', '')
+            returned_data += ("0"*(18-(data_amount.to_s.length)))+data_amount
+        else 
+            returned_data += "0"*18 #Payment Amount D Accrued Market Discount
+        end
         returned_data += "0"*18 #Payment Amount E*
         returned_data += "0"*18 #Payment Amount F*
-        returned_data += "0"*18 #Payment Amount G* 
-
+        returned_data += "0"*18 #Payment Amount G*
         returned_data += ' '*196 #196 blanks
         returned_data += "00000004" #8 Record Sequence Number
         returned_data += ' '*241 #241 blanks
