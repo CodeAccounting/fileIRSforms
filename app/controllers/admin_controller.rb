@@ -35,7 +35,14 @@ class AdminController < ApplicationController
     @form.each do |value|
         @form_fields[value.field_name] = value.field_value
     end
-    data = helpers.addT(@form_fields)
+    case @form_fields['form_id']
+      when "3921"
+        data = helpers.exportForm3921(@form_fields)
+      when "1099a"
+        data = helpers.exportForm1099a(@form_fields)
+      else
+        data = "This form type is not supported yet"
+    end
     send_data data,
     :type => 'text/txt; charset=UTF-8;',
     :disposition => "attachment; filename=export.txt"  
