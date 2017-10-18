@@ -493,8 +493,8 @@ module AdminHelper
         returned_data += " "*36 #36 blanks
 #these records are specifed for form 1099a 
         returned_data += " "*3 #3 blanks
-        if (form_fields['5']='checked') 
-            personal_liability = form_fields['1'];
+        if (form_fields['5']=='checked') 
+            personal_liability = '1';
         else
             personal_liability = ' ';
         end
@@ -823,38 +823,41 @@ module AdminHelper
 
         returned_data += "00000003" #8 Record Sequence Number
         returned_data += " "*36 #36 blanks
-#these records are specifed for form 1099b ovde sam stao stranica 77
-        if (form_fields['2nd_tin_not']='checked') 
-            data = form_fields['2nd_tin_not'];
+#these records are specifed for form 1099b 
+        if (form_fields['2nd_tin_not']=='checked') 
+            data = '2';
         else
             data = ' ';
         end
         returned_data +=  data #1 second TIN Notice (Optional)  '2nd_tin_not'
-        if (form_fields['5']='checked') 
-            data = form_fields['5'];
-        else
-            data = ' ';
-        end
         data = " "
-        if (form_fields['2_short_term']='checked' && form_fields['2_ordinary']='unchecked') 
-            data = '1';
-        end
-        if (form_fields['2_short_term']='checked' && form_fields['2_ordinary']='checked') 
-            data = '3';
-        end
-        if (form_fields['2_long_term']='checked' && form_fields['2_ordinary']='unchecked') 
+        if (form_fields['3']=='checked' && form_fields['5']=='unchecked') 
             data = '2';
         end
-        if (form_fields['2_long_term']='checked' && form_fields['2_ordinary']='checked') 
+        if (form_fields['3']=='unchecked' && form_fields['5']=='checked') 
+            data = '1';
+        end
+        returned_data +=  data #1 noncovered security indicator
+        data = " "
+        if (form_fields['2_short_term']=='checked' && form_fields['2_ordinary']=='unchecked') 
+            data = '1';
+        end
+        if (form_fields['2_short_term']=='checked' && form_fields['2_ordinary']=='checked') 
+            data = '3';
+        end
+        if (form_fields['2_long_term']=='checked' && form_fields['2_ordinary']=='unchecked') 
+            data = '2';
+        end
+        if (form_fields['2_long_term']=='checked' && form_fields['2_ordinary']=='checked') 
             data = '4';
         end
         returned_data +=  data #1 type of Gain or Loss Indicator '2_short_term, 2_long_term, 2_ordinary'
 
         data =' '
-        if (form_fields['6_gross']='checked' && form_fields['6_net']='unchecked') 
+        if (form_fields['6_gross']=='checked' && form_fields['6_net']=='unchecked') 
             data = '1';
         end
-        if (form_fields['6_gross']='unchecked' && form_fields['6_net']='checked') 
+        if (form_fields['6_gross']=='unchecked' && form_fields['6_net']=='checked') 
             data = '2';
         end
         returned_data +=  data #1 Gross Preceeds Indicator  '6_gross' ('6_net')
@@ -863,43 +866,63 @@ module AdminHelper
         else 
             data = ' '*8;
         end
-        returned_data += (" "*(8-(data.to_s.length)))+data #8 Date Sold or Disposed '1c'
+        returned_data += (" "*(8-(data.to_s.length)))+data #8 Date Sold or Disposed '1c' TODO: MAKI it DATE FIELD f THERE IS no DATE ENTER BLANK !
         if (form_fields['cusip_num']) 
             data = form_fields['cusip_num'];
         else 
             data = ' '*13;
         end
         returned_data += (" "*(13-(data.to_s.length)))+data #13 CUSIP Number 'cusip_num'
-        #39 Description of Property
-        #8 Date Acquired
+        if (form_fields['1a']) 
+            data = form_fields['1a'];
+        else 
+            data = ' ';
+        end
+        returned_data += data + (" "*(39-(data.to_s.length))) #39 Description of Property
+        if (form_fields['1b']) 
+            data = form_fields['1b'];
+        else 
+            data = ' ';
+        end
+        returned_data += data + (" "*(8-(data.to_s.length)))#8 Date Acquired TODO :MAKE IT TO BE  A DATE FIELD IN THE FORM!!
         if (form_fields['7']='checked') 
-            data = form_fields['7'];
+            data = '1';
         else
             data = ' ';
         end
         returned_data +=  data #1 Loss Not Allowed Indicator  '7'
-        #1 Applicable check box of Form 8949
-        if (form_fields['12']='checked') 
-            data = form_fields['12'];
+        if (form_fields['app_checkbox']) 
+            data = form_fields['app_checkbox'];
+        else
+            data = ' ';
+        end
+        returned_data +=  data #1 Applicable check box of Form 8949 'app_checkbox' value can be A,B,D,E,X or blank
+        if (form_fields['12']=='checked') 
+            data = '1'
         else
             data = ' ';
         end
         returned_data +=  data #1 Applicable checkbox for Collectables  '12'
-        if (form_fields['fatca_fil_req']='checked') 
-            data = form_fields['fatca_fil_req'];
+        if (form_fields['fatca_fil_req']=='checked') 
+            data = '1';
         else
             data = ' ';
         end
         returned_data +=  data #1 FATCA Filing Requirement Indicator  'fatca_fil_req'
         returned_data += " "*43 #43 blanks
-        #60 Special Data Entries
-        #12 State Income Tax Withheld
-        #12 Local Income Tax Withheld
-        #2 Combined Federal/State Code
+        returned_data += " "*60 #60 Special Data Entries
+        if (form_fields['state_tax_withheld']) 
+            data = form_fields['state_tax_withheld']; #TODO: remove dot or dollar sign 
+        else
+            data = '0';
+        end 
+        returned_data += ("0"*(12-(data.to_s.length))) + data #12  State Income Tax Withheld TODO: THIS SHOULD CLEANED FROM dots and dollar sign 
+        returned_data += " "*12 #12 Local Income Tax Withheld
+        returned_data += " "*2 #2 Combined Federal/State Code
         returned_data += " "*2 #2 blanks
 
 
-
+=begin
         if (form_fields['5']='checked') 
             personal_liability = form_fields['1'];
         else
@@ -920,11 +943,11 @@ module AdminHelper
         end
         returned_data += description_of_property.to_s + (" "*(39-(description_of_property.to_s.length))) #39
 
-        #----ovde sam stao stranica 89
         returned_data += " "*68 #68 blanks
         returned_data += " "*60 #60 special data entries or blanks 
         returned_data += " "*26 #26 blanks
         returned_data += " "*2 #2 blanks
+=end 
 # Payer C record (control record)
         returned_data += 'C' # enter C
         returned_data += '00000001' #8 total number of payees

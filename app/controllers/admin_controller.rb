@@ -40,6 +40,8 @@ class AdminController < ApplicationController
         data = helpers.exportForm3921(@form_fields)
       when "1099a"
         data = helpers.exportForm1099a(@form_fields)
+      when "1099b"
+        data = helpers.exportForm1099b(@form_fields)
       else
         data = "This form type is not supported yet"
     end
