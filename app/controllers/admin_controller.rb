@@ -35,6 +35,13 @@ class AdminController < ApplicationController
     @form.each do |value|
         @form_fields[value.field_name] = value.field_value
     end
+    #render :text => @form_fields.inspect
+    # all alphacharhs should be uppercase except email addresses
+    
+  #  @form_fields.each{ |s| s.kind_of?(String) ? s.upcase! : s }
+  #  @form_fields { |k, v| v.kind_of?(String) ? (@form_fields[k] = v.upcase) : (@form_fields[k] = v)} 
+    @form_fields.each { |k, v| @form_fields[k] = v.upcase } 
+
     case @form_fields['form_id']
       when "3921"
         data = helpers.exportForm3921(@form_fields)
@@ -47,6 +54,6 @@ class AdminController < ApplicationController
     end
     send_data data,
     :type => 'text/txt; charset=UTF-8;',
-    :disposition => "attachment; filename=export.txt"  
+    :disposition => "attachment; filename=export.txt" 
   end
 end

@@ -1,8 +1,8 @@
 module AdminHelper
     def exportForm3921(form_fields)
+#@questions : is payer TIN same as payer ID
     #only for Form 3921
     #1st 750 records - Transmitter “T” Record
-            #set all form field to blank if the are not exist
             form_fields['transferors_fin'] ||= " "
             form_fields['transferors_name_address'] ||= " "
             if form_fields['transferors_name_address'].lines.first.blank?
@@ -24,23 +24,32 @@ module AdminHelper
             returned_data = 'T' #begining of the file -lenght 1
             returned_data += '2017' #lenght 4
             returned_data += ' ' # P if it is for prior year otherwise blank -lenght 1
-            #@this is not good it should be TIN:
             returned_data += '111111111';
-            #returned_data += form_fields['transferors_fin'] + (" "*(9-(form_fields['transferors_fin'].to_s.length))) #9 characters - TRANSFEROR'S federal identification number
-            #@it was 93A66 I will put 11111 just for testing
             returned_data += '11111' + (" "*(5-('11111'.to_s.length))) #5 characters - Transmitter Control Code
             returned_data += " "*7 #7 characters - blank
             returned_data += 'T' # T if it is a test file otherwise blank -lenght 1
             returned_data += ' ' #Enter a “1” (one) if the transmitter is a foreign entity otherwise blank -lenght 1
             data = first_line.strip.truncate_words(2,omission: '')
             returned_data += data + (" "*(40-(data.to_s.length))) #40 characters - transmitter name. Left justify.
-            #@ below is not OK it put the same as above:
-            data2 = (first_line.slice! data).strip
+            data2 = first_line
+            data2.slice! data
+            data2 = data2.strip
+
             returned_data += data2 + (" "*(40-(data2.to_s.length))) #40 characters - transmitter aditional data. Left justify.
 
+            #@ the issue has been fixed by defining form_fields again
+            if form_fields['transferors_name_address'].lines.first.blank?
+                first_line = "_"
+            else 
+                first_line = form_fields['transferors_name_address'].lines.first
+            end
             data = first_line.strip.truncate_words(2,omission: '')
             returned_data += data + (" "*(40-(data.to_s.length))) #40 characters - transmitter name. Left justify.
-            data2 = (first_line.slice! data).strip
+            #@ below is not OK it put the same as above - I will correct this:
+            #data2 = (first_line.slice! data).strip
+            data2 = first_line
+            data2.slice! data
+            data2 = data2.strip
             returned_data += data2 + (" "*(40-(data2.to_s.length))) #40 characters - transmitter aditional data. Left justify. 
             data = second_line.strip              
             returned_data += data + (" "*(40-(data.to_s.length))) #40 characters Requered
@@ -53,9 +62,10 @@ module AdminHelper
             data_state = data_array[-2]
             data_state = " " if data_state.blank?
             data_state = data_state[0..1] if data_state.length>2
-            data_sliced = data.slice! data_zip
             #@ city was missing in the extracted file:
-            data_city = data_sliced.slice! data_state  
+            data.slice! data_zip
+            data.slice! data_state  
+            data_city = data
             data_city = " " if data_city.blank?
             returned_data += data_city + (" "*(40-(data_city.to_s.length))) #40 characters Requered
             returned_data += data_state + (" "*(2-(data_state.to_s.length))) #2 characters Requered
@@ -73,8 +83,9 @@ module AdminHelper
         #500-507
             returned_data += "00000001"; # number of the record T record is always first 8 characters
         #508-517
-            returned_data += "I" #vendor indicator I if there are no vendor
+            #@these blank fields have to go before vendor indicator not after as that was before I fixed
             returned_data += " "*10 #blanks
+            returned_data += "I" #vendor indicator I if there are no vendor
             returned_data += " "*40 #used only if Vendors Software is used otherwise blanks
             returned_data += " "*40 #used only if Vendors Software is used otherwise blanks
             returned_data += " "*40 #used only if Vendors Software is used otherwise blanks
@@ -100,6 +111,23 @@ module AdminHelper
             returned_data += "34              " # 3 for Exercise price per share; 4 for Fair market value of share on exercise date, 16 chars lenght
             returned_data += " "*8 #blanks
             returned_data += " " #blank if payer is US citizen 
+    #@ reset these again
+            if form_fields['transferors_name_address'].lines.first.blank?
+                first_line = "_"
+            else 
+                first_line = form_fields['transferors_name_address'].lines.first
+            end
+            if form_fields['transferors_name_address'].lines.second.blank?
+                second_line = "_"
+            else 
+                second_line = form_fields['transferors_name_address'].lines.second
+            end
+            if form_fields['transferors_name_address'].lines.third.blank?
+                third_line = "_"
+            else 
+                third_line = form_fields['transferors_name_address'].lines.third
+            end
+    #end of reset
             data5 = first_line.strip.truncate_words(2,omission: '')
             returned_data += data5 + (" "*(40-(data5.to_s.length))) #40 characters - transmitter name. Left justify.
             returned_data += " "*40 #blanks if there is no transfer agent otherwise the agent name 
@@ -243,13 +271,14 @@ module AdminHelper
 
             returned_data += "0"*18 #Payment Amount 1*
             returned_data += "0"*18 #Payment Amount 2*
+            #@ check bellow , total payments should be right justified and populated with zeros on the left side
             if (data_amount3)
-                returned_data += data_amount3 + (" "*(18-(data_amount3.to_s.length))) 
+                returned_data += ("0"*(18-(data_amount3.to_s.length))) + data_amount3  #@ forgot to populate with 0 
             else 
                 returned_data += "0"*18 #Payment Amount 3*
             end
             if (data_amount4)
-                returned_data += data_amount4 + (" "*(18-(data_amount4.to_s.length))) 
+                returned_data += ("0"*(18-(data_amount4.to_s.length))) + data_amount4  #@ forgot to populate with 0
             else 
                 returned_data += "0"*18 #Payment Amount 4*
             end
@@ -321,15 +350,16 @@ module AdminHelper
         returned_data = 'T' #begining of the file -lenght 1
         returned_data += '2017' #lenght 4
         returned_data += ' ' # P if it is for prior year otherwise blank -lenght 1
-        returned_data += form_fields['lenders_fin'] + (" "*(9-(form_fields['lenders_fin'].to_s.length))) #9 characters - TRANSFEROR'S federal identification number
-        
-        returned_data += '93A66' + (" "*(5-('93A66'.to_s.length))) #5 characters - Transmitter Control Code
+        returned_data += '111111111';
+        returned_data += '11111' + (" "*(5-('11111'.to_s.length))) #5 characters - Transmitter Control Code
         returned_data += " "*7 #7 characters - blank
         returned_data += 'T' # T if it is a test file otherwise blank -lenght 1
         returned_data += ' ' #Enter a “1” (one) if the transmitter is a foreign entity otherwise blank -lenght 1
         data = first_line.strip.truncate_words(2,omission: '')
         returned_data += data + (" "*(40-(data.to_s.length))) #40 characters - transmitter name. Left justify.
-        data2 = (first_line.slice! data).strip
+        data2 = first_line
+        data2.slice! data
+        data2 = data2.strip
         returned_data += data2 + (" "*(40-(data2.to_s.length))) #40 characters - transmitter aditional data. Left justify.
 
         data = first_line.strip.truncate_words(2,omission: '')
@@ -539,6 +569,7 @@ module AdminHelper
         else 
             returned_data += "0"*18 #Payment Amount 3*
         end
+
         if (form_fields['4'])
             data_amount4 = sprintf('%.2f', form_fields['4'])
             data_amount4 = data_amount4.tr('.', '')
@@ -609,15 +640,16 @@ module AdminHelper
         returned_data = 'T' #begining of the file -lenght 1
         returned_data += '2017' #lenght 4
         returned_data += ' ' # P if it is for prior year otherwise blank -lenght 1
-        returned_data += form_fields['payers_fin'] + (" "*(9-(form_fields['payers_fin'].to_s.length))) #9 characters - TRANSFEROR'S federal identification number
-        
-        returned_data += '93A66' + (" "*(5-('93A66'.to_s.length))) #5 characters - Transmitter Control Code
+        returned_data += '111111111';
+        returned_data += '11111' + (" "*(5-('11111'.to_s.length))) #5 characters - Transmitter Control Code
         returned_data += " "*7 #7 characters - blank
         returned_data += 'T' # T if it is a test file otherwise blank -lenght 1
         returned_data += ' ' #Enter a “1” (one) if the transmitter is a foreign entity otherwise blank -lenght 1
         data = first_line.strip.truncate_words(2,omission: '')
         returned_data += data + (" "*(40-(data.to_s.length))) #40 characters - transmitter name. Left justify.
-        data2 = (first_line.slice! data).strip
+        data2 = first_line
+        data2.slice! data
+        data2 = data2.strip
         returned_data += data2 + (" "*(40-(data2.to_s.length))) #40 characters - transmitter aditional data. Left justify.
 
         data = first_line.strip.truncate_words(2,omission: '')
@@ -1092,15 +1124,16 @@ module AdminHelper
         returned_data += '2017' #lenght 4
         returned_data += ' ' # P if it is for prior year otherwise blank -lenght 1
 
-        returned_data += form_fields['creditors_fin'] + (" "*(9-(form_fields['creditors_fin'].to_s.length))) #9 characters - TRANSFEROR'S federal identification number
-        
-        returned_data += '93A66' + (" "*(5-('93A66'.to_s.length))) #5 characters - Transmitter Control Code
+        returned_data += '111111111';
+            returned_data += '11111' + (" "*(5-('11111'.to_s.length))) #5 characters - Transmitter Control Code
         returned_data += " "*7 #7 characters - blank
         returned_data += 'T' # T if it is a test file otherwise blank -lenght 1
         returned_data += ' ' #Enter a “1” (one) if the transmitter is a foreign entity otherwise blank -lenght 1
         data = first_line.strip.truncate_words(2,omission: '')
         returned_data += data + (" "*(40-(data.to_s.length))) #40 characters - transmitter name. Left justify.
-        data2 = (first_line.slice! data).strip
+        data2 = first_line
+        data2.slice! data
+        data2 = data2.strip
         returned_data += data2 + (" "*(40-(data2.to_s.length))) #40 characters - transmitter aditional data. Left justify.
 
         data = first_line.strip.truncate_words(2,omission: '')
@@ -1399,15 +1432,16 @@ module AdminHelper
         returned_data += '2017' #lenght 4
         returned_data += ' ' # P if it is for prior year otherwise blank -lenght 1
 
-        returned_data += form_fields['corporations_fin'] + (" "*(9-(form_fields['corporations_fin'].to_s.length))) #9 characters - TRANSFEROR'S federal identification number
-        
-        returned_data += '93A66' + (" "*(5-('93A66'.to_s.length))) #5 characters - Transmitter Control Code
+        returned_data += '111111111';
+            returned_data += '11111' + (" "*(5-('11111'.to_s.length))) #5 characters - Transmitter Control Code
         returned_data += " "*7 #7 characters - blank
         returned_data += 'T' # T if it is a test file otherwise blank -lenght 1
         returned_data += ' ' #Enter a “1” (one) if the transmitter is a foreign entity otherwise blank -lenght 1
         data = first_line.strip.truncate_words(2,omission: '')
         returned_data += data + (" "*(40-(data.to_s.length))) #40 characters - transmitter name. Left justify.
-        data2 = (first_line.slice! data).strip
+        data2 = first_line
+        data2.slice! data
+        data2 = data2.strip
         returned_data += data2 + (" "*(40-(data2.to_s.length))) #40 characters - transmitter aditional data. Left justify.
 
         data = first_line.strip.truncate_words(2,omission: '')
@@ -1669,15 +1703,16 @@ def exportForm1099div(form_fields)
         returned_data += '2017' #lenght 4
         returned_data += ' ' # P if it is for prior year otherwise blank -lenght 1
 
-        returned_data += form_fields['payers_fin'] + (" "*(9-(form_fields['payers_fin'].to_s.length))) #9 characters - TRANSFEROR'S federal identification number
-        
-        returned_data += '93A66' + (" "*(5-('93A66'.to_s.length))) #5 characters - Transmitter Control Code
+        returned_data += '111111111';
+            returned_data += '11111' + (" "*(5-('11111'.to_s.length))) #5 characters - Transmitter Control Code
         returned_data += " "*7 #7 characters - blank
         returned_data += 'T' # T if it is a test file otherwise blank -lenght 1
         returned_data += ' ' #Enter a “1” (one) if the transmitter is a foreign entity otherwise blank -lenght 1
         data = first_line.strip.truncate_words(2,omission: '')
         returned_data += data + (" "*(40-(data.to_s.length))) #40 characters - transmitter name. Left justify.
-        data2 = (first_line.slice! data).strip
+        data2 = first_line
+        data2.slice! data
+        data2 = data2.strip
         returned_data += data2 + (" "*(40-(data2.to_s.length))) #40 characters - transmitter aditional data. Left justify.
 
         data = first_line.strip.truncate_words(2,omission: '')
@@ -2115,15 +2150,16 @@ def exportForm1099g(form_fields)
         returned_data += '2017' #lenght 4
         returned_data += ' ' # P if it is for prior year otherwise blank -lenght 1
 
-        returned_data += form_fields['payers_fin'] + (" "*(9-(form_fields['payers_fin'].to_s.length))) #9 characters - TRANSFEROR'S federal identification number
-        
-        returned_data += '93A66' + (" "*(5-('93A66'.to_s.length))) #5 characters - Transmitter Control Code
+        returned_data += '111111111';
+            returned_data += '11111' + (" "*(5-('11111'.to_s.length))) #5 characters - Transmitter Control Code
         returned_data += " "*7 #7 characters - blank
         returned_data += 'T' # T if it is a test file otherwise blank -lenght 1
         returned_data += ' ' #Enter a “1” (one) if the transmitter is a foreign entity otherwise blank -lenght 1
         data = first_line.strip.truncate_words(2,omission: '')
         returned_data += data + (" "*(40-(data.to_s.length))) #40 characters - transmitter name. Left justify.
-        data2 = (first_line.slice! data).strip
+        data2 = first_line
+        data2.slice! data
+        data2 = data2.strip
         returned_data += data2 + (" "*(40-(data2.to_s.length))) #40 characters - transmitter aditional data. Left justify.
 
         data = first_line.strip.truncate_words(2,omission: '')
@@ -2493,15 +2529,16 @@ def exportForm1099h(form_fields)
         returned_data += '2017' #lenght 4
         returned_data += ' ' # P if it is for prior year otherwise blank -lenght 1
 
-        returned_data += form_fields['issuers_providers_fin'] + (" "*(9-(form_fields['issuers_providers_fin'].to_s.length))) #9 characters - TRANSFEROR'S federal identification number
-        
-        returned_data += '93A66' + (" "*(5-('93A66'.to_s.length))) #5 characters - Transmitter Control Code
+        returned_data += '111111111';
+            returned_data += '11111' + (" "*(5-('11111'.to_s.length))) #5 characters - Transmitter Control Code
         returned_data += " "*7 #7 characters - blank
         returned_data += 'T' # T if it is a test file otherwise blank -lenght 1
         returned_data += ' ' #Enter a “1” (one) if the transmitter is a foreign entity otherwise blank -lenght 1
         data = first_line.strip.truncate_words(2,omission: '')
         returned_data += data + (" "*(40-(data.to_s.length))) #40 characters - transmitter name. Left justify.
-        data2 = (first_line.slice! data).strip
+        data2 = first_line
+        data2.slice! data
+        data2 = data2.strip
         returned_data += data2 + (" "*(40-(data2.to_s.length))) #40 characters - transmitter aditional data. Left justify.
 
         data = first_line.strip.truncate_words(2,omission: '')
@@ -2901,15 +2938,16 @@ def exportForm1099int(form_fields)
         returned_data += '2017' #lenght 4
         returned_data += ' ' # P if it is for prior year otherwise blank -lenght 1
 
-        returned_data += form_fields['payers_fin'] + (" "*(9-(form_fields['payers_fin'].to_s.length))) #9 characters - TRANSFEROR'S federal identification number
-        
-        returned_data += '93A66' + (" "*(5-('93A66'.to_s.length))) #5 characters - Transmitter Control Code
+        returned_data += '111111111';
+            returned_data += '11111' + (" "*(5-('11111'.to_s.length))) #5 characters - Transmitter Control Code
         returned_data += " "*7 #7 characters - blank
         returned_data += 'T' # T if it is a test file otherwise blank -lenght 1
         returned_data += ' ' #Enter a “1” (one) if the transmitter is a foreign entity otherwise blank -lenght 1
         data = first_line.strip.truncate_words(2,omission: '')
         returned_data += data + (" "*(40-(data.to_s.length))) #40 characters - transmitter name. Left justify.
-        data2 = (first_line.slice! data).strip
+        data2 = first_line
+        data2.slice! data
+        data2 = data2.strip
         returned_data += data2 + (" "*(40-(data2.to_s.length))) #40 characters - transmitter aditional data. Left justify.
 
         data = first_line.strip.truncate_words(2,omission: '')
@@ -3323,15 +3361,16 @@ returned_data += " "*2 #2 blanks
         returned_data += '2017' #lenght 4
         returned_data += ' ' # P if it is for prior year otherwise blank -lenght 1
 
-        returned_data += form_fields['filers_name_street'] + (" "*(9-(form_fields['filers_name_street'].to_s.length))) #9 characters - TRANSFEROR'S federal identification number
-        
-        returned_data += '93A66' + (" "*(5-('93A66'.to_s.length))) #5 characters - Transmitter Control Code
+        returned_data += '111111111';
+            returned_data += '11111' + (" "*(5-('11111'.to_s.length))) #5 characters - Transmitter Control Code
         returned_data += " "*7 #7 characters - blank
         returned_data += 'T' # T if it is a test file otherwise blank -lenght 1
         returned_data += ' ' #Enter a “1” (one) if the transmitter is a foreign entity otherwise blank -lenght 1
         data = first_line.strip.truncate_words(2,omission: '')
         returned_data += data + (" "*(40-(data.to_s.length))) #40 characters - transmitter name. Left justify.
-        data2 = (first_line.slice! data).strip
+        data2 = first_line
+        data2.slice! data
+        data2 = data2.strip
         returned_data += data2 + (" "*(40-(data2.to_s.length))) #40 characters - transmitter aditional data. Left justify.
 
         data = first_line.strip.truncate_words(2,omission: '')
@@ -3706,13 +3745,15 @@ returned_data += " "*2 #2 blanks
 
         returned_data += form_fields['creditors_fin_XXXX'] + (" "*(9-(form_fields['creditors_fin_XXXX'].to_s.length))) #9 characters - TRANSFEROR'S federal identification number
         
-        returned_data += '93A66' + (" "*(5-('93A66'.to_s.length))) #5 characters - Transmitter Control Code
-        returned_data += " "*7 #7 characters - blank
+        returned_data += '111111111';
+            returned_data += '11111' + (" "*(5-('11111'.to_s.length))) #5 characters - Transmitter Control Code
         returned_data += 'T' # T if it is a test file otherwise blank -lenght 1
         returned_data += ' ' #Enter a “1” (one) if the transmitter is a foreign entity otherwise blank -lenght 1
         data = first_line.strip.truncate_words(2,omission: '')
         returned_data += data + (" "*(40-(data.to_s.length))) #40 characters - transmitter name. Left justify.
-        data2 = (first_line.slice! data).strip
+        data2 = first_line
+        data2.slice! data
+        data2 = data2.strip
         returned_data += data2 + (" "*(40-(data2.to_s.length))) #40 characters - transmitter aditional data. Left justify.
 
         data = first_line.strip.truncate_words(2,omission: '')
