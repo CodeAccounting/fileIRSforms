@@ -5,7 +5,8 @@ class AdminController < ApplicationController
   end
   layout "adminshow", only: [:show]
   def index   
-    @submissions = Field.paginate_by_sql("SELECT DISTINCT ON (unique_id) unique_id, form_id , updated_at FROM Fields", page: params[:page], per_page: 10)
+    @submissions = Field.paginate_by_sql("SELECT * FROM (SELECT DISTINCT ON (unique_id) unique_id, form_id , updated_at FROM Fields) t ORDER BY updated_at DESC", page: params[:page], per_page: 10)
+  
   end
   def show
     if params.has_key?(:unique_id)
@@ -40,8 +41,7 @@ class AdminController < ApplicationController
     
   #  @form_fields.each{ |s| s.kind_of?(String) ? s.upcase! : s }
   #  @form_fields { |k, v| v.kind_of?(String) ? (@form_fields[k] = v.upcase) : (@form_fields[k] = v)} 
-    @form_fields.each { |k, v| @form_fields[k] = v.upcase } 
-
+    @form_fields.each { |k, v| @form_fields[k] = v.upcase.to_s[0..40] } 
     case @form_fields['form_id']
       when "3921"
         data = helpers.exportForm3921(@form_fields)
@@ -49,6 +49,20 @@ class AdminController < ApplicationController
         data = helpers.exportForm1099a(@form_fields)
       when "1099b"
         data = helpers.exportForm1099b(@form_fields)
+      when "1099c"
+        data = helpers.exportForm1099c(@form_fields)
+      when "1099cap"
+        data = helpers.exportForm1099cap(@form_fields)
+      when "1099div"
+        data = helpers.exportForm1099div(@form_fields)
+      when "1099g"
+        data = helpers.exportForm1099g(@form_fields)
+      when "1099h"
+        data = helpers.exportForm1099h(@form_fields)
+      when "1099INT"
+        data = helpers.exportForm1099int(@form_fields)
+      when "1099K"
+        data = helpers.exportForm1099k(@form_fields)
       else
         data = "This form type is not supported yet"
     end

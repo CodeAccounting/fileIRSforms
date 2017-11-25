@@ -28,7 +28,7 @@
                                 <div id="fields-container" class="form1099div">
                                    <img width="100%" src="/media/1099div.png" />
                                     <!-- fields -->
-                                    <input class="abs" name="payers_name_address" value="<%= @form_fields['payers_name_address']%>" style="top: 9%;left: 2%;width: 44%;height: 20%;" type="text">
+                                    <textarea class="abs" name="payers_name_address" style="top: 9%;left: 2%;width: 44%;height: 20%;"/><%= @form_fields['payers_name_address']%></textarea>
                                     <input class="abs" name="payers_fin" value="<%= @form_fields['payers_fin']%>" style="top: 33%;left: 2%;width: 21%;height: 9%;" type="text">
                                     <input class="abs" name="recipients_id" value="<%= @form_fields['recipients_id']%>" style="top: 33%;left: 24%;width: 22%;height: 9%;" type="text">
                                     <input class="abs" name="recipients_name" value="<%= @form_fields['recipients_name']%>" style="top: 45.5%;left: 2%;width: 44%;height: 7%;" type="text">

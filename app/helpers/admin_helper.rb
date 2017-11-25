@@ -1,6 +1,9 @@
 module AdminHelper
     def exportForm3921(form_fields)
-#@questions : is payer TIN same as payer ID
+    #@ info that name, address, city state zip should be separated in rows s
+    #@ all commas should be removed from name , title , address etc..
+    #@questions : is payer TIN same as payer ID
+    #@convert dates to date fields
     #only for Form 3921
     #1st 750 records - Transmitter “T” Record
             form_fields['transferors_fin'] ||= " "
@@ -25,34 +28,31 @@ module AdminHelper
             returned_data += '2017' #lenght 4
             returned_data += ' ' # P if it is for prior year otherwise blank -lenght 1
             returned_data += '111111111';
-            returned_data += '11111' + (" "*(5-('11111'.to_s.length))) #5 characters - Transmitter Control Code
+            returned_data += '11111' + (" "*(5-('11111'.to_s[0..5].length))) #5 characters - Transmitter Control Code
             returned_data += " "*7 #7 characters - blank
             returned_data += 'T' # T if it is a test file otherwise blank -lenght 1
             returned_data += ' ' #Enter a “1” (one) if the transmitter is a foreign entity otherwise blank -lenght 1
             data = first_line.strip.truncate_words(2,omission: '')
-            returned_data += data + (" "*(40-(data.to_s.length))) #40 characters - transmitter name. Left justify.
+            returned_data += data.to_s[0..40] + (" "*(40-(data.to_s[0..40].length))) #40 characters - transmitter name. Left justify.
             data2 = first_line
             data2.slice! data
             data2 = data2.strip
 
-            returned_data += data2 + (" "*(40-(data2.to_s.length))) #40 characters - transmitter aditional data. Left justify.
+            returned_data += data2.to_s[0..40] + (" "*(40-(data2.to_s[0..40].length))) #40 characters - transmitter aditional data. Left justify.
 
-            #@ the issue has been fixed by defining form_fields again
             if form_fields['transferors_name_address'].lines.first.blank?
                 first_line = "_"
             else 
                 first_line = form_fields['transferors_name_address'].lines.first
             end
             data = first_line.strip.truncate_words(2,omission: '')
-            returned_data += data + (" "*(40-(data.to_s.length))) #40 characters - transmitter name. Left justify.
-            #@ below is not OK it put the same as above - I will correct this:
-            #data2 = (first_line.slice! data).strip
+            returned_data += data.to_s[0..40] + (" "*(40-(data.to_s[0..40].length))) #40 characters - transmitter name. Left justify.
             data2 = first_line
             data2.slice! data
             data2 = data2.strip
-            returned_data += data2 + (" "*(40-(data2.to_s.length))) #40 characters - transmitter aditional data. Left justify. 
+            returned_data += data2.to_s[0..40] + (" "*(40-(data2.to_s[0..40].length))) #40 characters - transmitter aditional data. Left justify. 
             data = second_line.strip              
-            returned_data += data + (" "*(40-(data.to_s.length))) #40 characters Requered
+            returned_data += data.to_s[0..40] + (" "*(40-(data.to_s[0..40].length))) #40 characters Requered
             data = third_line.strip 
             data = " " if data.blank?
             data_array =  data.split(/\W+/)   
@@ -62,18 +62,16 @@ module AdminHelper
             data_state = data_array[-2]
             data_state = " " if data_state.blank?
             data_state = data_state[0..1] if data_state.length>2
-            #@ city was missing in the extracted file:
             data.slice! data_zip
             data.slice! data_state  
             data_city = data
             data_city = " " if data_city.blank?
-            returned_data += data_city + (" "*(40-(data_city.to_s.length))) #40 characters Requered
-            returned_data += data_state + (" "*(2-(data_state.to_s.length))) #2 characters Requered
+            returned_data += data_city.to_s[0..40] + (" "*(40-(data_city.to_s[0..40].length))) #40 characters Requered
+            returned_data += data_state.to_s[0..2] + (" "*(2-(data_state.to_s[0..2].length))) #2 characters Requered
             #@ need a validation here should be 9 digits :
-            returned_data += data_zip + (" "*(9-(data_zip.to_s.length))) #9 characters Requered
+            returned_data += data_zip.to_s[0..9] + (" "*(9-(data_zip.to_s[0..9].length))) #9 characters Requered
             returned_data += " "*15 #15 blank characters 
             returned_data += '00000001' #8 characters Total Number of Payees 
-            #@ I have added few blank characters to be 40 char lenght:
             returned_data += 'TEST TEST                               ';#40 characters
             returned_data += '1111111111     ' #15 characters Requered
         #359-408       
@@ -83,7 +81,6 @@ module AdminHelper
         #500-507
             returned_data += "00000001"; # number of the record T record is always first 8 characters
         #508-517
-            #@these blank fields have to go before vendor indicator not after as that was before I fixed
             returned_data += " "*10 #blanks
             returned_data += "I" #vendor indicator I if there are no vendor
             returned_data += " "*40 #used only if Vendors Software is used otherwise blanks
@@ -96,14 +93,13 @@ module AdminHelper
             returned_data += " "*35 #blanks
             returned_data += " "*1 #used only if Vendors Software is used otherwise blanks
             returned_data += " "*8 #blanks
-            returned_data += "\r\n" #@CRLF
-
+            returned_data += "\r\n" 
     #2nd 750 records - Payer "A" Record
             returned_data += 'A' #begining of the record -lenght 1
             returned_data += '2017' #lenght 4
             returned_data += ' ' #lenght 1 is this CF/SF Program ? 1 if it is otherwise blank
             returned_data += " "*5 #blanks
-            returned_data += form_fields['transferors_fin'] + (" "*(9-(form_fields['transferors_fin'].to_s.length))) #9 characters - TRANSFEROR'S federal identification number
+            returned_data += form_fields['transferors_fin'].to_s[0..9] + (" "*(9-(form_fields['transferors_fin'].to_s[0..9].length))) #9 characters - TRANSFEROR'S federal identification number
             #first four characters of the payer last name
             returned_data += " "*4 #blanks of first four characters of the payers last name
             returned_data += " " #blank if this is not last year the payer name will file info returns electro or on paper
@@ -111,7 +107,6 @@ module AdminHelper
             returned_data += "34              " # 3 for Exercise price per share; 4 for Fair market value of share on exercise date, 16 chars lenght
             returned_data += " "*8 #blanks
             returned_data += " " #blank if payer is US citizen 
-    #@ reset these again
             if form_fields['transferors_name_address'].lines.first.blank?
                 first_line = "_"
             else 
@@ -127,21 +122,20 @@ module AdminHelper
             else 
                 third_line = form_fields['transferors_name_address'].lines.third
             end
-    #end of reset
             data5 = first_line.strip.truncate_words(2,omission: '')
-            returned_data += data5 + (" "*(40-(data5.to_s.length))) #40 characters - transmitter name. Left justify.
+            returned_data += data5.to_s[0..40] + (" "*(40-(data5.to_s[0..40].length))) #40 characters - transmitter name. Left justify.
             returned_data += " "*40 #blanks if there is no transfer agent otherwise the agent name 
             returned_data += "0" #if there is no transfer agent
             data6 = second_line.strip              
-            returned_data += data6 + (" "*(40-(data6.to_s.length))) #the adress  of the payer if there is not transfer agent 40 characters Requered
-            returned_data += data_city + (" "*(40-(data_city.to_s.length))) #40 payers city if there is not transfer agent
-            returned_data += data_state + (" "*(2-(data_state.to_s.length))) #2 payers state if there is not transfer agent
-            returned_data += data_zip + (" "*(9-(data_zip.to_s.length))) #9 payers zip if there is not transfer agent
+            returned_data += data6.to_s[0..40] + (" "*(40-(data6.to_s[0..40].length))) #the adress  of the payer if there is not transfer agent 40 characters Requered
+            returned_data += data_city.to_s[0..40] + (" "*(40-(data_city.to_s[0..40].length))) #40 payers city if there is not transfer agent
+            returned_data += data_state.to_s[0..2] + (" "*(2-(data_state.to_s[0..2].length))) #2 payers state if there is not transfer agent
+            returned_data += data_zip.to_s[0..9] + (" "*(9-(data_zip.to_s[0..9].length))) #9 payers zip if there is not transfer agent
             returned_data += '5107062877     ' #15 payer’s telephone number - there are no such field in the form !!!
             returned_data += " "*260 #blanks
             returned_data += "00000002" #the second record
             returned_data += " "*241 #blanks
-            returned_data += "\r\n" #@CRLF
+            returned_data += "\r\n" 
     #3th 750 records - Payer "B" Record - this Record contains the payment information from information returns.
             returned_data += 'B' #begining of the record -lenght 1
             returned_data += '2017' #lenght 4
@@ -157,12 +151,12 @@ module AdminHelper
             else 
                 data_tin = ''
             end
-            returned_data += data_tin + (" "*(9-(data_tin.to_s.length))) #Payee’s Taxpayer Identification Number (TIN)
+            returned_data += data_tin.to_s[0..9] + (" "*(9-(data_tin.to_s[0..9].length))) #Payee’s Taxpayer Identification Number (TIN)
             data_account = form_fields['account_number']
             if (!data_account) 
                data_account = rand(99999999999999999999).to_s #generate 20 random number 
             end
-            returned_data += data_account + (" "*(20-(data_account.to_s.length))) 
+            returned_data += data_account.to_s[0..20] + (" "*(20-(data_account.to_s[0..20].length))) 
             returned_data += " "*4 #blanks #Payer’s Office Code - you can enter blanks
             returned_data += " "*10 #blanks
             returned_data += "0"*12 #Payment Amount 1*
@@ -170,14 +164,14 @@ module AdminHelper
             if (form_fields['3'])
                 data_amount3 = sprintf('%.2f', form_fields['3'])
                 data_amount3 = data_amount3.tr('.', '')
-                returned_data += ("0"*(12-(data_amount3.to_s.length)))+data_amount3
+                returned_data += ("0"*(12-(data_amount3.to_s[0..12].length)))+data_amount3.to_s[0..12]
             else 
                 returned_data += "0"*12 #Payment Amount 3*
             end
             if (form_fields['4'])
                 data_amount4 = sprintf('%.2f', form_fields['4'])
                 data_amount4 = data_amount4.tr('.', '')
-                returned_data += ("0"*(12-(data_amount4.to_s.length)))+data_amount4
+                returned_data += ("0"*(12-(data_amount4.to_s[0..12].length)))+data_amount4.to_s[0..12]
             else 
                 returned_data += "0"*12 #Payment Amount 4*
             end
@@ -199,7 +193,7 @@ module AdminHelper
             else
                 data_employees_name = ''
             end
-            returned_data +=  data_employees_name + (" "*(40-(data_employees_name.to_s.length))) #40 First payee name line -employees_name
+            returned_data +=  data_employees_name.to_s[0..40] + (" "*(40-(data_employees_name.to_s[0..40].length))) #40 First payee name line -employees_name
             returned_data += " "*40 #40 Second payee name line
             returned_data += " "*40 #40 blanks
             if (form_fields['street_address']) 
@@ -207,7 +201,7 @@ module AdminHelper
             else
                 street_address = ' ';
             end
-            returned_data +=  street_address + (" "*(40-(street_address.to_s.length))) #40 Payee mailing address
+            returned_data +=  street_address.to_s[0..40] + (" "*(40-(street_address.to_s[0..40].length))) #40 Payee mailing address
             returned_data += " "*40 #40 blanks
                     
             if (form_fields['city_town_state']) 
@@ -227,9 +221,9 @@ module AdminHelper
             city = city_town_state_sliced.slice! state  
             city = " " if city.blank?  
            
-            returned_data +=  city + (" "*(40-(city.to_s.length))) #40 payee city , town or postal office (do not enter zip)
-            returned_data +=  state + (" "*(2-(state.to_s.length)))#2 valid U.S Postal Service state
-            returned_data +=  zip + (" "*(9-(zip.to_s.length)))#9 Payee ZIP code
+            returned_data +=  city.to_s[0..40] + (" "*(40-(city.to_s[0..40].length))) #40 payee city , town or postal office (do not enter zip)
+            returned_data +=  state.to_s[0..2] + (" "*(2-(state.to_s[0..2].length)))#2 valid U.S Postal Service state
+            returned_data +=  zip.to_s[0..9] + (" "*(9-(zip.to_s[0..9].length)))#9 Payee ZIP code
             returned_data += " " # blank
             returned_data += "00000003" #8 Record Sequence Number
             returned_data += " "*36 #36 blanks
@@ -240,30 +234,30 @@ module AdminHelper
             else
                 date_granted = ' ';
             end
-            returned_data +=  date_granted + (" "*(8-(date_granted.to_s.length))) #8 date option granted
+            returned_data +=  date_granted.to_s[0..8] + (" "*(8-(date_granted.to_s[0..8].length))) #8 date option granted
             if (form_fields['2']) 
                 date_exercised = form_fields['2'];
             else
                 date_exercised = ' ';
             end
-            returned_data +=  date_exercised + (" "*(8-(date_exercised.to_s.length))) #8 date option exercised
+            returned_data +=  date_exercised.to_s[0..8] + (" "*(8-(date_exercised.to_s[0..8].length))) #8 date option exercised
             if (form_fields['5']) 
                 number_of_shares = form_fields['5'];
             else
                 number_of_shares = '0';
             end
-                    returned_data += ("0"*(8-(number_of_shares.to_s.length))) + number_of_shares.to_s #8 number of shares transferred
+                    returned_data += ("0"*(8-(number_of_shares.to_s[0..8].length))) + number_of_shares.to_s[0..8] #8 number of shares transferred
             returned_data += " "*4 #4 blanks
             if (form_fields['6']) 
                 other_than_transferor = form_fields['6'];
             else
                 other_than_transferor = ' ';
             end
-            returned_data +=  other_than_transferor + (" "*(40-(other_than_transferor.to_s.length))) #40 if other than transferor information
+            returned_data +=  other_than_transferor.to_s[0..40] + (" "*(40-(other_than_transferor.to_s[0..40].length))) #40 if other than transferor information
             returned_data += " "*48 #48 blank
             returned_data += " "*60 #60 special data entries or blanks 
             returned_data += " "*26 #26 blanks
-            returned_data += "\r\n" #@CRLF
+            returned_data += "\r\n" 
     # Payer C record (control record)
             returned_data += 'C' # enter C
             returned_data += '00000001' #8 total number of payees
@@ -271,14 +265,13 @@ module AdminHelper
 
             returned_data += "0"*18 #Payment Amount 1*
             returned_data += "0"*18 #Payment Amount 2*
-            #@ check bellow , total payments should be right justified and populated with zeros on the left side
             if (data_amount3)
-                returned_data += ("0"*(18-(data_amount3.to_s.length))) + data_amount3  #@ forgot to populate with 0 
+                returned_data += ("0"*(18-(data_amount3.to_s[0..18].length))) + data_amount3.to_s[0..18]   
             else 
                 returned_data += "0"*18 #Payment Amount 3*
             end
             if (data_amount4)
-                returned_data += ("0"*(18-(data_amount4.to_s.length))) + data_amount4  #@ forgot to populate with 0
+                returned_data += ("0"*(18-(data_amount4.to_s[0..18].length))) + data_amount4.to_s[0..18]
             else 
                 returned_data += "0"*18 #Payment Amount 4*
             end
@@ -298,7 +291,7 @@ module AdminHelper
             returned_data += ' '*196 #196 blanks
             returned_data += "00000004" #8 Record Sequence Number
             returned_data += ' '*241 #241 blanks
-            returned_data += "\r\n" #@CRLF
+            returned_data += "\r\n" 
     # K record used only when state reporting approval has been granted
     # F record
             returned_data += 'F' #enter F
@@ -309,7 +302,7 @@ module AdminHelper
             returned_data += ' '*442 #442 blanks
             returned_data += "00000005" #8 Record Sequence Number
             returned_data += ' '*241 #241 blanks
-            returned_data += "\r\n" #@CRLF
+            returned_data += "\r\n" 
     #end of file
 
             return returned_data
@@ -351,23 +344,29 @@ module AdminHelper
         returned_data += '2017' #lenght 4
         returned_data += ' ' # P if it is for prior year otherwise blank -lenght 1
         returned_data += '111111111';
-        returned_data += '11111' + (" "*(5-('11111'.to_s.length))) #5 characters - Transmitter Control Code
+        returned_data += '11111' + (" "*(5-('11111'.to_s[0..5].length))) #5 characters - Transmitter Control Code
         returned_data += " "*7 #7 characters - blank
         returned_data += 'T' # T if it is a test file otherwise blank -lenght 1
         returned_data += ' ' #Enter a “1” (one) if the transmitter is a foreign entity otherwise blank -lenght 1
         data = first_line.strip.truncate_words(2,omission: '')
-        returned_data += data + (" "*(40-(data.to_s.length))) #40 characters - transmitter name. Left justify.
+        returned_data += data.to_s[0..40] + (" "*(40-(data.to_s[0..40].length))) #40 characters - transmitter name. Left justify.
         data2 = first_line
         data2.slice! data
         data2 = data2.strip
-        returned_data += data2 + (" "*(40-(data2.to_s.length))) #40 characters - transmitter aditional data. Left justify.
-
+        returned_data += data2.to_s[0..40] + (" "*(40-(data2.to_s[0..40].length))) #40 characters - transmitter aditional data. Left justify.
+        if form_fields['lenders_name_address'].lines.first.blank?
+            first_line = "_"
+        else 
+            first_line = form_fields['lenders_name_address'].lines.first
+        end
         data = first_line.strip.truncate_words(2,omission: '')
-        returned_data += data + (" "*(40-(data.to_s.length))) #40 characters - transmitter name. Left justify.
-        data2 = (first_line.slice! data).strip
-        returned_data += data2 + (" "*(40-(data2.to_s.length))) #40 characters - transmitter aditional data. Left justify. 
+        returned_data += data.to_s[0..40] + (" "*(40-(data.to_s[0..40].length))) #40 characters - transmitter name. Left justify.
+        data2 = first_line
+        data2.slice! data
+        data2 = data2.strip
+        returned_data += data2.to_s[0..40] + (" "*(40-(data2.to_s[0..40].length))) #40 characters - transmitter aditional data. Left justify. 
         data = second_line.strip              
-        returned_data += data + (" "*(40-(data.to_s.length))) #40 characters Requered
+        returned_data += data.to_s[0..40] + (" "*(40-(data.to_s[0..40].length))) #40 characters Requered
         data = third_line.strip 
         data = " " if data.blank?
         data_array =  data.split(/\W+/)   
@@ -377,25 +376,26 @@ module AdminHelper
         data_state = data_array[-2]
         data_state = " " if data_state.blank?
         data_state = data_state[0..1] if data_state.length>2
-        data_sliced = data.slice! data_zip
-        data_city = data_sliced.slice! data_state  
+        data.slice! data_zip
+        data.slice! data_state  
+        data_city = data
         data_city = " " if data_city.blank?
-        returned_data += data_city + (" "*(40-(data_city.to_s.length))) #40 characters Requered
-        returned_data += data_state + (" "*(2-(data_state.to_s.length))) #2 characters Requered
-        returned_data += data_zip + (" "*(9-(data_zip.to_s.length))) #9 characters Requered
+        returned_data += data_city.to_s[0..40] + (" "*(40-(data_city.to_s[0..40].length))) #40 characters Requered
+        returned_data += data_state.to_s[0..2] + (" "*(2-(data_state.to_s[0..2].length))) #2 characters Requered
+        returned_data += data_zip.to_s[0..9] + (" "*(9-(data_zip.to_s[0..9].length))) #9 characters Requered
         returned_data += " "*15 #15 blank characters 
         returned_data += '00000001' #8 characters Total Number of Payees there is no such field in Form 3921
         returned_data += 'Dejan Sabados                           ';#40 characters
         returned_data += '1111111111     ' #15 characters Requered
     #359-408       
-        returned_data += 'dejansabados@yahoo.com                            ' #50 characters 
+        returned_data += 'albionpetrovic@gmail.com                          ' #50 characters 
     #409-499
         returned_data += " "*91 #91 characters - blank
     #500-507
         returned_data += "00000001"; # number of the record T record is always first 8 characters
     #508-517
-        returned_data += "I" #vendor indicator I if there are no vendor
         returned_data += " "*10 #blanks
+        returned_data += "I" #vendor indicator I if there are no vendor
         returned_data += " "*40 #used only if Vendors Software is used otherwise blanks
         returned_data += " "*40 #used only if Vendors Software is used otherwise blanks
         returned_data += " "*40 #used only if Vendors Software is used otherwise blanks
@@ -406,14 +406,14 @@ module AdminHelper
         returned_data += " "*35 #blanks
         returned_data += " "*1 #used only if Vendors Software is used otherwise blanks
         returned_data += " "*8 #blanks
-        returned_data += " "*2 #blanks
+        returned_data += "\r\n" 
 
 #2nd 750 records - Payer "A" Record
         returned_data += 'A' #begining of the record -lenght 1
         returned_data += '2017' #lenght 4
         returned_data += ' ' #lenght 1 is this CF/SF Program ? 1 if it is otherwise blank
         returned_data += " "*5 #blanks
-        returned_data += form_fields['lenders_fin'] + (" "*(9-(form_fields['lenders_fin'].to_s.length))) #9 characters - TRANSFEROR'S federal identification number
+        returned_data += form_fields['lenders_fin'].to_s[0..9] + (" "*(9-(form_fields['lenders_fin'].to_s[0..9].length))) #9 characters - TRANSFEROR'S federal identification number
         #first four characters of the payer last name
         returned_data += " "*4 #blanks of first four characters of the payers last name
         returned_data += " " #blank if this is not last year the payer name will file info returns electro or on paper
@@ -421,19 +421,36 @@ module AdminHelper
         returned_data += "24              " # 3 for Exercise price per share; 4 for Fair market value of share on exercise date, 16 chars lenght
         returned_data += " "*8 #blanks
         returned_data += " " #blank if payer is US citizen 
+        if form_fields['lenders_name_address'].lines.first.blank?
+            first_line = "_"
+        else 
+            first_line = form_fields['lenders_name_address'].lines.first
+        end
+        if form_fields['lenders_name_address'].lines.second.blank?
+            second_line = "_"
+        else 
+            second_line = form_fields['lenders_name_address'].lines.second
+        end
+        if form_fields['lenders_name_address'].lines.third.blank?
+            third_line = "_"
+        else 
+            third_line = form_fields['lenders_name_address'].lines.third
+        end
+         #end of reset
         data5 = first_line.strip.truncate_words(2,omission: '')
-        returned_data += data5 + (" "*(40-(data5.to_s.length))) #40 characters - transmitter name. Left justify.
+        returned_data += data5.to_s[0..40] + (" "*(40-(data5.to_s[0..40].length))) #40 characters - transmitter name. Left justify.
         returned_data += " "*40 #blanks if there is no transfer agent otherwise the agent name 
         returned_data += "0" #if there is no transfer agent
         data6 = second_line.strip              
-        returned_data += data6 + (" "*(40-(data6.to_s.length))) #the adress  of the payer if there is not transfer agent 40 characters Requered
-        returned_data += data_city + (" "*(40-(data_city.to_s.length))) #40 payers city if there is not transfer agent
-        returned_data += data_state + (" "*(2-(data_state.to_s.length))) #2 payers state if there is not transfer agent
-        returned_data += data_zip + (" "*(9-(data_zip.to_s.length))) #9 payers zip if there is not transfer agent
+        returned_data += data6.to_s[0..40] + (" "*(40-(data6.to_s[0..40].length))) #the adress  of the payer if there is not transfer agent 40 characters Requered
+        returned_data += data_city.to_s[0..40] + (" "*(40-(data_city.to_s[0..40].length))) #40 payers city if there is not transfer agent
+        returned_data += data_state.to_s[0..2] + (" "*(2-(data_state.to_s[0..2].length))) #2 payers state if there is not transfer agent
+        returned_data += data_zip.to_s[0..9] + (" "*(9-(data_zip.to_s[0..9].length))) #9 payers zip if there is not transfer agent
         returned_data += '5107062877     ' #15 payer’s telephone number - there are no such field in the form !!!
         returned_data += " "*260 #blanks
         returned_data += "00000002" #the second record
-        returned_data += " "*243 #blanks
+        returned_data += " "*241 #blanks
+        returned_data += "\r\n"
 #3th 750 records - Payer "B" Record - this Record contains the payment information from information returns.
         returned_data += 'B' #begining of the record -lenght 1
         returned_data += '2017' #lenght 4
@@ -450,12 +467,12 @@ module AdminHelper
             data_tin = ''
         end
 
-        returned_data += data_tin + (" "*(9-(data_tin.to_s.length))) #Payee’s Taxpayer Identification Number (TIN)
+        returned_data += data_tin.to_s[0..9] + (" "*(9-(data_tin.to_s[0..9].length))) #Payee’s Taxpayer Identification Number (TIN)
         data_account = form_fields['account_number']
         if (!data_account) 
            data_account = rand(99999999999999999999).to_s #generate 20 random number 
         end
-        returned_data += data_account + (" "*(20-(data_account.to_s.length))) 
+        returned_data += data_account.to_s[0..20] + (" "*(20-(data_account.to_s[0..20].length))) 
         returned_data += " "*4 #blanks #Payer’s Office Code - you can enter blanks
         returned_data += " "*10 #blanks
       #TODO see how is this solved in Form bellow and make like that (to accept values with dollar sign etc )
@@ -464,14 +481,14 @@ module AdminHelper
         if (form_fields['2'])
             data_amount3 = sprintf('%.2f', form_fields['2'])
             data_amount3 = data_amount3.tr('.', '')
-            returned_data += ("0"*(12-(data_amount3.to_s.length)))+data_amount3
+            returned_data += ("0"*(12-(data_amount3.to_s[0..12].length)))+data_amount3.to_s[0..12]
         else 
             returned_data += "0"*12 #Payment Amount 3*
         end
         if (form_fields['4'])
             data_amount4 = sprintf('%.2f', form_fields['4'])
             data_amount4 = data_amount4.tr('.', '')
-            returned_data += ("0"*(12-(data_amount4.to_s.length)))+data_amount4
+            returned_data += ("0"*(12-(data_amount4.to_s[0..12].length)))+data_amount4.to_s[0..12]
         else 
             returned_data += "0"*12 #Payment Amount 4*
         end
@@ -494,7 +511,7 @@ module AdminHelper
         else
             data_employees_name = ''
         end
-        returned_data +=  data_employees_name + (" "*(40-(data_employees_name.to_s.length))) #40 First payee name line -employees_name
+        returned_data +=  data_employees_name.to_s[0..40] + (" "*(40-(data_employees_name.to_s[0..40].length))) #40 First payee name line -employees_name
         returned_data += " "*40 #40 Second payee name line
         returned_data += " "*40 #40 blanks
         if (form_fields['street_address']) 
@@ -502,7 +519,7 @@ module AdminHelper
         else
             street_address = ' ';
         end
-        returned_data +=  street_address + (" "*(40-(street_address.to_s.length))) #40 Payee mailing address
+        returned_data +=  street_address.to_s[0..40] + (" "*(40-(street_address.to_s[0..40].length))) #40 Payee mailing address
         returned_data += " "*40 #40 blanks
                 
         if (form_fields['city_town']) 
@@ -522,9 +539,9 @@ module AdminHelper
         city = city_town_state_sliced.slice! state  
         city = " " if city.blank?  
        
-        returned_data +=  city + (" "*(40-(city.to_s.length))) #40 payee city , town or postal office (do not enter zip)
-        returned_data +=  state + (" "*(2-(state.to_s.length)))#2 valid U.S Postal Service state
-        returned_data +=  zip + (" "*(9-(zip.to_s.length)))#9 Payee ZIP code
+        returned_data +=  city.to_s[0..40] + (" "*(40-(city.to_s[0..40].length))) #40 payee city , town or postal office (do not enter zip)
+        returned_data +=  state.to_s[0..2] + (" "*(2-(state.to_s[0..2].length)))#2 valid U.S Postal Service state
+        returned_data +=  zip.to_s[0..9] + (" "*(9-(zip.to_s[0..9].length)))#9 Payee ZIP code
         returned_data += " " # blank
 
         returned_data += "00000003" #8 Record Sequence Number
@@ -543,17 +560,17 @@ module AdminHelper
         else
             acquisition = ' ';
         end
-        returned_data +=  acquisition + (" "*(8-(acquisition.to_s.length))) #8 Date of Lender’s Acquisition or Knowledge of Abandonment
+        returned_data +=  acquisition.to_s[0..8] + (" "*(8-(acquisition.to_s[0..8].length))) #8 Date of Lender’s Acquisition or Knowledge of Abandonment
         if (form_fields['6']) 
             description_of_property = form_fields['6'].strip;
         else
             description_of_property = ' ';
         end
-        returned_data += description_of_property.to_s + (" "*(39-(description_of_property.to_s.length))) #39
+        returned_data += description_of_property.to_s[0..39] + (" "*(39-(description_of_property.to_s[0..39].length))) #39
         returned_data += " "*68 #68 blanks
         returned_data += " "*60 #60 special data entries or blanks 
         returned_data += " "*26 #26 blanks
-        returned_data += " "*2 #2 blanks
+        returned_data += "\r\n"
 # Payer C record (control record)
         returned_data += 'C' # enter C
         returned_data += '00000001' #8 total number of payees
@@ -565,7 +582,7 @@ module AdminHelper
         if (form_fields['2'])
             data_amount3 = sprintf('%.2f', form_fields['2'])
             data_amount3 = data_amount3.tr('.', '')
-            returned_data += ("0"*(18-(data_amount3.to_s.length)))+data_amount3
+            returned_data += ("0"*(18-(data_amount3.to_s[0..18].length)))+data_amount3.to_s[0..18]
         else 
             returned_data += "0"*18 #Payment Amount 3*
         end
@@ -573,7 +590,7 @@ module AdminHelper
         if (form_fields['4'])
             data_amount4 = sprintf('%.2f', form_fields['4'])
             data_amount4 = data_amount4.tr('.', '')
-            returned_data += ("0"*(18-(data_amount4.to_s.length)))+data_amount4
+            returned_data += ("0"*(18-(data_amount4.to_s[0..18].length)))+data_amount4.to_s[0..18]
         else 
             returned_data += "0"*18 #Payment Amount 4*
         end
@@ -593,7 +610,7 @@ module AdminHelper
         returned_data += ' '*196 #196 blanks
         returned_data += "00000004" #8 Record Sequence Number
         returned_data += ' '*241 #241 blanks
-        returned_data += ' '*2 #2 blanks
+        returned_data += "\r\n"
 # K record used only when state reporting approval has been granted
 # F record
         returned_data += 'F' #enter F
@@ -604,7 +621,7 @@ module AdminHelper
         returned_data += ' '*442 #442 blanks
         returned_data += "00000005" #8 Record Sequence Number
         returned_data += ' '*241 #241 blanks
-        returned_data += ' '*2 #2 blanks
+        returned_data += "\r\n"
 #end of file
         return returned_data
     end
@@ -641,23 +658,29 @@ module AdminHelper
         returned_data += '2017' #lenght 4
         returned_data += ' ' # P if it is for prior year otherwise blank -lenght 1
         returned_data += '111111111';
-        returned_data += '11111' + (" "*(5-('11111'.to_s.length))) #5 characters - Transmitter Control Code
+        returned_data += '11111' + (" "*(5-('11111'.to_s[0..5].length))) #5 characters - Transmitter Control Code
         returned_data += " "*7 #7 characters - blank
         returned_data += 'T' # T if it is a test file otherwise blank -lenght 1
         returned_data += ' ' #Enter a “1” (one) if the transmitter is a foreign entity otherwise blank -lenght 1
         data = first_line.strip.truncate_words(2,omission: '')
-        returned_data += data + (" "*(40-(data.to_s.length))) #40 characters - transmitter name. Left justify.
+        returned_data += data.to_s[0..40] + (" "*(40-(data.to_s[0..40].length))) #40 characters - transmitter name. Left justify.
         data2 = first_line
         data2.slice! data
         data2 = data2.strip
-        returned_data += data2 + (" "*(40-(data2.to_s.length))) #40 characters - transmitter aditional data. Left justify.
-
+        returned_data += data2.to_s[0..40] + (" "*(40-(data2.to_s[0..40].length))) #40 characters - transmitter aditional data. Left justify.
+        if form_fields['payers_name_address'].lines.first.blank?
+            first_line = "_"
+        else 
+            first_line = form_fields['payers_name_address'].lines.first
+        end
         data = first_line.strip.truncate_words(2,omission: '')
-        returned_data += data + (" "*(40-(data.to_s.length))) #40 characters - transmitter name. Left justify.
-        data2 = (first_line.slice! data).strip
-        returned_data += data2 + (" "*(40-(data2.to_s.length))) #40 characters - transmitter aditional data. Left justify. 
+        returned_data += data.to_s[0..40] + (" "*(40-(data.to_s[0..40].length))) #40 characters - transmitter name. Left justify.
+        data2 = first_line
+        data2.slice! data
+        data2 = data2.strip
+        returned_data += data2.to_s[0..40] + (" "*(40-(data2.to_s[0..40].length))) #40 characters - transmitter aditional data. Left justify. 
         data = second_line.strip              
-        returned_data += data + (" "*(40-(data.to_s.length))) #40 characters Requered
+        returned_data += data.to_s[0..40] + (" "*(40-(data.to_s[0..40].length))) #40 characters Requered
         data = third_line.strip 
         data = " " if data.blank?
         data_array =  data.split(/\W+/)   
@@ -667,25 +690,26 @@ module AdminHelper
         data_state = data_array[-2]
         data_state = " " if data_state.blank?
         data_state = data_state[0..1] if data_state.length>2
-        data_sliced = data.slice! data_zip
-        data_city = data_sliced.slice! data_state  
+        data.slice! data_zip
+        data.slice! data_state  
+        data_city = data
         data_city = " " if data_city.blank?
-        returned_data += data_city + (" "*(40-(data_city.to_s.length))) #40 characters Requered
-        returned_data += data_state + (" "*(2-(data_state.to_s.length))) #2 characters Requered
-        returned_data += data_zip + (" "*(9-(data_zip.to_s.length))) #9 characters Requered
+        returned_data += data_city.to_s[0..40] + (" "*(40-(data_city.to_s[0..40].length))) #40 characters Requered
+        returned_data += data_state.to_s[0..2] + (" "*(2-(data_state.to_s[0..2].length))) #2 characters Requered
+        returned_data += data_zip.to_s[0..9] + (" "*(9-(data_zip.to_s[0..9].length))) #9 characters Requered
         returned_data += " "*15 #15 blank characters 
         returned_data += '00000001' #8 characters Total Number of Payees there is no such field in Form 3921
-        returned_data += 'Dejan Sabados                           ';#40 characters
+        returned_data += 'TEST TEST                               ';#40 characters
         returned_data += '1111111111     ' #15 characters Requered
     #359-408       
-        returned_data += 'dejansabados@yahoo.com                            ' #50 characters 
+        returned_data += 'albionpetrovic@gmail.com                          ' #50 characters 
     #409-499
         returned_data += " "*91 #91 characters - blank
     #500-507
         returned_data += "00000001"; # number of the record T record is always first 8 characters
     #508-517
-        returned_data += "I" #vendor indicator I if there are no vendor
         returned_data += " "*10 #blanks
+        returned_data += "I" #vendor indicator I if there are no vendor
         returned_data += " "*40 #used only if Vendors Software is used otherwise blanks
         returned_data += " "*40 #used only if Vendors Software is used otherwise blanks
         returned_data += " "*40 #used only if Vendors Software is used otherwise blanks
@@ -696,13 +720,13 @@ module AdminHelper
         returned_data += " "*35 #blanks
         returned_data += " "*1 #used only if Vendors Software is used otherwise blanks
         returned_data += " "*8 #blanks
-        returned_data += " "*2 #blanks
+        returned_data += "\r\n" 
 #2nd 750 records - Payer "A" Record
         returned_data += 'A' #begining of the record -lenght 1
         returned_data += '2017' #lenght 4
         returned_data += ' ' #lenght 1 is this CF/SF Program ? 1 if it is otherwise blank
         returned_data += " "*5 #blanks
-        returned_data += form_fields['payers_fin'] + (" "*(9-(form_fields['payers_fin'].to_s.length))) #9 characters - TRANSFEROR'S federal identification number
+        returned_data += form_fields['payers_fin'].to_s[0..9] + (" "*(9-(form_fields['payers_fin'].to_s[0..9].length))) #9 characters - TRANSFEROR'S federal identification number
         #first four characters of the payer last name
         returned_data += " "*4 #blanks of first four characters of the payers last name
         returned_data += " " #blank if this is not last year the payer name will file info returns electro or on paper
@@ -710,20 +734,36 @@ module AdminHelper
 
         returned_data += "234579ABCD      " #16 paument codes
         returned_data += " "*8 #blanks
-        returned_data += " " #blank if payer is US citizen 
+        returned_data += " " #blank if payer is US citizen
+        if form_fields['payers_name_address'].lines.first.blank?
+            first_line = "_"
+        else 
+            first_line = form_fields['payers_name_address'].lines.first
+        end
+        if form_fields['payers_name_address'].lines.second.blank?
+            second_line = "_"
+        else 
+            second_line = form_fields['payers_name_address'].lines.second
+        end
+        if form_fields['payers_name_address'].lines.third.blank?
+            third_line = "_"
+        else 
+            third_line = form_fields['payers_name_address'].lines.third
+        end
         data5 = first_line.strip.truncate_words(2,omission: '')
-        returned_data += data5 + (" "*(40-(data5.to_s.length))) #40 characters - transmitter name. Left justify.
+        returned_data += data5.to_s[0..40] + (" "*(40-(data5.to_s[0..40].length))) #40 characters - transmitter name. Left justify.
         returned_data += " "*40 #blanks if there is no transfer agent otherwise the agent name 
         returned_data += "0" #if there is no transfer agent
         data6 = second_line.strip              
-        returned_data += data6 + (" "*(40-(data6.to_s.length))) #the adress  of the payer if there is not transfer agent 40 characters Requered
-        returned_data += data_city + (" "*(40-(data_city.to_s.length))) #40 payers city if there is not transfer agent
-        returned_data += data_state + (" "*(2-(data_state.to_s.length))) #2 payers state if there is not transfer agent
-        returned_data += data_zip + (" "*(9-(data_zip.to_s.length))) #9 payers zip if there is not transfer agent
+        returned_data += data6.to_s[0..40] + (" "*(40-(data6.to_s[0..40].length))) #the adress  of the payer if there is not transfer agent 40 characters Requered
+        returned_data += data_city.to_s[0..40] + (" "*(40-(data_city.to_s[0..40].length))) #40 payers city if there is not transfer agent
+        returned_data += data_state.to_s[0..2] + (" "*(2-(data_state.to_s[0..2].length))) #2 payers state if there is not transfer agent
+        returned_data += data_zip.to_s[0..9] + (" "*(9-(data_zip.to_s[0..9].length))) #9 payers zip if there is not transfer agent
         returned_data += '5107062877     ' #15 payer’s telephone number - there are no such field in the form !!!
         returned_data += " "*260 #blanks
         returned_data += "00000002" #the second record
-        returned_data += " "*243 #blanks
+        returned_data += " "*241 #blanks
+        returned_data += "\r\n"
 
 #3th 750 records - Payer "B" Record - this Record contains the payment information from information returns.
         returned_data += 'B' #begining of the record -lenght 1
@@ -741,12 +781,12 @@ module AdminHelper
             data_tin = ''
         end
 
-        returned_data += data_tin + (" "*(9-(data_tin.to_s.length))) #Payee’s Taxpayer Identification Number (TIN)
+        returned_data += data_tin.to_s[0..9] + (" "*(9-(data_tin.to_s[0..9].length))) #Payee’s Taxpayer Identification Number (TIN)
         data_account = form_fields['account_num']
         if (!data_account) 
            data_account = rand(99999999999999999999).to_s #generate 20 random number 
         end
-        returned_data += data_account + (" "*(20-(data_account.to_s.length))) 
+        returned_data += data_account.to_s[0..20] + (" "*(20-(data_account.to_s[0..20].length))) 
         returned_data += " "*4 #blanks #Payer’s Office Code - you can enter blanks
         returned_data += " "*10 #blanks
         #payment amounts 234579ABCD 
@@ -754,28 +794,28 @@ module AdminHelper
         if (form_fields['1d'])
             data_amount = sprintf('%.2f', form_fields['1d'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(12-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(12-(data_amount.to_s[0..12].length)))+data_amount.to_s[0..12]
         else 
             returned_data += "0"*12 #Payment Amount 2, Proceeds (For forward contracts)
         end
         if (form_fields['1e'])
             data_amount = sprintf('%.2f', form_fields['1e'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(12-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(12-(data_amount.to_s[0..12].length)))+data_amount.to_s[0..12]
         else 
             returned_data += "0"*12 #Payment Amount 3 Cost or other basis
         end
         if (form_fields['4'])
             data_amount = sprintf('%.2f', form_fields['4'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(12-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(12-(data_amount.to_s[0..12].length)))+data_amount.to_s[0..12]
         else 
             returned_data += "0"*12 #Payment Amount 4 Federal income tax withheld (backup withholding). Do not report negative amounts.
         end
         if (form_fields['1g'])
             data_amount = sprintf('%.2f', form_fields['1g'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(12-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(12-(data_amount.to_s[0..12].length)))+data_amount.to_s[0..12]
         else 
             returned_data += "0"*12 #Payment Amount 5 Wash Sale Loss Disallowed
         end
@@ -783,7 +823,7 @@ module AdminHelper
         if (form_fields['13'])
             data_amount = sprintf('%.2f', form_fields['13'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(12-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(12-(data_amount.to_s[0..12].length)))+data_amount.to_s[0..12]
         else 
             returned_data += "0"*12 #Payment Amount 7 Bartering
         end
@@ -791,35 +831,35 @@ module AdminHelper
         if (form_fields['8'])
             data_amount = sprintf('%.2f', form_fields['8'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(12-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(12-(data_amount.to_s[0..12].length)))+data_amount.to_s[0..12]
         else 
             returned_data += "0"*12 #Payment Amount 9 Profit (or loss) realized in 2017 
         end
         if (form_fields['9'])
             data_amount = sprintf('%.2f', form_fields['9'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(12-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(12-(data_amount.to_s[0..12].length)))+data_amount.to_s[0..12]
         else 
             returned_data += "0"*12 #Payment Amount A Unrealized profit (or loss) on open contracts 12/31/2016 
         end
         if (form_fields['10'])
             data_amount = sprintf('%.2f', form_fields['10'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(12-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(12-(data_amount.to_s[0..12].length)))+data_amount.to_s[0..12]
         else 
             returned_data += "0"*12 #Payment Amount B Unrealized profit (or loss) on open contracts 12/31/2017
         end
         if (form_fields['11'])
             data_amount = sprintf('%.2f', form_fields['11'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(12-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(12-(data_amount.to_s[0..12].length)))+data_amount.to_s[0..12]
         else 
             returned_data += "0"*12 #Payment Amount C Aggregate profit (or loss)
         end
         if (form_fields['1f'])
             data_amount = sprintf('%.2f', form_fields['1f'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(12-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(12-(data_amount.to_s[0..12].length)))+data_amount.to_s[0..12]
         else 
             returned_data += "0"*12 #Payment Amount D Accrued Market Discount
         end
@@ -832,7 +872,7 @@ module AdminHelper
         else
             data_payee_name = ''
         end
-        returned_data +=  data_payee_name + (" "*(40-(data_payee_name.to_s.length))) #40 First payee name line -employees_name
+        returned_data +=  data_payee_name.to_s[0..40] + (" "*(40-(data_payee_name.to_s[0..40].length))) #40 First payee name line -employees_name
         returned_data += " "*40 #40 Second payee name line
         returned_data += " "*40 #40 blanks
         if (form_fields['street_address']) 
@@ -840,7 +880,7 @@ module AdminHelper
         else
             street_address = ' ';
         end
-        returned_data +=  street_address + (" "*(40-(street_address.to_s.length))) #40 Payee mailing address
+        returned_data +=  street_address.to_s[0..40] + (" "*(40-(street_address.to_s[0..40].length))) #40 Payee mailing address
         returned_data += " "*40 #40 blanks
                 
         if (form_fields['city_town']) 
@@ -860,9 +900,9 @@ module AdminHelper
         city = city_town_state_sliced.slice! state  
         city = " " if city.blank?  
        
-        returned_data +=  city + (" "*(40-(city.to_s.length))) #40 payee city , town or postal office (do not enter zip)
-        returned_data +=  state + (" "*(2-(state.to_s.length)))#2 valid U.S Postal Service state
-        returned_data +=  zip + (" "*(9-(zip.to_s.length)))#9 Payee ZIP code
+        returned_data +=  city.to_s[0..40] + (" "*(40-(city.to_s[0..40].length))) #40 payee city , town or postal office (do not enter zip)
+        returned_data +=  state.to_s[0..2] + (" "*(2-(state.to_s[0..2].length)))#2 valid U.S Postal Service state
+        returned_data +=  zip.to_s[0..9] + (" "*(9-(zip.to_s[0..9].length)))#9 Payee ZIP code
         returned_data += " " # blank
 
         returned_data += "00000003" #8 Record Sequence Number
@@ -910,25 +950,25 @@ module AdminHelper
         else 
             data = ' '*8;
         end
-        returned_data += (" "*(8-(data.to_s.length)))+data #8 Date Sold or Disposed '1c' TODO: MAKI it DATE FIELD f THERE IS no DATE ENTER BLANK !
+        returned_data += (" "*(8-(data.to_s[0..8].length)))+data.to_s[0..8] #8 Date Sold or Disposed '1c' TODO: MAKI it DATE FIELD f THERE IS no DATE ENTER BLANK !
         if (form_fields['cusip_num']) 
             data = form_fields['cusip_num'];
         else 
             data = ' '*13;
         end
-        returned_data += (" "*(13-(data.to_s.length)))+data #13 CUSIP Number 'cusip_num'
+        returned_data += (" "*(13-(data.to_s[0..13].length)))+data.to_s[0..13] #13 CUSIP Number 'cusip_num'
         if (form_fields['1a']) 
             data = form_fields['1a'];
         else 
             data = ' ';
         end
-        returned_data += data + (" "*(39-(data.to_s.length))) #39 Description of Property
+        returned_data += data + (" "*(39-(data.to_s[0..39].length))).to_s[0..39] #39 Description of Property
         if (form_fields['1b']) 
             data = form_fields['1b'];
         else 
             data = ' ';
         end
-        returned_data += data + (" "*(8-(data.to_s.length)))#8 Date Acquired TODO :MAKE IT TO BE  A DATE FIELD IN THE FORM!!
+        returned_data += data + (" "*(8-(data.to_s[0..8].length))).to_s[0..8] #8 Date Acquired TODO :MAKE IT TO BE  A DATE FIELD IN THE FORM!!
         if (form_fields['7']='checked') 
             data = '1';
         else
@@ -960,10 +1000,10 @@ module AdminHelper
         else
             data = '0';
         end 
-        returned_data += ("0"*(12-(data.to_s.length))) + data #12  State Income Tax Withheld TODO: THIS SHOULD CLEANED FROM dots and dollar sign 
+        returned_data += ("0"*(12-(data.to_s[0..12].length))) + data.to_s[0..12] #12  State Income Tax Withheld TODO: THIS SHOULD CLEANED FROM dots and dollar sign 
         returned_data += " "*12 #12 Local Income Tax Withheld
         returned_data += " "*2 #2 Combined Federal/State Code
-        returned_data += " "*2 #2 blanks
+        returned_data += "\r\n"
 
 
 =begin
@@ -1002,28 +1042,28 @@ module AdminHelper
         if (form_fields['1d'])
             data_amount = sprintf('%.2f', form_fields['1d'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(18-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(18-(data_amount.to_s[0..18].length)))+data_amount.to_s[0..18]
         else 
             returned_data += "0"*18 #Payment Amount 2, Proceeds (For forward contracts)
         end
         if (form_fields['1e'])
             data_amount = sprintf('%.2f', form_fields['1e'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(18-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(18-(data_amount.to_s[0..18].length)))+data_amount.to_s[0..18]
         else 
             returned_data += "0"*18 #Payment Amount 3 Cost or other basis
         end
         if (form_fields['4'])
             data_amount = sprintf('%.2f', form_fields['4'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(18-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(18-(data_amount.to_s[0..18].length)))+data_amount.to_s[0..18]
         else 
             returned_data += "0"*18 #Payment Amount 4 Federal income tax withheld (backup withholding). Do not report negative amounts.
         end
         if (form_fields['1g'])
             data_amount = sprintf('%.2f', form_fields['1g'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(18-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(18-(data_amount.to_s[0..18].length)))+data_amount.to_s[0..18]
         else 
             returned_data += "0"*18 #Payment Amount 5 Wash Sale Loss Disallowed
         end
@@ -1031,7 +1071,7 @@ module AdminHelper
         if (form_fields['13'])
             data_amount = sprintf('%.2f', form_fields['13'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(18-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(18-(data_amount.to_s[0..18].length)))+data_amount.to_s[0..18]
         else 
             returned_data += "0"*18 #Payment Amount 7 Bartering
         end
@@ -1039,35 +1079,35 @@ module AdminHelper
         if (form_fields['8'])
             data_amount = sprintf('%.2f', form_fields['8'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(18-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(18-(data_amount.to_s[0..18].length)))+data_amount.to_s[0..18]
         else 
             returned_data += "0"*18 #Payment Amount 9 Profit (or loss) realized in 2017 
         end
         if (form_fields['9'])
             data_amount = sprintf('%.2f', form_fields['9'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(18-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(18-(data_amount.to_s[0..18].length)))+data_amount.to_s[0..18]
         else 
             returned_data += "0"*18 #Payment Amount A Unrealized profit (or loss) on open contracts 18/31/2016 
         end
         if (form_fields['10'])
             data_amount = sprintf('%.2f', form_fields['10'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(18-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(18-(data_amount.to_s[0..18].length)))+data_amount.to_s[0..18]
         else 
             returned_data += "0"*18 #Payment Amount B Unrealized profit (or loss) on open contracts 12/31/2017
         end
         if (form_fields['11'])
             data_amount = sprintf('%.2f', form_fields['11'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(18-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(18-(data_amount.to_s[0..18].length)))+data_amount.to_s[0..18]
         else 
             returned_data += "0"*18 #Payment Amount C Aggregate profit (or loss)
         end
         if (form_fields['1f'])
             data_amount = sprintf('%.2f', form_fields['1f'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(18-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(18-(data_amount.to_s[0..18].length)))+data_amount.to_s[0..18]
         else 
             returned_data += "0"*18 #Payment Amount D Accrued Market Discount
         end
@@ -1077,7 +1117,7 @@ module AdminHelper
         returned_data += ' '*196 #196 blanks
         returned_data += "00000004" #8 Record Sequence Number
         returned_data += ' '*241 #241 blanks
-        returned_data += ' '*2 #2 blanks
+        returned_data += "\r\n"
 # K record used only when state reporting approval has been granted
 # F record
         returned_data += 'F' #enter F
@@ -1088,7 +1128,7 @@ module AdminHelper
         returned_data += ' '*442 #442 blanks
         returned_data += "00000005" #8 Record Sequence Number
         returned_data += ' '*241 #241 blanks
-        returned_data += ' '*2 #2 blanks
+        returned_data += "\r\n"
 #end of file
         return returned_data
     end
@@ -1125,23 +1165,29 @@ module AdminHelper
         returned_data += ' ' # P if it is for prior year otherwise blank -lenght 1
 
         returned_data += '111111111';
-            returned_data += '11111' + (" "*(5-('11111'.to_s.length))) #5 characters - Transmitter Control Code
+            returned_data += '11111' + (" "*(5-('11111'.to_s[0..5].length))) #5 characters - Transmitter Control Code
         returned_data += " "*7 #7 characters - blank
         returned_data += 'T' # T if it is a test file otherwise blank -lenght 1
         returned_data += ' ' #Enter a “1” (one) if the transmitter is a foreign entity otherwise blank -lenght 1
         data = first_line.strip.truncate_words(2,omission: '')
-        returned_data += data + (" "*(40-(data.to_s.length))) #40 characters - transmitter name. Left justify.
+        returned_data += data + (" "*(40-(data.to_s[0..40].length))) #40 characters - transmitter name. Left justify.
         data2 = first_line
         data2.slice! data
         data2 = data2.strip
-        returned_data += data2 + (" "*(40-(data2.to_s.length))) #40 characters - transmitter aditional data. Left justify.
-
+        returned_data += data2 + (" "*(40-(data2.to_s[0..40].length))) #40 characters - transmitter aditional data. Left justify.
+        if form_fields['creditors_name_address'].lines.first.blank?
+            first_line = "_"
+        else 
+            first_line = form_fields['creditors_name_address'].lines.first
+        end
         data = first_line.strip.truncate_words(2,omission: '')
-        returned_data += data + (" "*(40-(data.to_s.length))) #40 characters - transmitter name. Left justify.
-        data2 = (first_line.slice! data).strip
-        returned_data += data2 + (" "*(40-(data2.to_s.length))) #40 characters - transmitter aditional data. Left justify. 
+        returned_data += data + (" "*(40-(data.to_s[0..40].length))) #40 characters - transmitter name. Left justify.
+        data2 = first_line
+        data2.slice! data
+        data2 = data2.strip
+        returned_data += data2 + (" "*(40-(data2.to_s[0..40].length))) #40 characters - transmitter aditional data. Left justify. 
         data = second_line.strip              
-        returned_data += data + (" "*(40-(data.to_s.length))) #40 characters Requered
+        returned_data += data + (" "*(40-(data.to_s[0..40].length))) #40 characters Requered
         data = third_line.strip 
         data = " " if data.blank?
         data_array =  data.split(/\W+/)   
@@ -1151,25 +1197,26 @@ module AdminHelper
         data_state = data_array[-2]
         data_state = " " if data_state.blank?
         data_state = data_state[0..1] if data_state.length>2
-        data_sliced = data.slice! data_zip
-        data_city = data_sliced.slice! data_state  
+        data.slice! data_zip
+        data.slice! data_state  
+        data_city = data
         data_city = " " if data_city.blank?
-        returned_data += data_city + (" "*(40-(data_city.to_s.length))) #40 characters Requered
-        returned_data += data_state + (" "*(2-(data_state.to_s.length))) #2 characters Requered
-        returned_data += data_zip + (" "*(9-(data_zip.to_s.length))) #9 characters Requered
+        returned_data += data_city + (" "*(40-(data_city.to_s[0..40].length))) #40 characters Requered
+        returned_data += data_state.to_s[0..2] + (" "*(2-(data_state.to_s[0..2].length))) #2 characters Requered
+        returned_data += data_zip.to_s[0..9] + (" "*(9-(data_zip.to_s[0..9].length))) #9 characters Requered
         returned_data += " "*15 #15 blank characters 
         returned_data += '00000001' #8 characters Total Number of Payees there is no such field in Form 3921
         returned_data += 'Dejan Sabados                           ';#40 characters
         returned_data += '1111111111     ' #15 characters Requered
     #359-408       
-        returned_data += 'dejansabados@yahoo.com                            ' #50 characters 
+        returned_data += 'albionpetrovic@gmail.com                          ' #50 characters 
     #409-499
         returned_data += " "*91 #91 characters - blank
     #500-507
         returned_data += "00000001"; # number of the record T record is always first 8 characters
     #508-517
-        returned_data += "I" #vendor indicator I if there are no vendor
         returned_data += " "*10 #blanks
+        returned_data += "I" #vendor indicator I if there are no vendor
         returned_data += " "*40 #used only if Vendors Software is used otherwise blanks
         returned_data += " "*40 #used only if Vendors Software is used otherwise blanks
         returned_data += " "*40 #used only if Vendors Software is used otherwise blanks
@@ -1180,13 +1227,13 @@ module AdminHelper
         returned_data += " "*35 #blanks
         returned_data += " "*1 #used only if Vendors Software is used otherwise blanks
         returned_data += " "*8 #blanks
-        returned_data += " "*2 #blanks
+        returned_data += "\r\n" 
 #2nd 750 records - Payer "A" Record
         returned_data += 'A' #begining of the record -lenght 1
         returned_data += '2017' #lenght 4
         returned_data += ' ' #lenght 1 is this CF/SF Program ? 1 if it is otherwise blank
         returned_data += " "*5 #blanks
-        returned_data += form_fields['creditors_fin'] + (" "*(9-(form_fields['creditors_fin'].to_s.length))) #9 characters - TRANSFEROR'S federal identification number
+        returned_data += form_fields['creditors_fin'].to_s[0..9] + (" "*(9-(form_fields['creditors_fin'].to_s[0..9].length))) #9 characters - TRANSFEROR'S federal identification number
         #first four characters of the payer last name
         returned_data += " "*4 #blanks of first four characters of the payers last name
         returned_data += " " #blank if this is not last year the payer name will file info returns electro or on paper
@@ -1195,19 +1242,35 @@ module AdminHelper
         returned_data += "237             " #16 amount codes
         returned_data += " "*8 #blanks
         returned_data += " " #blank if payer is US citizen 
+        if form_fields['creditors_name_address'].lines.first.blank?
+            first_line = "_"
+        else 
+            first_line = form_fields['creditors_name_address'].lines.first
+        end
+        if form_fields['creditors_name_address'].lines.second.blank?
+            second_line = "_"
+        else 
+            second_line = form_fields['creditors_name_address'].lines.second
+        end
+        if form_fields['creditors_name_address'].lines.third.blank?
+            third_line = "_"
+        else 
+            third_line = form_fields['creditors_name_address'].lines.third
+        end
         data5 = first_line.strip.truncate_words(2,omission: '')
-        returned_data += data5 + (" "*(40-(data5.to_s.length))) #40 characters - transmitter name. Left justify.
+        returned_data += data5 + (" "*(40-(data5.to_s[0..40].length))) #40 characters - transmitter name. Left justify.
         returned_data += " "*40 #blanks if there is no transfer agent otherwise the agent name 
         returned_data += "0" #if there is no transfer agent
         data6 = second_line.strip              
-        returned_data += data6 + (" "*(40-(data6.to_s.length))) #the adress  of the payer if there is not transfer agent 40 characters Requered
-        returned_data += data_city + (" "*(40-(data_city.to_s.length))) #40 payers city if there is not transfer agent
-        returned_data += data_state + (" "*(2-(data_state.to_s.length))) #2 payers state if there is not transfer agent
-        returned_data += data_zip + (" "*(9-(data_zip.to_s.length))) #9 payers zip if there is not transfer agent
+        returned_data += data6 + (" "*(40-(data6.to_s[0..40].length))) #the adress  of the payer if there is not transfer agent 40 characters Requered
+        returned_data += data_city + (" "*(40-(data_city.to_s[0..40].length))) #40 payers city if there is not transfer agent
+        returned_data += data_state.to_s[0..2] + (" "*(2-(data_state.to_s[0..2].length))) #2 payers state if there is not transfer agent
+        returned_data += data_zip.to_s[0..9] + (" "*(9-(data_zip.to_s[0..9].length))) #9 payers zip if there is not transfer agent
         returned_data += '5107062877     ' #15 payer’s telephone number - there are no such field in the form !!!
         returned_data += " "*260 #blanks
         returned_data += "00000002" #the second record
-        returned_data += " "*243 #blanks
+        returned_data += " "*241 #blanks
+        returned_data += "\r\n"
 #3th 750 records - Payer "B" Record - this Record contains the payment information from information returns.
         returned_data += 'B' #begining of the record -lenght 1
         returned_data += '2017' #lenght 4
@@ -1224,12 +1287,12 @@ module AdminHelper
             data_tin = ''
         end
 
-        returned_data += data_tin + (" "*(9-(data_tin.to_s.length))) #Payee’s Taxpayer Identification Number (TIN)
+        returned_data += data_tin.to_s[0..9] + (" "*(9-(data_tin.to_s[0..9].length))) #Payee’s Taxpayer Identification Number (TIN)
         data_account = form_fields['account_num']
         if (!data_account) 
            data_account = rand(99999999999999999999).to_s #generate 20 random number 
         end
-        returned_data += data_account + (" "*(20-(data_account.to_s.length))) 
+        returned_data += data_account.to_s[0..20] + (" "*(20-(data_account.to_s[0..20].length))) 
         returned_data += " "*4 #blanks #Payer’s Office Code - you can enter blanks
         returned_data += " "*10 #blanks
         #payment amounts 237 
@@ -1237,14 +1300,14 @@ module AdminHelper
         if (form_fields['2'])
             data_amount = sprintf('%.2f', form_fields['2'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(12-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(12-(data_amount.to_s[0..12].length)))+data_amount.to_s[0..12]
         else 
             returned_data += "0"*12 #Payment Amount 2, Amount of debt discharged
         end
         if (form_fields['3'])
             data_amount = sprintf('%.2f', form_fields['3'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(12-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(12-(data_amount.to_s[0..12].length)))+data_amount.to_s[0..12]
         else 
             returned_data += "0"*12 #Payment Amount 3,Interest included in Amount Code 2 
         end
@@ -1254,7 +1317,7 @@ module AdminHelper
         if (form_fields['7'])
             data_amount = sprintf('%.2f', form_fields['7'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(12-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(12-(data_amount.to_s[0..12].length)))+data_amount.to_s[0..12]
         else 
             returned_data += "0"*12 #Payment Amount 7, Fair market value of property.
         end
@@ -1273,7 +1336,7 @@ module AdminHelper
         else
             data_payee_name = ''
         end
-        returned_data +=  data_payee_name + (" "*(40-(data_payee_name.to_s.length))) #40 First payee name line -employees_name
+        returned_data +=  data_payee_name + (" "*(40-(data_payee_name.to_s[0..40].length))) #40 First payee name line -employees_name
         returned_data += " "*40 #40 Second payee name line
         returned_data += " "*40 #40 blanks
         if (form_fields['street_address']) 
@@ -1281,7 +1344,7 @@ module AdminHelper
         else
             street_address = ' ';
         end
-        returned_data +=  street_address + (" "*(40-(street_address.to_s.length))) #40 Payee mailing address
+        returned_data +=  street_address + (" "*(40-(street_address.to_s[0..40].length))) #40 Payee mailing address
         returned_data += " "*40 #40 blanks
                 
         if (form_fields['city_town_state']) 
@@ -1301,9 +1364,9 @@ module AdminHelper
         city = city_town_state_sliced.slice! state  
         city = " " if city.blank?  
        
-        returned_data +=  city + (" "*(40-(city.to_s.length))) #40 payee city , town or postal office (do not enter zip)
-        returned_data +=  state + (" "*(2-(state.to_s.length)))#2 valid U.S Postal Service state
-        returned_data +=  zip + (" "*(9-(zip.to_s.length)))#9 Payee ZIP code
+        returned_data +=  city + (" "*(40-(city.to_s[0..40].length))) #40 payee city , town or postal office (do not enter zip)
+        returned_data +=  state.to_s[0..2] + (" "*(2-(state.to_s[0..2].length)))#2 valid U.S Postal Service state
+        returned_data +=  zip.to_s[0..9] + (" "*(9-(zip.to_s[0..9].length)))#9 Payee ZIP code
         returned_data += " " # blank
 
         returned_data += "00000003" #8 Record Sequence Number
@@ -1327,7 +1390,7 @@ module AdminHelper
         else 
             data = ' '*39;
         end
-        returned_data += data+(" "*(39-(data.to_s.length))) #39 Debt Description '4' text
+        returned_data += data.to_s[0..39]+(" "*(39-(data.to_s[0..39].length))) #39 Debt Description '4' text
         if (form_fields['5']=='checked') 
             data = '1';
         else
@@ -1337,7 +1400,7 @@ module AdminHelper
         returned_data += " "*67 #67 blanks
         returned_data += " "*60 #60 special data entries or blanks
         returned_data += " "*26 #26 blanks
-        returned_data += " "*2 #2 blanks
+        returned_data += "\r\n"
 
 # Payer C record (control record)
 
@@ -1350,14 +1413,14 @@ module AdminHelper
         if (form_fields['2'])
             data_amount = sprintf('%.2f', form_fields['2'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(18-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(18-(data_amount.to_s[0..18].length)))+data_amount.to_s[0..18]
         else 
             returned_data += "0"*18 #Payment Amount 2, Amount of debt discharged
         end
         if (form_fields['3'])
             data_amount = sprintf('%.2f', form_fields['3'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(18-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(18-(data_amount.to_s[0..18].length)))+data_amount.to_s[0..18]
         else 
             returned_data += "0"*18 #Payment Amount 3,Interest included in Amount Code 2 
         end
@@ -1367,7 +1430,7 @@ module AdminHelper
         if (form_fields['7'])
             data_amount = sprintf('%.2f', form_fields['7'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(18-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(18-(data_amount.to_s[0..18].length)))+data_amount.to_s[0..18]
         else 
             returned_data += "0"*18 #Payment Amount 7, Fair market value of property.
         end
@@ -1383,7 +1446,7 @@ module AdminHelper
         returned_data += ' '*196 #196 blanks
         returned_data += "00000004" #8 Record Sequence Number
         returned_data += ' '*241 #241 blanks
-        returned_data += ' '*2 #2 blanks
+        returned_data += "\r\n"
 # K record used only when state reporting approval has been granted
 # F record
         returned_data += 'F' #enter F
@@ -1394,7 +1457,7 @@ module AdminHelper
         returned_data += ' '*442 #442 blanks
         returned_data += "00000005" #8 Record Sequence Number
         returned_data += ' '*241 #241 blanks
-        returned_data += ' '*2 #2 blanks
+        returned_data += "\r\n"
 #end of file
         return returned_data
     end
@@ -1433,23 +1496,29 @@ module AdminHelper
         returned_data += ' ' # P if it is for prior year otherwise blank -lenght 1
 
         returned_data += '111111111';
-            returned_data += '11111' + (" "*(5-('11111'.to_s.length))) #5 characters - Transmitter Control Code
+            returned_data += '11111' + (" "*(5-('11111'.to_s[0..5].length))) #5 characters - Transmitter Control Code
         returned_data += " "*7 #7 characters - blank
         returned_data += 'T' # T if it is a test file otherwise blank -lenght 1
         returned_data += ' ' #Enter a “1” (one) if the transmitter is a foreign entity otherwise blank -lenght 1
         data = first_line.strip.truncate_words(2,omission: '')
-        returned_data += data + (" "*(40-(data.to_s.length))) #40 characters - transmitter name. Left justify.
+        returned_data += data + (" "*(40-(data.to_s[0..40].length))) #40 characters - transmitter name. Left justify.
         data2 = first_line
         data2.slice! data
         data2 = data2.strip
-        returned_data += data2 + (" "*(40-(data2.to_s.length))) #40 characters - transmitter aditional data. Left justify.
-
+        returned_data += data2 + (" "*(40-(data2.to_s[0..40].length))) #40 characters - transmitter aditional data. Left justify.
+        if form_fields['corporations_name_address'].lines.first.blank?
+            first_line = "_"
+        else 
+            first_line = form_fields['corporations_name_address'].lines.first
+        end
         data = first_line.strip.truncate_words(2,omission: '')
-        returned_data += data + (" "*(40-(data.to_s.length))) #40 characters - transmitter name. Left justify.
-        data2 = (first_line.slice! data).strip
-        returned_data += data2 + (" "*(40-(data2.to_s.length))) #40 characters - transmitter aditional data. Left justify. 
+        returned_data += data + (" "*(40-(data.to_s[0..40].length))) #40 characters - transmitter name. Left justify.
+        data2 = first_line
+        data2.slice! data
+        data2 = data2.strip
+        returned_data += data2 + (" "*(40-(data2.to_s[0..40].length))) #40 characters - transmitter aditional data. Left justify. 
         data = second_line.strip              
-        returned_data += data + (" "*(40-(data.to_s.length))) #40 characters Requered
+        returned_data += data + (" "*(40-(data.to_s[0..40].length))) #40 characters Requered
         data = third_line.strip 
         data = " " if data.blank?
         data_array =  data.split(/\W+/)   
@@ -1459,25 +1528,26 @@ module AdminHelper
         data_state = data_array[-2]
         data_state = " " if data_state.blank?
         data_state = data_state[0..1] if data_state.length>2
-        data_sliced = data.slice! data_zip
-        data_city = data_sliced.slice! data_state  
+        data.slice! data_zip
+        data.slice! data_state  
+        data_city = data
         data_city = " " if data_city.blank?
-        returned_data += data_city + (" "*(40-(data_city.to_s.length))) #40 characters Requered
-        returned_data += data_state + (" "*(2-(data_state.to_s.length))) #2 characters Requered
-        returned_data += data_zip + (" "*(9-(data_zip.to_s.length))) #9 characters Requered
+        returned_data += data_city + (" "*(40-(data_city.to_s[0..40].length))) #40 characters Requered
+        returned_data += data_state.to_s[0..2] + (" "*(2-(data_state.to_s[0..2].length))) #2 characters Requered
+        returned_data += data_zip.to_s[0..9] + (" "*(9-(data_zip.to_s[0..9].length))) #9 characters Requered
         returned_data += " "*15 #15 blank characters 
         returned_data += '00000001' #8 characters Total Number of Payees
-        returned_data += 'Dejan Sabados                           ';#40 characters
+        returned_data += 'TEST TEST                               ';#40 characters
         returned_data += '1111111111     ' #15 characters Requered
     #359-408       
-        returned_data += 'dejansabados@yahoo.com                            ' #50 characters 
+        returned_data += 'albionpetrovic@gmail.com                          ' #50 characters 
     #409-499
         returned_data += " "*91 #91 characters - blank
     #500-507
         returned_data += "00000001"; # number of the record T record is always first 8 characters
     #508-517
-        returned_data += "I" #vendor indicator I if there are no vendor
         returned_data += " "*10 #blanks
+        returned_data += "I" #vendor indicator I if there are no vendor
         returned_data += " "*40 #used only if Vendors Software is used otherwise blanks
         returned_data += " "*40 #used only if Vendors Software is used otherwise blanks
         returned_data += " "*40 #used only if Vendors Software is used otherwise blanks
@@ -1488,13 +1558,13 @@ module AdminHelper
         returned_data += " "*35 #blanks
         returned_data += " "*1 #used only if Vendors Software is used otherwise blanks
         returned_data += " "*8 #blanks
-        returned_data += " "*2 #blanks
+        returned_data += "\r\n" 
 #2nd 750 records - Payer "A" Record
         returned_data += 'A' #begining of the record -lenght 1
         returned_data += '2017' #lenght 4
         returned_data += ' ' #lenght 1 is this CF/SF Program ? 1 if it is otherwise blank
         returned_data += " "*5 #blanks
-        returned_data += form_fields['corporations_fin'] + (" "*(9-(form_fields['corporations_fin'].to_s.length))) #9 characters - TRANSFEROR'S federal identification number
+        returned_data += form_fields['corporations_fin'].to_s[0..9] + (" "*(9-(form_fields['corporations_fin'].to_s[0..9].length))) #9 characters - TRANSFEROR'S federal identification number
         #first four characters of the payer last name
         returned_data += " "*4 #blanks of first four characters of the payers last name
         returned_data += " " #blank if this is not last year the payer name will file info returns electro or on paper
@@ -1503,19 +1573,35 @@ module AdminHelper
         returned_data += "2               " #16 amount codes
         returned_data += " "*8 #blanks
         returned_data += " " #blank if payer is US citizen 
+        if form_fields['corporations_name_address'].lines.first.blank?
+            first_line = "_"
+        else 
+            first_line = form_fields['corporations_name_address'].lines.first
+        end
+        if form_fields['corporations_name_address'].lines.second.blank?
+            second_line = "_"
+        else 
+            second_line = form_fields['corporations_name_address'].lines.second
+        end
+        if form_fields['corporations_name_address'].lines.third.blank?
+            third_line = "_"
+        else 
+            third_line = form_fields['corporations_name_address'].lines.third
+        end
         data5 = first_line.strip.truncate_words(2,omission: '')
-        returned_data += data5 + (" "*(40-(data5.to_s.length))) #40 characters - transmitter name. Left justify.
+        returned_data += data5 + (" "*(40-(data5.to_s[0..40].length))) #40 characters - transmitter name. Left justify.
         returned_data += " "*40 #blanks if there is no transfer agent otherwise the agent name 
         returned_data += "0" #if there is no transfer agent
         data6 = second_line.strip              
-        returned_data += data6 + (" "*(40-(data6.to_s.length))) #the adress  of the payer if there is not transfer agent 40 characters Requered
-        returned_data += data_city + (" "*(40-(data_city.to_s.length))) #40 payers city if there is not transfer agent
-        returned_data += data_state + (" "*(2-(data_state.to_s.length))) #2 payers state if there is not transfer agent
-        returned_data += data_zip + (" "*(9-(data_zip.to_s.length))) #9 payers zip if there is not transfer agent
+        returned_data += data6 + (" "*(40-(data6.to_s[0..40].length))) #the adress  of the payer if there is not transfer agent 40 characters Requered
+        returned_data += data_city + (" "*(40-(data_city.to_s[0..40].length))) #40 payers city if there is not transfer agent
+        returned_data += data_state.to_s[0..2] + (" "*(2-(data_state.to_s[0..2].length))) #2 payers state if there is not transfer agent
+        returned_data += data_zip.to_s[0..9] + (" "*(9-(data_zip.to_s[0..9].length))) #9 payers zip if there is not transfer agent
         returned_data += '5107062877     ' #15 payer’s telephone number - there are no such field in the form !!!
         returned_data += " "*260 #blanks
         returned_data += "00000002" #the second record
-        returned_data += " "*243 #blanks
+        returned_data += " "*241 #blanks
+        returned_data += "\r\n"
 #3th 750 records - Payer "B" Record - this Record contains the payment information from information returns.
         returned_data += 'B' #begining of the record -lenght 1
         returned_data += '2017' #lenght 4
@@ -1532,12 +1618,12 @@ module AdminHelper
             data_tin = ''
         end
 
-        returned_data += data_tin + (" "*(9-(data_tin.to_s.length))) #Payee’s Taxpayer Identification Number (TIN)
+        returned_data += data_tin.to_s[0..9] + (" "*(9-(data_tin.to_s[0..9].length))) #Payee’s Taxpayer Identification Number (TIN)
         data_account = form_fields['account_number']
         if (!data_account) 
            data_account = rand(99999999999999999999).to_s #generate 20 random number 
         end
-        returned_data += data_account + (" "*(20-(data_account.to_s.length))) 
+        returned_data += data_account.to_s[0..20] + (" "*(20-(data_account.to_s[0..20].length))) 
         returned_data += " "*4 #blanks #Payer’s Office Code - you can enter blanks
         returned_data += " "*10 #blanks
         #payment amounts 2
@@ -1545,7 +1631,7 @@ module AdminHelper
         if (form_fields['2'])
             data_amount = sprintf('%.2f', form_fields['2'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(12-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(12-(data_amount.to_s[0..12].length)))+data_amount.to_s[0..12]
         else 
             returned_data += "0"*12 #Payment Amount 2XXXX
         end
@@ -1569,7 +1655,7 @@ module AdminHelper
         else
             data_payee_name = ''
         end
-        returned_data +=  data_payee_name + (" "*(40-(data_payee_name.to_s.length))) #40 First payee name line -employees_name
+        returned_data +=  data_payee_name + (" "*(40-(data_payee_name.to_s[0..40].length))) #40 First payee name line -employees_name
         returned_data += " "*40 #40 Second payee name line
         returned_data += " "*40 #40 blanks
         if (form_fields['street_address']) 
@@ -1577,7 +1663,7 @@ module AdminHelper
         else
             street_address = ' ';
         end
-        returned_data +=  street_address + (" "*(40-(street_address.to_s.length))) #40 Payee mailing address
+        returned_data +=  street_address + (" "*(40-(street_address.to_s[0..40].length))) #40 Payee mailing address
         returned_data += " "*40 #40 blanks
                 
         if (form_fields['city_or_town']) 
@@ -1597,9 +1683,9 @@ module AdminHelper
         city = city_town_state_sliced.slice! state  
         city = " " if city.blank?  
        
-        returned_data +=  city + (" "*(40-(city.to_s.length))) #40 payee city , town or postal office (do not enter zip)
-        returned_data +=  state + (" "*(2-(state.to_s.length)))#2 valid U.S Postal Service state
-        returned_data +=  zip + (" "*(9-(zip.to_s.length)))#9 Payee ZIP code
+        returned_data +=  city + (" "*(40-(city.to_s[0..40].length))) #40 payee city , town or postal office (do not enter zip)
+        returned_data +=  state.to_s[0..2] + (" "*(2-(state.to_s[0..2].length)))#2 valid U.S Postal Service state
+        returned_data +=  zip.to_s[0..9] + (" "*(9-(zip.to_s[0..9].length)))#9 Payee ZIP code
         returned_data += " " # blank
 
         returned_data += "00000003" #8 Record Sequence Number
@@ -1613,12 +1699,12 @@ module AdminHelper
         end
         returned_data += data #8 date of sale or exchange, YYYYMMDD format '1'
         returned_data += " "*52 #52 blanks
-        returned_data += ("0"*(8-(form_fields['3'].to_s.length)))+form_fields['3'] #8 number of shares exchanged, right justify fill with zeros, only numbers '3'
-        returned_data += form_fields['4']+(" "*(10-(form_fields['4'].to_s.length))) #10 classes of stock exchange left justify '4'
+        returned_data += ("0"*(8-(form_fields['3'].to_s[0..8].length)))+form_fields['3'].to_s[0..8] #8 number of shares exchanged, right justify fill with zeros, only numbers '3'
+        returned_data += form_fields['4'].to_s[0..10]+(" "*(10-(form_fields['4'].to_s[0..10].length))) #10 classes of stock exchange left justify '4'
         returned_data += " "*37 #37 blanks
         returned_data += " "*60 #60 special data entries text
         returned_data += " "*26 #26 blanks
-        returned_data += " "*2 #2 blanks
+        returned_data += "\r\n"
 # Payer C record (control record)
 
         returned_data += 'C' # enter C
@@ -1630,7 +1716,7 @@ module AdminHelper
         if (form_fields['2'])
             data_amount = sprintf('%.2f', form_fields['2'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(18-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(18-(data_amount.to_s[0..18].length)))+data_amount.to_s[0..18]
         else 
             returned_data += "0"*18 #Payment Amount 2
         end
@@ -1651,7 +1737,7 @@ module AdminHelper
         returned_data += ' '*196 #196 blanks
         returned_data += "00000004" #8 Record Sequence Number
         returned_data += ' '*241 #241 blanks
-        returned_data += ' '*2 #2 blanks
+        returned_data += "\r\n"
 # K record used only when state reporting approval has been granted
 # F record
         returned_data += 'F' #enter F
@@ -1662,7 +1748,7 @@ module AdminHelper
         returned_data += ' '*442 #442 blanks
         returned_data += "00000005" #8 Record Sequence Number
         returned_data += ' '*241 #241 blanks
-        returned_data += ' '*2 #2 blanks
+        returned_data += "\r\n"
 #end of file
         return returned_data
     end
@@ -1704,23 +1790,29 @@ def exportForm1099div(form_fields)
         returned_data += ' ' # P if it is for prior year otherwise blank -lenght 1
 
         returned_data += '111111111';
-            returned_data += '11111' + (" "*(5-('11111'.to_s.length))) #5 characters - Transmitter Control Code
+            returned_data += '11111' + (" "*(5-('11111'.to_s[0..5].length))) #5 characters - Transmitter Control Code
         returned_data += " "*7 #7 characters - blank
         returned_data += 'T' # T if it is a test file otherwise blank -lenght 1
         returned_data += ' ' #Enter a “1” (one) if the transmitter is a foreign entity otherwise blank -lenght 1
         data = first_line.strip.truncate_words(2,omission: '')
-        returned_data += data + (" "*(40-(data.to_s.length))) #40 characters - transmitter name. Left justify.
+        returned_data += data + (" "*(40-(data.to_s[0..40].length))) #40 characters - transmitter name. Left justify.
         data2 = first_line
         data2.slice! data
         data2 = data2.strip
-        returned_data += data2 + (" "*(40-(data2.to_s.length))) #40 characters - transmitter aditional data. Left justify.
-
+        returned_data += data2 + (" "*(40-(data2.to_s[0..40].length))) #40 characters - transmitter aditional data. Left justify.
+        if form_fields['payers_name_address'].lines.first.blank?
+            first_line = "_"
+        else 
+            first_line = form_fields['payers_name_address'].lines.first
+        end
         data = first_line.strip.truncate_words(2,omission: '')
-        returned_data += data + (" "*(40-(data.to_s.length))) #40 characters - transmitter name. Left justify.
-        data2 = (first_line.slice! data).strip
-        returned_data += data2 + (" "*(40-(data2.to_s.length))) #40 characters - transmitter aditional data. Left justify. 
+        returned_data += data + (" "*(40-(data.to_s[0..40].length))) #40 characters - transmitter name. Left justify.
+        data2 = first_line
+        data2.slice! data
+        data2 = data2.strip
+        returned_data += data2 + (" "*(40-(data2.to_s[0..40].length))) #40 characters - transmitter aditional data. Left justify. 
         data = second_line.strip              
-        returned_data += data + (" "*(40-(data.to_s.length))) #40 characters Requered
+        returned_data += data + (" "*(40-(data.to_s[0..40].length))) #40 characters Requered
         data = third_line.strip 
         data = " " if data.blank?
         data_array =  data.split(/\W+/)   
@@ -1730,25 +1822,26 @@ def exportForm1099div(form_fields)
         data_state = data_array[-2]
         data_state = " " if data_state.blank?
         data_state = data_state[0..1] if data_state.length>2
-        data_sliced = data.slice! data_zip
-        data_city = data_sliced.slice! data_state  
+        data.slice! data_zip
+        data.slice! data_state  
+        data_city = data
         data_city = " " if data_city.blank?
-        returned_data += data_city + (" "*(40-(data_city.to_s.length))) #40 characters Requered
-        returned_data += data_state + (" "*(2-(data_state.to_s.length))) #2 characters Requered
-        returned_data += data_zip + (" "*(9-(data_zip.to_s.length))) #9 characters Requered
+        returned_data += data_city + (" "*(40-(data_city.to_s[0..40].length))) #40 characters Requered
+        returned_data += data_state.to_s[0..2] + (" "*(2-(data_state.to_s[0..2].length))) #2 characters Requered
+        returned_data += data_zip.to_s[0..9] + (" "*(9-(data_zip.to_s[0..9].length))) #9 characters Requered
         returned_data += " "*15 #15 blank characters 
         returned_data += '00000001' #8 characters Total Number of Payees
-        returned_data += 'Dejan Sabados                           ';#40 characters
+        returned_data += 'TEST TEST                               ';#40 characters
         returned_data += '1111111111     ' #15 characters Requered
     #359-408       
-        returned_data += 'dejansabados@yahoo.com                            ' #50 characters 
+        returned_data += 'albionpetrovic@gmail.com                          ' #50 characters 
     #409-499
         returned_data += " "*91 #91 characters - blank
     #500-507
         returned_data += "00000001"; # number of the record T record is always first 8 characters
     #508-517
-        returned_data += "I" #vendor indicator I if there are no vendor
         returned_data += " "*10 #blanks
+        returned_data += "I" #vendor indicator I if there are no vendor
         returned_data += " "*40 #used only if Vendors Software is used otherwise blanks
         returned_data += " "*40 #used only if Vendors Software is used otherwise blanks
         returned_data += " "*40 #used only if Vendors Software is used otherwise blanks
@@ -1759,13 +1852,13 @@ def exportForm1099div(form_fields)
         returned_data += " "*35 #blanks
         returned_data += " "*1 #used only if Vendors Software is used otherwise blanks
         returned_data += " "*8 #blanks
-        returned_data += " "*2 #blanks
+        returned_data += "\r\n" 
 #2nd 750 records - Payer "A" Record
         returned_data += 'A' #begining of the record -lenght 1
         returned_data += '2017' #lenght 4
         returned_data += ' ' #lenght 1 is this CF/SF Program ? 1 if it is otherwise blank
         returned_data += " "*5 #blanks
-        returned_data += form_fields['payers_fin'] + (" "*(9-(form_fields['payers_fin'].to_s.length))) #9 characters - TRANSFEROR'S federal identification number
+        returned_data += form_fields['payers_fin'].to_s[0..9] + (" "*(9-(form_fields['payers_fin'].to_s[0..9].length))) #9 characters - TRANSFEROR'S federal identification number
         #first four characters of the payer last name
         returned_data += " "*4 #blanks of first four characters of the payers last name
         returned_data += " " #blank if this is not last year the payer name will file info returns electro or on paper
@@ -1774,19 +1867,36 @@ def exportForm1099div(form_fields)
         returned_data += "1236789ABCDEFG  " #16 amount codes
         returned_data += " "*8 #blanks
         returned_data += " " #blank if payer is US citizen 
+        if form_fields['payers_name_address'].lines.first.blank?
+            first_line = "_"
+        else 
+            first_line = form_fields['payers_name_address'].lines.first
+        end
+        if form_fields['payers_name_address'].lines.second.blank?
+            second_line = "_"
+        else 
+            second_line = form_fields['payers_name_address'].lines.second
+        end
+        if form_fields['payers_name_address'].lines.third.blank?
+            third_line = "_"
+        else 
+            third_line = form_fields['payers_name_address'].lines.third
+        end
+        #end of reset
         data5 = first_line.strip.truncate_words(2,omission: '')
-        returned_data += data5 + (" "*(40-(data5.to_s.length))) #40 characters - transmitter name. Left justify.
+        returned_data += data5 + (" "*(40-(data5.to_s[0..40].length))) #40 characters - transmitter name. Left justify.
         returned_data += " "*40 #blanks if there is no transfer agent otherwise the agent name 
         returned_data += "0" #if there is no transfer agent
         data6 = second_line.strip              
-        returned_data += data6 + (" "*(40-(data6.to_s.length))) #the adress  of the payer if there is not transfer agent 40 characters Requered
-        returned_data += data_city + (" "*(40-(data_city.to_s.length))) #40 payers city if there is not transfer agent
-        returned_data += data_state + (" "*(2-(data_state.to_s.length))) #2 payers state if there is not transfer agent
-        returned_data += data_zip + (" "*(9-(data_zip.to_s.length))) #9 payers zip if there is not transfer agent
+        returned_data += data6 + (" "*(40-(data6.to_s[0..40].length))) #the adress  of the payer if there is not transfer agent 40 characters Requered
+        returned_data += data_city + (" "*(40-(data_city.to_s[0..40].length))) #40 payers city if there is not transfer agent
+        returned_data += data_state.to_s[0..2] + (" "*(2-(data_state.to_s[0..2].length))) #2 payers state if there is not transfer agent
+        returned_data += data_zip.to_s[0..9] + (" "*(9-(data_zip.to_s[0..9].length))) #9 payers zip if there is not transfer agent
         returned_data += '5107062877     ' #15 payer’s telephone number - there are no such field in the form !!!
         returned_data += " "*260 #blanks
         returned_data += "00000002" #the second record
-        returned_data += " "*243 #blanks
+        returned_data += " "*241 #blanks
+        returned_data += "\r\n"
 #3th 750 records - Payer "B" Record - this Record contains the payment information from information returns.
         returned_data += 'B' #begining of the record -lenght 1
         returned_data += '2017' #lenght 4
@@ -1803,33 +1913,33 @@ def exportForm1099div(form_fields)
             data_tin = ''
         end
 
-        returned_data += data_tin + (" "*(9-(data_tin.to_s.length))) #Payee’s Taxpayer Identification Number (TIN)
+        returned_data += data_tin.to_s[0..9] + (" "*(9-(data_tin.to_s[0..9].length))) #Payee’s Taxpayer Identification Number (TIN)
         data_account = form_fields['account_number']
         if (!data_account) 
            data_account = rand(99999999999999999999).to_s #generate 20 random number 
         end
-        returned_data += data_account + (" "*(20-(data_account.to_s.length))) 
+        returned_data += data_account.to_s[0..20] + (" "*(20-(data_account.to_s[0..20].length))) 
         returned_data += " "*4 #blanks #Payer’s Office Code - you can enter blanks
         returned_data += " "*10 #blanks
         #payment amounts 1236789ABCDEFG
         if (form_fields['1a'])
             data_amount = sprintf('%.2f', form_fields['1a'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(12-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(12-(data_amount.to_s[0..12].length)))+data_amount.to_s[0..12]
         else 
             returned_data += "0"*12 
         end    #Total ordinary dividends '1a'
         if (form_fields['1b'])
             data_amount = sprintf('%.2f', form_fields['1b'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(12-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(12-(data_amount.to_s[0..12].length)))+data_amount.to_s[0..12]
         else 
             returned_data += "0"*12 
         end #Payment Amount 2*Qualified dividends '1b'
         if (form_fields['2a'])
             data_amount = sprintf('%.2f', form_fields['2a'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(12-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(12-(data_amount.to_s[0..12].length)))+data_amount.to_s[0..12]
         else 
             returned_data += "0"*12 
         end  #Payment Amount 3*Total capital gain distribution '2a'
@@ -1840,77 +1950,77 @@ def exportForm1099div(form_fields)
         if (form_fields['2b'])
             data_amount = sprintf('%.2f', form_fields['2b'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(12-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(12-(data_amount.to_s[0..12].length)))+data_amount.to_s[0..12]
         else 
             returned_data += "0"*12 
         end #Payment Amount 6*Unrecaptured Section 1250 gain '2b'
         if (form_fields['2c'])
             data_amount = sprintf('%.2f', form_fields['2c'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(12-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(12-(data_amount.to_s[0..12].length)))+data_amount.to_s[0..12]
         else 
             returned_data += "0"*12 
         end #Payment Amount 7*Section 1202 gain '2c'
         if (form_fields['2d'])
             data_amount = sprintf('%.2f', form_fields['2d'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(12-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(12-(data_amount.to_s[0..12].length)))+data_amount.to_s[0..12]
         else 
             returned_data += "0"*12 
         end #Payment Amount 8*Collectibles (28%) rate gain '2d'
         if (form_fields['3'])
             data_amount = sprintf('%.2f', form_fields['3'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(12-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(12-(data_amount.to_s[0..12].length)))+data_amount.to_s[0..12]
         else 
             returned_data += "0"*12 
         end #Payment Amount 9*Nondividend distributions '3'
         if (form_fields['4'])
             data_amount = sprintf('%.2f', form_fields['4'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(12-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(12-(data_amount.to_s[0..12].length)))+data_amount.to_s[0..12]
         else 
             returned_data += "0"*12 
         end #Payment Amount A*Federal income tax withheld '4'
         if (form_fields['5'])
             data_amount = sprintf('%.2f', form_fields['5'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(12-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(12-(data_amount.to_s[0..12].length)))+data_amount.to_s[0..12]
         else 
             returned_data += "0"*12 
         end #Payment Amount B*Investment expenses '5'
         if (form_fields['6'])
             data_amount = sprintf('%.2f', form_fields['6'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(12-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(12-(data_amount.to_s[0..12].length)))+data_amount.to_s[0..12]
         else 
             returned_data += "0"*12 
         end #Payment Amount C*Foreign tax paid '6'
         if (form_fields['8'])
             data_amount = sprintf('%.2f', form_fields['8'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(12-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(12-(data_amount.to_s[0..12].length)))+data_amount.to_s[0..12]
         else 
             returned_data += "0"*12 
         end #Payment Amount D*Cash liquidation distributions '8'
         if (form_fields['9'])
             data_amount = sprintf('%.2f', form_fields['9'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(12-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(12-(data_amount.to_s[0..12].length)))+data_amount.to_s[0..12]
         else 
             returned_data += "0"*12 
         end #Payment Amount E*Non-cash liquidation distributions '9'
         if (form_fields['10'])
             data_amount = sprintf('%.2f', form_fields['10'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(12-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(12-(data_amount.to_s[0..12].length)))+data_amount.to_s[0..12]
         else 
             returned_data += "0"*12 
         end #Payment Amount F*Exempt interest dividends '10'
         if (form_fields['11'])
             data_amount = sprintf('%.2f', form_fields['11'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(12-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(12-(data_amount.to_s[0..12].length)))+data_amount.to_s[0..12]
         else 
             returned_data += "0"*12 
         end #Payment Amount G*Specified private activity bond interest dividends '11'
@@ -1921,7 +2031,7 @@ def exportForm1099div(form_fields)
         else
             data_payee_name = ''
         end
-        returned_data +=  data_payee_name + (" "*(40-(data_payee_name.to_s.length))) #40 First payee name line -employees_name
+        returned_data +=  data_payee_name + (" "*(40-(data_payee_name.to_s[0..40].length))) #40 First payee name line -employees_name
         returned_data += " "*40 #40 Second payee name line
         returned_data += " "*40 #40 blanks
         if (form_fields['street_address']) 
@@ -1929,7 +2039,7 @@ def exportForm1099div(form_fields)
         else
             street_address = ' ';
         end
-        returned_data +=  street_address + (" "*(40-(street_address.to_s.length))) #40 Payee mailing address
+        returned_data +=  street_address + (" "*(40-(street_address.to_s[0..40].length))) #40 Payee mailing address
         returned_data += " "*40 #40 blanks
                 
         if (form_fields['city_town_state']) 
@@ -1949,9 +2059,9 @@ def exportForm1099div(form_fields)
         city = city_town_state_sliced.slice! state  
         city = " " if city.blank?  
        
-        returned_data +=  city + (" "*(40-(city.to_s.length))) #40 payee city , town or postal office (do not enter zip)
-        returned_data +=  state + (" "*(2-(state.to_s.length)))#2 valid U.S Postal Service state
-        returned_data +=  zip + (" "*(9-(zip.to_s.length)))#9 Payee ZIP code
+        returned_data +=  city + (" "*(40-(city.to_s[0..40].length))) #40 payee city , town or postal office (do not enter zip)
+        returned_data +=  state.to_s[0..2] + (" "*(2-(state.to_s[0..2].length)))#2 valid U.S Postal Service state
+        returned_data +=  zip.to_s[0..9] + (" "*(9-(zip.to_s[0..9].length)))#9 Payee ZIP code
         returned_data += " " # blank
 
         returned_data += "00000003" #8 Record Sequence Number
@@ -1969,7 +2079,7 @@ def exportForm1099div(form_fields)
         else 
             data = ' ';
         end
-        returned_data += data + (" "*(40-(data.to_s.length))) #40 Foreign Country or U.S. Possession '7'
+        returned_data += data + (" "*(40-(data.to_s[0..40].length))) #40 Foreign Country or U.S. Possession '7'
         if (form_fields['fatca_filing_req']=='checked') 
             data = '1';
         else
@@ -1983,10 +2093,10 @@ def exportForm1099div(form_fields)
         else 
             data = ' ';
         end
-        returned_data += ("0"*(12-(data.to_s.length)))+data #12 State Income Tax Withheld '14'
+        returned_data += ("0"*(12-(data.to_s[0..12].length)))+data.to_s[0..12] #12 State Income Tax Withheld '14'
         returned_data += "0" * 12 #12 Local Income Tax Withheld
         returned_data += " "*2 #2 Combined Federal/State Code
-        returned_data += " "*2 #2 blanks
+        returned_data += "\r\n"
 # Payer C record (control record)
 
         returned_data += 'C' # enter C
@@ -1997,21 +2107,21 @@ def exportForm1099div(form_fields)
         if (form_fields['1a'])
             data_amount = sprintf('%.2f', form_fields['1a'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(12-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(12-(data_amount.to_s[0..12].length)))+data_amount.to_s[0..12]
         else 
             returned_data += "0"*18 
         end    #Total ordinary dividends '1a'
         if (form_fields['1b'])
             data_amount = sprintf('%.2f', form_fields['1b'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(12-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(12-(data_amount.to_s[0..12].length)))+data_amount.to_s[0..12]
         else 
             returned_data += "0"*18 
         end #Payment Amount 2*Qualified dividends '1b'
         if (form_fields['2a'])
             data_amount = sprintf('%.2f', form_fields['2a'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(12-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(12-(data_amount.to_s[0..12].length)))+data_amount.to_s[0..12]
         else 
             returned_data += "0"*18 
         end  #Payment Amount 3*Total capital gain distribution '2a'
@@ -2022,77 +2132,77 @@ def exportForm1099div(form_fields)
         if (form_fields['2b'])
             data_amount = sprintf('%.2f', form_fields['2b'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(18-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(18-(data_amount.to_s[0..18].length)))+data_amount.to_s[0..18]
         else 
             returned_data += "0"*18 
         end #Payment Amount 6*Unrecaptured Section 1250 gain '2b'
         if (form_fields['2c'])
             data_amount = sprintf('%.2f', form_fields['2c'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(18-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(18-(data_amount.to_s[0..18].length)))+data_amount.to_s[0..18]
         else 
             returned_data += "0"*18 
         end #Payment Amount 7*Section 1202 gain '2c'
         if (form_fields['2d'])
             data_amount = sprintf('%.2f', form_fields['2d'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(18-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(18-(data_amount.to_s[0..18].length)))+data_amount.to_s[0..18]
         else 
             returned_data += "0"*18 
         end #Payment Amount 8*Collectibles (28%) rate gain '2d'
         if (form_fields['3'])
             data_amount = sprintf('%.2f', form_fields['3'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(18-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(18-(data_amount.to_s[0..18].length)))+data_amount.to_s[0..18]
         else 
             returned_data += "0"*18 
         end #Payment Amount 9*Nondividend distributions '3'
         if (form_fields['4'])
             data_amount = sprintf('%.2f', form_fields['4'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(18-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(18-(data_amount.to_s[0..18].length)))+data_amount.to_s[0..18]
         else 
             returned_data += "0"*18 
         end #Payment Amount A*Federal income tax withheld '4'
         if (form_fields['5'])
             data_amount = sprintf('%.2f', form_fields['5'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(18-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(18-(data_amount.to_s[0..18].length)))+data_amount.to_s[0..18]
         else 
             returned_data += "0"*18 
         end #Payment Amount B*Investment expenses '5'
         if (form_fields['6'])
             data_amount = sprintf('%.2f', form_fields['6'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(18-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(18-(data_amount.to_s[0..18].length)))+data_amount.to_s[0..18]
         else 
             returned_data += "0"*18 
         end #Payment Amount C*Foreign tax paid '6'
         if (form_fields['8'])
             data_amount = sprintf('%.2f', form_fields['8'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(18-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(18-(data_amount.to_s[0..18].length)))+data_amount.to_s[0..18]
         else 
             returned_data += "0"*18 
         end #Payment Amount D*Cash liquidation distributions '8'
         if (form_fields['9'])
             data_amount = sprintf('%.2f', form_fields['9'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(18-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(18-(data_amount.to_s[0..18].length)))+data_amount.to_s[0..18]
         else 
             returned_data += "0"*18 
         end #Payment Amount E*Non-cash liquidation distributions '9'
         if (form_fields['10'])
             data_amount = sprintf('%.2f', form_fields['10'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(18-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(18-(data_amount.to_s[0..18].length)))+data_amount.to_s[0..18]
         else 
             returned_data += "0"*18 
         end #Payment Amount F*Exempt interest dividends '10'
         if (form_fields['11'])
             data_amount = sprintf('%.2f', form_fields['11'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(18-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(18-(data_amount.to_s[0..18].length)))+data_amount.to_s[0..18]
         else 
             returned_data += "0"*18 
         end #Payment Amount G*Specified private activity bond interest dividends '11'
@@ -2102,7 +2212,7 @@ def exportForm1099div(form_fields)
         returned_data += ' '*196 #196 blanks
         returned_data += "00000004" #8 Record Sequence Number
         returned_data += ' '*241 #241 blanks
-        returned_data += ' '*2 #2 blanks
+        returned_data += "\r\n"
 # K record used only when state reporting approval has been granted
 # F record
         returned_data += 'F' #enter F
@@ -2113,7 +2223,7 @@ def exportForm1099div(form_fields)
         returned_data += ' '*442 #442 blanks
         returned_data += "00000005" #8 Record Sequence Number
         returned_data += ' '*241 #241 blanks
-        returned_data += ' '*2 #2 blanks
+        returned_data += "\r\n"
 #end of file
         return returned_data
     end
@@ -2151,23 +2261,29 @@ def exportForm1099g(form_fields)
         returned_data += ' ' # P if it is for prior year otherwise blank -lenght 1
 
         returned_data += '111111111';
-            returned_data += '11111' + (" "*(5-('11111'.to_s.length))) #5 characters - Transmitter Control Code
+            returned_data += '11111' + (" "*(5-('11111'.to_s[0..5].length))) #5 characters - Transmitter Control Code
         returned_data += " "*7 #7 characters - blank
         returned_data += 'T' # T if it is a test file otherwise blank -lenght 1
         returned_data += ' ' #Enter a “1” (one) if the transmitter is a foreign entity otherwise blank -lenght 1
         data = first_line.strip.truncate_words(2,omission: '')
-        returned_data += data + (" "*(40-(data.to_s.length))) #40 characters - transmitter name. Left justify.
+        returned_data += data + (" "*(40-(data.to_s[0..40].length))) #40 characters - transmitter name. Left justify.
         data2 = first_line
         data2.slice! data
         data2 = data2.strip
-        returned_data += data2 + (" "*(40-(data2.to_s.length))) #40 characters - transmitter aditional data. Left justify.
-
+        returned_data += data2 + (" "*(40-(data2.to_s[0..40].length))) #40 characters - transmitter aditional data. Left justify.
+        if form_fields['payers__name_address'].lines.first.blank?
+            first_line = "_"
+        else 
+            first_line = form_fields['payers__name_address'].lines.first
+        end
         data = first_line.strip.truncate_words(2,omission: '')
-        returned_data += data + (" "*(40-(data.to_s.length))) #40 characters - transmitter name. Left justify.
-        data2 = (first_line.slice! data).strip
-        returned_data += data2 + (" "*(40-(data2.to_s.length))) #40 characters - transmitter aditional data. Left justify. 
+        returned_data += data + (" "*(40-(data.to_s[0..40].length))) #40 characters - transmitter name. Left justify.
+        data2 = first_line
+        data2.slice! data
+        data2 = data2.strip
+        returned_data += data2 + (" "*(40-(data2.to_s[0..40].length))) #40 characters - transmitter aditional data. Left justify. 
         data = second_line.strip              
-        returned_data += data + (" "*(40-(data.to_s.length))) #40 characters Requered
+        returned_data += data + (" "*(40-(data.to_s[0..40].length))) #40 characters Requered
         data = third_line.strip 
         data = " " if data.blank?
         data_array =  data.split(/\W+/)   
@@ -2177,25 +2293,26 @@ def exportForm1099g(form_fields)
         data_state = data_array[-2]
         data_state = " " if data_state.blank?
         data_state = data_state[0..1] if data_state.length>2
-        data_sliced = data.slice! data_zip
-        data_city = data_sliced.slice! data_state  
+        data.slice! data_zip
+        data.slice! data_state  
+        data_city = data
         data_city = " " if data_city.blank?
-        returned_data += data_city + (" "*(40-(data_city.to_s.length))) #40 characters Requered
-        returned_data += data_state + (" "*(2-(data_state.to_s.length))) #2 characters Requered
-        returned_data += data_zip + (" "*(9-(data_zip.to_s.length))) #9 characters Requered
+        returned_data += data_city + (" "*(40-(data_city.to_s[0..40].length))) #40 characters Requered
+        returned_data += data_state.to_s[0..2] + (" "*(2-(data_state.to_s[0..2].length))) #2 characters Requered
+        returned_data += data_zip.to_s[0..9] + (" "*(9-(data_zip.to_s[0..9].length))) #9 characters Requered
         returned_data += " "*15 #15 blank characters 
         returned_data += '00000001' #8 characters Total Number of Payees
-        returned_data += 'Dejan Sabados                           ';#40 characters
+        returned_data += 'TEST TEST                               ';#40 characters
         returned_data += '1111111111     ' #15 characters Requered
     #359-408       
-        returned_data += 'dejansabados@yahoo.com                            ' #50 characters 
+        returned_data += 'albionpetrovic@gmail.com                          ' #50 characters 
     #409-499
         returned_data += " "*91 #91 characters - blank
     #500-507
         returned_data += "00000001"; # number of the record T record is always first 8 characters
     #508-517
-        returned_data += "I" #vendor indicator I if there are no vendor
         returned_data += " "*10 #blanks
+        returned_data += "I" #vendor indicator I if there are no vendor
         returned_data += " "*40 #used only if Vendors Software is used otherwise blanks
         returned_data += " "*40 #used only if Vendors Software is used otherwise blanks
         returned_data += " "*40 #used only if Vendors Software is used otherwise blanks
@@ -2206,13 +2323,13 @@ def exportForm1099g(form_fields)
         returned_data += " "*35 #blanks
         returned_data += " "*1 #used only if Vendors Software is used otherwise blanks
         returned_data += " "*8 #blanks
-        returned_data += " "*2 #blanks
+        returned_data += "\r\n" 
 #2nd 750 records - Payer "A" Record
         returned_data += 'A' #begining of the record -lenght 1
         returned_data += '2017' #lenght 4
         returned_data += ' ' #lenght 1 is this CF/SF Program ? 1 if it is otherwise blank
         returned_data += " "*5 #blanks
-        returned_data += form_fields['payers_fin'] + (" "*(9-(form_fields['payers_fin'].to_s.length))) #9 characters - TRANSFEROR'S federal identification number
+        returned_data += form_fields['payers_fin'].to_s[0..9] + (" "*(9-(form_fields['payers_fin'].to_s[0..9].length))) #9 characters - TRANSFEROR'S federal identification number
         #first four characters of the payer last name
         returned_data += " "*4 #blanks of first four characters of the payers last name
         returned_data += " " #blank if this is not last year the payer name will file info returns electro or on paper
@@ -2229,19 +2346,35 @@ def exportForm1099g(form_fields)
 
         returned_data += " "*8 #blanks
         returned_data += " " #blank if payer is US citizen 
+        if form_fields['payers__name_address'].lines.first.blank?
+            first_line = "_"
+        else 
+            first_line = form_fields['payers__name_address'].lines.first
+        end
+        if form_fields['payers__name_address'].lines.second.blank?
+            second_line = "_"
+        else 
+            second_line = form_fields['payers__name_address'].lines.second
+        end
+        if form_fields['payers__name_address'].lines.third.blank?
+            third_line = "_"
+        else 
+            third_line = form_fields['payers__name_address'].lines.third
+        end
         data5 = first_line.strip.truncate_words(2,omission: '')
-        returned_data += data5 + (" "*(40-(data5.to_s.length))) #40 characters - transmitter name. Left justify.
+        returned_data += data5 + (" "*(40-(data5.to_s[0..40].length))) #40 characters - transmitter name. Left justify.
         returned_data += " "*40 #blanks if there is no transfer agent otherwise the agent name 
         returned_data += "0" #if there is no transfer agent
         data6 = second_line.strip              
-        returned_data += data6 + (" "*(40-(data6.to_s.length))) #the adress  of the payer if there is not transfer agent 40 characters Requered
-        returned_data += data_city + (" "*(40-(data_city.to_s.length))) #40 payers city if there is not transfer agent
-        returned_data += data_state + (" "*(2-(data_state.to_s.length))) #2 payers state if there is not transfer agent
-        returned_data += data_zip + (" "*(9-(data_zip.to_s.length))) #9 payers zip if there is not transfer agent
+        returned_data += data6 + (" "*(40-(data6.to_s[0..40].length))) #the adress  of the payer if there is not transfer agent 40 characters Requered
+        returned_data += data_city + (" "*(40-(data_city.to_s[0..40].length))) #40 payers city if there is not transfer agent
+        returned_data += data_state.to_s[0..2] + (" "*(2-(data_state.to_s[0..2].length))) #2 payers state if there is not transfer agent
+        returned_data += data_zip.to_s[0..9] + (" "*(9-(data_zip.to_s[0..9].length))) #9 payers zip if there is not transfer agent
         returned_data += '5107062877     ' #15 payer’s telephone number - there are no such field in the form !!!
         returned_data += " "*260 #blanks
         returned_data += "00000002" #the second record
-        returned_data += " "*243 #blanks
+        returned_data += " "*241 #blanks
+        returned_data += "\r\n"
 #3th 750 records - Payer "B" Record - this Record contains the payment information from information returns.
         returned_data += 'B' #begining of the record -lenght 1
         returned_data += '2017' #lenght 4
@@ -2258,12 +2391,12 @@ def exportForm1099g(form_fields)
             data_tin = ''
         end
 
-        returned_data += data_tin + (" "*(9-(data_tin.to_s.length))) #Payee’s Taxpayer Identification Number (TIN)
+        returned_data += data_tin.to_s[0..9] + (" "*(9-(data_tin.to_s[0..9].length))) #Payee’s Taxpayer Identification Number (TIN)
         data_account = form_fields['account_number']
         if (!data_account) 
            data_account = rand(99999999999999999999).to_s #generate 20 random number 
         end
-        returned_data += data_account + (" "*(20-(data_account.to_s.length))) 
+        returned_data += data_account.to_s[0..20] + (" "*(20-(data_account.to_s[0..20].length))) 
         returned_data += " "*4 #blanks #Payer’s Office Code - you can enter blanks
         returned_data += " "*10 #blanks
         #payment amounts 1245678
@@ -2277,14 +2410,14 @@ def exportForm1099g(form_fields)
         if (form_fields['1'])
             data_amount = sprintf('%.2f', form_fields['1'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(12-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(12-(data_amount.to_s[0..12].length)))+data_amount.to_s[0..12]
         else 
             returned_data += "0"*12
         end #Payment Amount 1*XXXX Unemployment compensation '1'
         if (form_fields['2'])
             data_amount = sprintf('%.2f', form_fields['2'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(12-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(12-(data_amount.to_s[0..12].length)))+data_amount.to_s[0..12]
         else 
             returned_data += "0"*12
         end #Payment Amount 2*XXXX State or local income tax refunds,credits, or offsets '2'
@@ -2292,35 +2425,35 @@ def exportForm1099g(form_fields)
         if (form_fields['4'])
             data_amount = sprintf('%.2f', form_fields['4'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(12-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(12-(data_amount.to_s[0..12].length)))+data_amount.to_s[0..12]
         else 
             returned_data += "0"*12
         end  #Payment Amount 4*XXXX Federal income tax withheld (backup withholding or voluntary withholding on unemployment compensation of Commodity Credit Corporation Loans or certain crop disaster payments) '4'
         if (form_fields['5'])
             data_amount = sprintf('%.2f', form_fields['5'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(12-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(12-(data_amount.to_s[0..12].length)))+data_amount.to_s[0..12]
         else 
             returned_data += "0"*12
         end  #Payment Amount 5*XXXX Reemployment Trade Adjustment Assistance (RTAA) programs '5'
         if (form_fields['6'])
             data_amount = sprintf('%.2f', form_fields['6'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(12-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(12-(data_amount.to_s[0..12].length)))+data_amount.to_s[0..12]
         else 
             returned_data += "0"*12
         end  #Payment Amount 6*XXXX Taxable grants '6'
         if (form_fields['7'])
             data_amount = sprintf('%.2f', form_fields['7'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(12-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(12-(data_amount.to_s[0..12].length)))+data_amount.to_s[0..12]
         else 
             returned_data += "0"*12
         end  #Payment Amount 7*XXXX Agriculture payments '7'
         if (form_fields['9'])
             data_amount = sprintf('%.2f', form_fields['9'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(12-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(12-(data_amount.to_s[0..12].length)))+data_amount.to_s[0..12]
         else 
             returned_data += "0"*12
         end  #Payment Amount 8*XXXX Market gain '9'
@@ -2338,7 +2471,7 @@ def exportForm1099g(form_fields)
         else
             data_payee_name = ''
         end
-        returned_data +=  data_payee_name + (" "*(40-(data_payee_name.to_s.length))) #40 First payee name line -employees_name
+        returned_data +=  data_payee_name + (" "*(40-(data_payee_name.to_s[0..40].length))) #40 First payee name line -employees_name
         returned_data += " "*40 #40 Second payee name line
         returned_data += " "*40 #40 blanks
         if (form_fields['street_address']) 
@@ -2346,7 +2479,7 @@ def exportForm1099g(form_fields)
         else
             street_address = ' ';
         end
-        returned_data +=  street_address + (" "*(40-(street_address.to_s.length))) #40 Payee mailing address
+        returned_data +=  street_address + (" "*(40-(street_address.to_s[0..40].length))) #40 Payee mailing address
         returned_data += " "*40 #40 blanks
                 
         if (form_fields['city_town_state']) 
@@ -2366,9 +2499,9 @@ def exportForm1099g(form_fields)
         city = city_town_state_sliced.slice! state  
         city = " " if city.blank?  
        
-        returned_data +=  city + (" "*(40-(city.to_s.length))) #40 payee city , town or postal office (do not enter zip)
-        returned_data +=  state + (" "*(2-(state.to_s.length)))#2 valid U.S Postal Service state
-        returned_data +=  zip + (" "*(9-(zip.to_s.length)))#9 Payee ZIP code
+        returned_data +=  city + (" "*(40-(city.to_s[0..40].length))) #40 payee city , town or postal office (do not enter zip)
+        returned_data +=  state.to_s[0..2] + (" "*(2-(state.to_s[0..2].length)))#2 valid U.S Postal Service state
+        returned_data +=  zip.to_s[0..9] + (" "*(9-(zip.to_s[0..9].length)))#9 Payee ZIP code
         returned_data += " " # blank
 
         returned_data += "00000003" #8 Record Sequence Number
@@ -2394,10 +2527,10 @@ def exportForm1099g(form_fields)
         else
             data = '0' #TODO: needs validation , remove dots and dollar sign 
         end
-        returned_data +=   ("0"*(12-(data.to_s.length)))+data  #12 State Income Tax Withheld '11', filled in zeros right justified
+        returned_data +=   ("0"*(12-(data.to_s[0..12].length)))+data.to_s[0..12]  #12 State Income Tax Withheld '11', filled in zeros right justified
         returned_data += "0"*12 #12 Local Income Tax Withheld
         returned_data += " "*2 #2 Combined Federal/ State Code
-        returned_data += " "*2 #2 blanks
+        returned_data += "\r\n"
 
 =begin  returned_data += " "*3 #3 blanks
         if (form_fields['6']) 
@@ -2423,14 +2556,14 @@ def exportForm1099g(form_fields)
         if (form_fields['1'])
             data_amount = sprintf('%.2f', form_fields['1'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(18-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(18-(data_amount.to_s[0..18].length)))+data_amount.to_s[0..18]
         else 
             returned_data += "0"*18
         end #Payment Amount 1*XXXX Unemployment compensation '1'
         if (form_fields['2'])
             data_amount = sprintf('%.2f', form_fields['2'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(18-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(18-(data_amount.to_s[0..18].length)))+data_amount.to_s[0..18]
         else 
             returned_data += "0"*18
         end #Payment Amount 2*XXXX State or local income tax refunds,credits, or offsets '2'
@@ -2438,35 +2571,35 @@ def exportForm1099g(form_fields)
         if (form_fields['4'])
             data_amount = sprintf('%.2f', form_fields['4'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(18-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(18-(data_amount.to_s[0..18].length)))+data_amount.to_s[0..18]
         else 
             returned_data += "0"*18
         end  #Payment Amount 4*XXXX Federal income tax withheld (backup withholding or voluntary withholding on unemployment compensation of Commodity Credit Corporation Loans or certain crop disaster payments) '4'
         if (form_fields['5'])
             data_amount = sprintf('%.2f', form_fields['5'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(18-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(18-(data_amount.to_s[0..18].length)))+data_amount.to_s[0..18]
         else 
             returned_data += "0"*18
         end  #Payment Amount 5*XXXX Reemployment Trade Adjustment Assistance (RTAA) programs '5'
         if (form_fields['6'])
             data_amount = sprintf('%.2f', form_fields['6'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(18-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(18-(data_amount.to_s[0..18].length)))+data_amount.to_s[0..18]
         else 
             returned_data += "0"*18
         end  #Payment Amount 6*XXXX Taxable grants '6'
         if (form_fields['7'])
             data_amount = sprintf('%.2f', form_fields['7'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(18-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(18-(data_amount.to_s[0..18].length)))+data_amount.to_s[0..18]
         else 
             returned_data += "0"*18
         end  #Payment Amount 7*XXXX Agriculture payments '7'
         if (form_fields['9'])
             data_amount = sprintf('%.2f', form_fields['9'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(18-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(18-(data_amount.to_s[0..18].length)))+data_amount.to_s[0..18]
         else 
             returned_data += "0"*18
         end  #Payment Amount 8*XXXX Market gain '9'
@@ -2481,7 +2614,7 @@ def exportForm1099g(form_fields)
         returned_data += ' '*196 #196 blanks
         returned_data += "00000004" #8 Record Sequence Number
         returned_data += ' '*241 #241 blanks
-        returned_data += ' '*2 #2 blanks
+        returned_data += "\r\n"
 # K record used only when state reporting approval has been granted
 # F record
         returned_data += 'F' #enter F
@@ -2492,7 +2625,7 @@ def exportForm1099g(form_fields)
         returned_data += ' '*442 #442 blanks
         returned_data += "00000005" #8 Record Sequence Number
         returned_data += ' '*241 #241 blanks
-        returned_data += ' '*2 #2 blanks
+        returned_data += "\r\n"
 #end of file
         return returned_data
     end
@@ -2510,7 +2643,7 @@ def exportForm1099h(form_fields)
         form_fields['issuers_providers_fin'] ||= " "       
 
         form_fields['issuers_providers_name_address'] ||= " "
-        if form_fields['creditors_name_address_XXXXX'].lines.first.blank?
+        if form_fields['issuers_providers_name_address'].lines.first.blank?
             first_line = "_"
         else 
             first_line = form_fields['issuers_providers_name_address'].lines.first
@@ -2530,23 +2663,29 @@ def exportForm1099h(form_fields)
         returned_data += ' ' # P if it is for prior year otherwise blank -lenght 1
 
         returned_data += '111111111';
-            returned_data += '11111' + (" "*(5-('11111'.to_s.length))) #5 characters - Transmitter Control Code
+            returned_data += '11111' + (" "*(5-('11111'.to_s[0..5].length))) #5 characters - Transmitter Control Code
         returned_data += " "*7 #7 characters - blank
         returned_data += 'T' # T if it is a test file otherwise blank -lenght 1
         returned_data += ' ' #Enter a “1” (one) if the transmitter is a foreign entity otherwise blank -lenght 1
         data = first_line.strip.truncate_words(2,omission: '')
-        returned_data += data + (" "*(40-(data.to_s.length))) #40 characters - transmitter name. Left justify.
+        returned_data += data + (" "*(40-(data.to_s[0..40].length))) #40 characters - transmitter name. Left justify.
         data2 = first_line
         data2.slice! data
         data2 = data2.strip
-        returned_data += data2 + (" "*(40-(data2.to_s.length))) #40 characters - transmitter aditional data. Left justify.
-
+        returned_data += data2 + (" "*(40-(data2.to_s[0..40].length))) #40 characters - transmitter aditional data. Left justify.
+        if form_fields['issuers_providers_name_address'].lines.first.blank?
+            first_line = "_"
+        else 
+            first_line = form_fields['issuers_providers_name_address'].lines.first
+        end
         data = first_line.strip.truncate_words(2,omission: '')
-        returned_data += data + (" "*(40-(data.to_s.length))) #40 characters - transmitter name. Left justify.
-        data2 = (first_line.slice! data).strip
-        returned_data += data2 + (" "*(40-(data2.to_s.length))) #40 characters - transmitter aditional data. Left justify. 
+        returned_data += data + (" "*(40-(data.to_s[0..40].length))) #40 characters - transmitter name. Left justify.
+        data2 = first_line
+        data2.slice! data
+        data2 = data2.strip
+        returned_data += data2 + (" "*(40-(data2.to_s[0..40].length))) #40 characters - transmitter aditional data. Left justify. 
         data = second_line.strip              
-        returned_data += data + (" "*(40-(data.to_s.length))) #40 characters Requered
+        returned_data += data + (" "*(40-(data.to_s[0..40].length))) #40 characters Requered
         data = third_line.strip 
         data = " " if data.blank?
         data_array =  data.split(/\W+/)   
@@ -2556,25 +2695,26 @@ def exportForm1099h(form_fields)
         data_state = data_array[-2]
         data_state = " " if data_state.blank?
         data_state = data_state[0..1] if data_state.length>2
-        data_sliced = data.slice! data_zip
-        data_city = data_sliced.slice! data_state  
+        data.slice! data_zip
+        data.slice! data_state  
+        data_city = data
         data_city = " " if data_city.blank?
-        returned_data += data_city + (" "*(40-(data_city.to_s.length))) #40 characters Requered
-        returned_data += data_state + (" "*(2-(data_state.to_s.length))) #2 characters Requered
-        returned_data += data_zip + (" "*(9-(data_zip.to_s.length))) #9 characters Requered
+        returned_data += data_city + (" "*(40-(data_city.to_s[0..40].length))) #40 characters Requered
+        returned_data += data_state.to_s[0..2] + (" "*(2-(data_state.to_s[0..2].length))) #2 characters Requered
+        returned_data += data_zip.to_s[0..9] + (" "*(9-(data_zip.to_s[0..9].length))) #9 characters Requered
         returned_data += " "*15 #15 blank characters 
         returned_data += '00000001' #8 characters Total Number of Payees
-        returned_data += 'Dejan Sabados                           ';#40 characters
+        returned_data += 'TEST TEST                               ';#40 characters
         returned_data += '1111111111     ' #15 characters Requered
     #359-408       
-        returned_data += 'dejansabados@yahoo.com                            ' #50 characters 
+        returned_data += 'albionpetrovic@gmail.com                          ' #50 characters 
     #409-499
         returned_data += " "*91 #91 characters - blank
     #500-507
         returned_data += "00000001"; # number of the record T record is always first 8 characters
     #508-517
-        returned_data += "I" #vendor indicator I if there are no vendor
         returned_data += " "*10 #blanks
+        returned_data += "I" #vendor indicator I if there are no vendor
         returned_data += " "*40 #used only if Vendors Software is used otherwise blanks
         returned_data += " "*40 #used only if Vendors Software is used otherwise blanks
         returned_data += " "*40 #used only if Vendors Software is used otherwise blanks
@@ -2585,13 +2725,13 @@ def exportForm1099h(form_fields)
         returned_data += " "*35 #blanks
         returned_data += " "*1 #used only if Vendors Software is used otherwise blanks
         returned_data += " "*8 #blanks
-        returned_data += " "*2 #blanks
+        returned_data += "\r\n" 
 #2nd 750 records - Payer "A" Record
         returned_data += 'A' #begining of the record -lenght 1
         returned_data += '2017' #lenght 4
         returned_data += ' ' #lenght 1 is this CF/SF Program ? 1 if it is otherwise blank
         returned_data += " "*5 #blanks
-        returned_data += form_fields['issuers_providers_fin'] + (" "*(9-(form_fields['issuers_providers_fin'].to_s.length))) #9 characters - TRANSFEROR'S federal identification number
+        returned_data += form_fields['issuers_providers_fin'].to_s[0..9] + (" "*(9-(form_fields['issuers_providers_fin'].to_s[0..9].length))) #9 characters - TRANSFEROR'S federal identification number
         #first four characters of the payer last name
         returned_data += " "*4 #blanks of first four characters of the payers last name
         returned_data += " " #blank if this is not last year the payer name will file info returns electro or on paper
@@ -2600,19 +2740,35 @@ def exportForm1099h(form_fields)
         returned_data += "123456789ABCD   " #16 amount codes for Form 1099-H, Health Coverage Tax credit
         returned_data += " "*8 #blanks
         returned_data += " " #blank if payer is US citizen 
+        if form_fields['issuers_providers_name_address'].lines.first.blank?
+            first_line = "_"
+        else 
+            first_line = form_fields['issuers_providers_name_address'].lines.first
+        end
+        if form_fields['issuers_providers_name_address'].lines.second.blank?
+            second_line = "_"
+        else 
+            second_line = form_fields['issuers_providers_name_address'].lines.second
+        end
+        if form_fields['issuers_providers_name_address'].lines.third.blank?
+            third_line = "_"
+        else 
+            third_line = form_fields['issuers_providers_name_address'].lines.third
+        end
         data5 = first_line.strip.truncate_words(2,omission: '')
-        returned_data += data5 + (" "*(40-(data5.to_s.length))) #40 characters - transmitter name. Left justify.
+        returned_data += data5 + (" "*(40-(data5.to_s[0..40].length))) #40 characters - transmitter name. Left justify.
         returned_data += " "*40 #blanks if there is no transfer agent otherwise the agent name 
         returned_data += "0" #if there is no transfer agent
         data6 = second_line.strip              
-        returned_data += data6 + (" "*(40-(data6.to_s.length))) #the adress  of the payer if there is not transfer agent 40 characters Requered
-        returned_data += data_city + (" "*(40-(data_city.to_s.length))) #40 payers city if there is not transfer agent
-        returned_data += data_state + (" "*(2-(data_state.to_s.length))) #2 payers state if there is not transfer agent
-        returned_data += data_zip + (" "*(9-(data_zip.to_s.length))) #9 payers zip if there is not transfer agent
+        returned_data += data6 + (" "*(40-(data6.to_s[0..40].length))) #the adress  of the payer if there is not transfer agent 40 characters Requered
+        returned_data += data_city + (" "*(40-(data_city.to_s[0..40].length))) #40 payers city if there is not transfer agent
+        returned_data += data_state.to_s[0..2] + (" "*(2-(data_state.to_s[0..2].length))) #2 payers state if there is not transfer agent
+        returned_data += data_zip.to_s[0..9] + (" "*(9-(data_zip.to_s[0..9].length))) #9 payers zip if there is not transfer agent
         returned_data += '5107062877     ' #15 payer’s telephone number - there are no such field in the form !!!
         returned_data += " "*260 #blanks
         returned_data += "00000002" #the second record
-        returned_data += " "*243 #blanks
+        returned_data += " "*241 #blanks
+        returned_data += "\r\n"
 #3th 750 records - Payer "B" Record - this Record contains the payment information from information returns.
         returned_data += 'B' #begining of the record -lenght 1
         returned_data += '2017' #lenght 4
@@ -2629,100 +2785,100 @@ def exportForm1099h(form_fields)
             data_tin = ''
         end
 
-        returned_data += data_tin + (" "*(9-(data_tin.to_s.length))) #Payee’s Taxpayer Identification Number (TIN)
+        returned_data += data_tin.to_s[0..9] + (" "*(9-(data_tin.to_s[0..9].length))) #Payee’s Taxpayer Identification Number (TIN)
         data_account = rand(99999999999999999999).to_s #generate 20 random number 
-        returned_data += data_account + (" "*(20-(data_account.to_s.length))) 
+        returned_data += data_account.to_s[0..20]+ (" "*(20-(data_account.to_s[0..20].length))) 
         returned_data += " "*4 #blanks #Payer’s Office Code - you can enter blanks
         returned_data += " "*10 #blanks
         #payment amounts 123456789ABCD  
         if (form_fields['1'])
             data_amount = sprintf('%.2f', form_fields['1'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(12-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(12-(data_amount.to_s[0..12].length)))+data_amount.to_s[0..12]
         else 
             returned_data += "0"*12 
         end #-1 Gross amount of health insurance advance payments '1'
         if (form_fields['3'])
             data_amount = sprintf('%.2f', form_fields['3'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(12-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(12-(data_amount.to_s[0..12].length)))+data_amount.to_s[0..12]
         else 
             returned_data += "0"*12 
         end #-2 Gross amount of health insurance payments for January '3'
         if (form_fields['4'])
             data_amount = sprintf('%.2f', form_fields['4'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(12-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(12-(data_amount.to_s[0..12].length)))+data_amount.to_s[0..12]
         else 
             returned_data += "0"*12 
         end #-3 Gross amount of health insurance payments for February '4'
         if (form_fields['5'])
             data_amount = sprintf('%.2f', form_fields['5'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(12-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(12-(data_amount.to_s[0..12].length)))+data_amount.to_s[0..12]
         else 
             returned_data += "0"*12 
         end #-4 Gross amount of health insurance payments for March '5'
         if (form_fields['6'])
             data_amount = sprintf('%.2f', form_fields['6'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(12-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(12-(data_amount.to_s[0..12].length)))+data_amount.to_s[0..12]
         else 
             returned_data += "0"*12 
         end #-5 Gross amount of health insurance payments for April '6'
         if (form_fields['7'])
             data_amount = sprintf('%.2f', form_fields['7'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(12-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(12-(data_amount.to_s[0..12].length)))+data_amount.to_s[0..12]
         else 
             returned_data += "0"*12 
         end #-6 Gross amount of health insurance payments for May '7'
         if (form_fields['8'])
             data_amount = sprintf('%.2f', form_fields['8'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(12-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(12-(data_amount.to_s[0..12].length)))+data_amount.to_s[0..12]
         else 
             returned_data += "0"*12 
         end #-7 Gross amount of health insurance payments for June '8'
         if (form_fields['9'])
             data_amount = sprintf('%.2f', form_fields['9'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(12-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(12-(data_amount.to_s[0..12].length)))+data_amount.to_s[0..12]
         else 
             returned_data += "0"*12 
         end #-8 Gross amount of health insurance payments for July '9'
         if (form_fields['10'])
             data_amount = sprintf('%.2f', form_fields['10'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(12-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(12-(data_amount.to_s[0..12].length)))+data_amount.to_s[0..12]
         else 
             returned_data += "0"*12 
         end #-9 Gross amount of health insurance payments for August '10'
         if (form_fields['11'])
             data_amount = sprintf('%.2f', form_fields['11'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(12-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(12-(data_amount.to_s[0..12].length)))+data_amount.to_s[0..12]
         else 
             returned_data += "0"*12 
         end #-A Gross amount of health insurance payments for September '11'
         if (form_fields['12'])
             data_amount = sprintf('%.2f', form_fields['12'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(12-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(12-(data_amount.to_s[0..12].length)))+data_amount.to_s[0..12]
         else 
             returned_data += "0"*12 
         end #-B Gross amount of health insurance payments for October '12'
         if (form_fields['13'])
             data_amount = sprintf('%.2f', form_fields['13'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(12-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(12-(data_amount.to_s[0..12].length)))+data_amount.to_s[0..12]
         else 
             returned_data += "0"*12 
         end #-C Gross amount of health insurance payments for November '13'
         if (form_fields['14'])
             data_amount = sprintf('%.2f', form_fields['14'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(12-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(12-(data_amount.to_s[0..12].length)))+data_amount.to_s[0..12]
         else 
             returned_data += "0"*12 
         end #-D Gross amount of health insurance payments for December '14'
@@ -2735,7 +2891,7 @@ def exportForm1099h(form_fields)
         else
             data_payee_name = ''
         end
-        returned_data +=  data_payee_name + (" "*(40-(data_payee_name.to_s.length))) #40 First payee name line -employees_name
+        returned_data +=  data_payee_name + (" "*(40-(data_payee_name.to_s[0..40].length))) #40 First payee name line -employees_name
         returned_data += " "*40 #40 Second payee name line
         returned_data += " "*40 #40 blanks
         if (form_fields['street_address']) 
@@ -2743,7 +2899,7 @@ def exportForm1099h(form_fields)
         else
             street_address = ' ';
         end
-        returned_data +=  street_address + (" "*(40-(street_address.to_s.length))) #40 Payee mailing address
+        returned_data +=  street_address + (" "*(40-(street_address.to_s[0..40].length))) #40 Payee mailing address
         returned_data += " "*40 #40 blanks
                 
         if (form_fields['city_town_address']) 
@@ -2763,9 +2919,9 @@ def exportForm1099h(form_fields)
         city = city_town_state_sliced.slice! state  
         city = " " if city.blank?  
        
-        returned_data +=  city + (" "*(40-(city.to_s.length))) #40 payee city , town or postal office (do not enter zip)
-        returned_data +=  state + (" "*(2-(state.to_s.length)))#2 valid U.S Postal Service state
-        returned_data +=  zip + (" "*(9-(zip.to_s.length)))#9 Payee ZIP code
+        returned_data +=  city + (" "*(40-(city.to_s[0..40].length))) #40 payee city , town or postal office (do not enter zip)
+        returned_data +=  state.to_s[0..2] + (" "*(2-(state.to_s[0..2].length)))#2 valid U.S Postal Service state
+        returned_data +=  zip.to_s[0..9] + (" "*(9-(zip.to_s[0..9].length)))#9 Payee ZIP code
         returned_data += " " # blank
 
         returned_data += "00000003" #8 Record Sequence Number
@@ -2777,11 +2933,11 @@ def exportForm1099h(form_fields)
         else
             data = ' ';
         end 
-        returned_data +=  (" "*(2-(data.to_s.length)))+data #2 Number of Months Eligible TODO: check with Sean does this field belongs to this record
+        returned_data +=  (" "*(2-(data.to_s[0..2].length)))+data.to_s[0..2] #2 Number of Months Eligible TODO: check with Sean does this field belongs to this record
         returned_data += " "*114 #114 blanks
         returned_data += " "*60 #60 Special Data Entries
         returned_data += " "*26 #26 blanks
-        returned_data += " "*2 #2 blanks
+        returned_data += "\r\n"
 # Payer C record (control record)
 
         returned_data += 'C' # enter C
@@ -2792,91 +2948,91 @@ def exportForm1099h(form_fields)
         if (form_fields['1'])
             data_amount = sprintf('%.2f', form_fields['1'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(12-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(12-(data_amount.to_s[0..12].length)))+data_amount.to_s[0..12]
         else 
             returned_data += "0"*18 
         end #-1 Gross amount of health insurance advance payments '1'
         if (form_fields['3'])
             data_amount = sprintf('%.2f', form_fields['3'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(12-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(12-(data_amount.to_s[0..12].length)))+data_amount.to_s[0..12]
         else 
             returned_data += "0"*18 
         end #-2 Gross amount of health insurance payments for January '3'
         if (form_fields['4'])
             data_amount = sprintf('%.2f', form_fields['4'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(12-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(12-(data_amount.to_s[0..12].length)))+data_amount.to_s[0..12]
         else 
             returned_data += "0"*18 
         end #-3 Gross amount of health insurance payments for February '4'
         if (form_fields['5'])
             data_amount = sprintf('%.2f', form_fields['5'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(12-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(12-(data_amount.to_s[0..12].length)))+data_amount.to_s[0..12]
         else 
             returned_data += "0"*18 
         end #-4 Gross amount of health insurance payments for March '5'
         if (form_fields['6'])
             data_amount = sprintf('%.2f', form_fields['6'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(12-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(12-(data_amount.to_s[0..12].length)))+data_amount.to_s[0..12]
         else 
             returned_data += "0"*18 
         end #-5 Gross amount of health insurance payments for April '6'
         if (form_fields['7'])
             data_amount = sprintf('%.2f', form_fields['7'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(12-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(12-(data_amount.to_s[0..12].length)))+data_amount.to_s[0..12]
         else 
             returned_data += "0"*18 
         end #-6 Gross amount of health insurance payments for May '7'
         if (form_fields['8'])
             data_amount = sprintf('%.2f', form_fields['8'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(12-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(12-(data_amount.to_s[0..12].length)))+data_amount.to_s[0..12]
         else 
             returned_data += "0"*18 
         end #-7 Gross amount of health insurance payments for June '8'
         if (form_fields['9'])
             data_amount = sprintf('%.2f', form_fields['9'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(12-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(12-(data_amount.to_s[0..12].length)))+data_amount.to_s[0..12]
         else 
             returned_data += "0"*18 
         end #-8 Gross amount of health insurance payments for July '9'
         if (form_fields['10'])
             data_amount = sprintf('%.2f', form_fields['10'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(12-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(12-(data_amount.to_s[0..12].length)))+data_amount.to_s[0..12]
         else 
             returned_data += "0"*18 
         end #-9 Gross amount of health insurance payments for August '10'
         if (form_fields['11'])
             data_amount = sprintf('%.2f', form_fields['11'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(12-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(12-(data_amount.to_s[0..12].length)))+data_amount.to_s[0..12]
         else 
             returned_data += "0"*18 
         end #-A Gross amount of health insurance payments for September '11'
         if (form_fields['12'])
             data_amount = sprintf('%.2f', form_fields['12'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(12-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(12-(data_amount.to_s[0..12].length)))+data_amount.to_s[0..12]
         else 
             returned_data += "0"*18 
         end #-B Gross amount of health insurance payments for October '12'
         if (form_fields['13'])
             data_amount = sprintf('%.2f', form_fields['13'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(12-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(12-(data_amount.to_s[0..12].length)))+data_amount.to_s[0..12]
         else 
             returned_data += "0"*18 
         end #-C Gross amount of health insurance payments for November '13'
         if (form_fields['14'])
             data_amount = sprintf('%.2f', form_fields['14'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(12-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(12-(data_amount.to_s[0..12].length)))+data_amount.to_s[0..12]
         else 
             returned_data += "0"*18 
         end #-D Gross amount of health insurance payments for December '14'
@@ -2886,7 +3042,7 @@ def exportForm1099h(form_fields)
         returned_data += ' '*196 #196 blanks
         returned_data += "00000004" #8 Record Sequence Number
         returned_data += ' '*241 #241 blanks
-        returned_data += ' '*2 #2 blanks
+        returned_data += "\r\n"
 # K record used only when state reporting approval has been granted
 # F record
         returned_data += 'F' #enter F
@@ -2897,7 +3053,7 @@ def exportForm1099h(form_fields)
         returned_data += ' '*442 #442 blanks
         returned_data += "00000005" #8 Record Sequence Number
         returned_data += ' '*241 #241 blanks
-        returned_data += ' '*2 #2 blanks
+        returned_data += "\r\n"
 #end of file
         return returned_data
     end
@@ -2939,23 +3095,29 @@ def exportForm1099int(form_fields)
         returned_data += ' ' # P if it is for prior year otherwise blank -lenght 1
 
         returned_data += '111111111';
-            returned_data += '11111' + (" "*(5-('11111'.to_s.length))) #5 characters - Transmitter Control Code
+            returned_data += '11111' + (" "*(5-('11111'.to_s[0..5].length))) #5 characters - Transmitter Control Code
         returned_data += " "*7 #7 characters - blank
         returned_data += 'T' # T if it is a test file otherwise blank -lenght 1
         returned_data += ' ' #Enter a “1” (one) if the transmitter is a foreign entity otherwise blank -lenght 1
         data = first_line.strip.truncate_words(2,omission: '')
-        returned_data += data + (" "*(40-(data.to_s.length))) #40 characters - transmitter name. Left justify.
+        returned_data += data + (" "*(40-(data.to_s[0..40].length))) #40 characters - transmitter name. Left justify.
         data2 = first_line
         data2.slice! data
         data2 = data2.strip
-        returned_data += data2 + (" "*(40-(data2.to_s.length))) #40 characters - transmitter aditional data. Left justify.
-
+        returned_data += data2 + (" "*(40-(data2.to_s[0..40].length))) #40 characters - transmitter aditional data. Left justify.
+        if form_fields['payers_name_address'].lines.first.blank?
+            first_line = "_"
+        else 
+            first_line = form_fields['payers_name_address'].lines.first
+        end
         data = first_line.strip.truncate_words(2,omission: '')
-        returned_data += data + (" "*(40-(data.to_s.length))) #40 characters - transmitter name. Left justify.
-        data2 = (first_line.slice! data).strip
-        returned_data += data2 + (" "*(40-(data2.to_s.length))) #40 characters - transmitter aditional data. Left justify. 
+        returned_data += data + (" "*(40-(data.to_s[0..40].length))) #40 characters - transmitter name. Left justify.
+        data2 = first_line
+        data2.slice! data
+        data2 = data2.strip
+        returned_data += data2 + (" "*(40-(data2.to_s[0..40].length))) #40 characters - transmitter aditional data. Left justify. 
         data = second_line.strip              
-        returned_data += data + (" "*(40-(data.to_s.length))) #40 characters Requered
+        returned_data += data + (" "*(40-(data.to_s[0..40].length))) #40 characters Requered
         data = third_line.strip 
         data = " " if data.blank?
         data_array =  data.split(/\W+/)   
@@ -2965,25 +3127,26 @@ def exportForm1099int(form_fields)
         data_state = data_array[-2]
         data_state = " " if data_state.blank?
         data_state = data_state[0..1] if data_state.length>2
-        data_sliced = data.slice! data_zip
-        data_city = data_sliced.slice! data_state  
+        data.slice! data_zip
+        data.slice! data_state  
+        data_city = data
         data_city = " " if data_city.blank?
-        returned_data += data_city + (" "*(40-(data_city.to_s.length))) #40 characters Requered
-        returned_data += data_state + (" "*(2-(data_state.to_s.length))) #2 characters Requered
-        returned_data += data_zip + (" "*(9-(data_zip.to_s.length))) #9 characters Requered
+        returned_data += data_city + (" "*(40-(data_city.to_s[0..40].length))) #40 characters Requered
+        returned_data += data_state.to_s[0..2] + (" "*(2-(data_state.to_s[0..2].length))) #2 characters Requered
+        returned_data += data_zip.to_s[0..9] + (" "*(9-(data_zip.to_s[0..9].length))) #9 characters Requered
         returned_data += " "*15 #15 blank characters 
         returned_data += '00000001' #8 characters Total Number of Payees
-        returned_data += 'Dejan Sabados                           ';#40 characters
+        returned_data += 'TEST TEST                               ';#40 characters
         returned_data += '1111111111     ' #15 characters Requered
     #359-408       
-        returned_data += 'dejansabados@yahoo.com                            ' #50 characters 
+        returned_data += 'albionpetrovic@gmail.com                          ' #50 characters 
     #409-499
         returned_data += " "*91 #91 characters - blank
     #500-507
         returned_data += "00000001"; # number of the record T record is always first 8 characters
     #508-517
-        returned_data += "I" #vendor indicator I if there are no vendor
         returned_data += " "*10 #blanks
+        returned_data += "I" #vendor indicator I if there are no vendor
         returned_data += " "*40 #used only if Vendors Software is used otherwise blanks
         returned_data += " "*40 #used only if Vendors Software is used otherwise blanks
         returned_data += " "*40 #used only if Vendors Software is used otherwise blanks
@@ -2994,13 +3157,13 @@ def exportForm1099int(form_fields)
         returned_data += " "*35 #blanks
         returned_data += " "*1 #used only if Vendors Software is used otherwise blanks
         returned_data += " "*8 #blanks
-        returned_data += " "*2 #blanks
+        returned_data += "\r\n" 
 #2nd 750 records - Payer "A" Record
         returned_data += 'A' #begining of the record -lenght 1
         returned_data += '2017' #lenght 4
         returned_data += ' ' #lenght 1 is this CF/SF Program ? 1 if it is otherwise blank
         returned_data += " "*5 #blanks
-        returned_data += form_fields['payers_fin'] + (" "*(9-(form_fields['payers_fin'].to_s.length))) #9 characters - TRANSFEROR'S federal identification number
+        returned_data += form_fields['payers_fin'].to_s[0..8] + (" "*(9-form_fields['payers_fin'].to_s[0..8].length)) #9 characters - TRANSFEROR'S federal identification number
         #first four characters of the payer last name
         returned_data += " "*4 #blanks of first four characters of the payers last name
         returned_data += " " #blank if this is not last year the payer name will file info returns electro or on paper
@@ -3022,19 +3185,36 @@ def exportForm1099int(form_fields)
  
         returned_data += " "*8 #blanks
         returned_data += " " #blank if payer is US citizen 
+        if form_fields['payers_name_address'].lines.first.blank?
+            first_line = "_"
+        else 
+            first_line = form_fields['payers_name_address'].lines.first
+        end
+        if form_fields['payers_name_address'].lines.second.blank?
+            second_line = "_"
+        else 
+            second_line = form_fields['payers_name_address'].lines.second
+        end
+        if form_fields['payers_name_address'].lines.third.blank?
+            third_line = "_"
+        else 
+            third_line = form_fields['payers_name_address'].lines.third
+        end
         data5 = first_line.strip.truncate_words(2,omission: '')
-        returned_data += data5 + (" "*(40-(data5.to_s.length))) #40 characters - transmitter name. Left justify.
+        returned_data += data5 + (" "*(40-(data5.to_s[0..40].length))) #40 characters - transmitter name. Left justify.
         returned_data += " "*40 #blanks if there is no transfer agent otherwise the agent name 
         returned_data += "0" #if there is no transfer agent
         data6 = second_line.strip              
-        returned_data += data6 + (" "*(40-(data6.to_s.length))) #the adress  of the payer if there is not transfer agent 40 characters Requered
-        returned_data += data_city + (" "*(40-(data_city.to_s.length))) #40 payers city if there is not transfer agent
-        returned_data += data_state + (" "*(2-(data_state.to_s.length))) #2 payers state if there is not transfer agent
-        returned_data += data_zip + (" "*(9-(data_zip.to_s.length))) #9 payers zip if there is not transfer agent
+        returned_data += data6 + (" "*(40-(data6.to_s[0..40].length))) #the adress  of the payer if there is not transfer agent 40 characters Requered
+        returned_data += data_city + (" "*(40-(data_city.to_s[0..40].length))) #40 payers city if there is not transfer agent
+        returned_data += data_state.to_s[0..2] + (" "*(2-(data_state.to_s[0..2].length))) #2 payers state if there is not transfer agent
+        returned_data += data_zip.to_s[0..9] + (" "*(9-(data_zip.to_s[0..9].length))) #9 payers zip if there is not transfer agent
         returned_data += '5107062877     ' #15 payer’s telephone number - there are no such field in the form !!!
         returned_data += " "*260 #blanks
         returned_data += "00000002" #the second record
-        returned_data += " "*243 #blanks
+        returned_data += " "*241 #blanks
+        returned_data += " "*241 #blanks
+        returned_data += "\r\n"
 #3th 750 records - Payer "B" Record - this Record contains the payment information from information returns.
         returned_data += 'B' #begining of the record -lenght 1
         returned_data += '2017' #lenght 4
@@ -3051,12 +3231,12 @@ def exportForm1099int(form_fields)
             data_tin = ''
         end
 
-        returned_data += data_tin + (" "*(9-(data_tin.to_s.length))) #Payee’s Taxpayer Identification Number (TIN)
+        returned_data += data_tin.to_s[0..9] + (" "*(9-(data_tin.to_s[0..9].length))) #Payee’s Taxpayer Identification Number (TIN)
         data_account = form_fields['account_number']
         if (!data_account) 
            data_account = rand(99999999999999999999).to_s #generate 20 random number 
         end
-        returned_data += data_account + (" "*(20-(data_account.to_s.length))) 
+        returned_data += data_account.to_s[0..20] + (" "*(20-(data_account.to_s[0..20].length))) 
         returned_data += " "*4 #blanks #Payer’s Office Code - you can enter blanks
         returned_data += " "*10 #blanks
         returned_data += "12345689ABDE    " #16 amount codes
@@ -3064,42 +3244,42 @@ def exportForm1099int(form_fields)
         if (form_fields['1'])
             data_amount = sprintf('%.2f', form_fields['1'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(12-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(12-(data_amount.to_s[0..12].length)))+data_amount.to_s[0..12]
         else 
             returned_data += "0"*12 
         end #Payment Amount  1-Interest income not included in Amount Code 3 '1'
          if (form_fields['2'])
             data_amount = sprintf('%.2f', form_fields['2'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(12-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(12-(data_amount.to_s[0..12].length)))+data_amount.to_s[0..12]
         else 
             returned_data += "0"*12 
         end #Payment Amount  2-Early withdrawal penalty '2'
          if (form_fields['3'])
             data_amount = sprintf('%.2f', form_fields['3'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(12-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(12-(data_amount.to_s[0..12].length)))+data_amount.to_s[0..12]
         else 
             returned_data += "0"*12 
         end #Payment Amount  3-Interest on U.S. Savings Bonds and Treasury obligations '3'
          if (form_fields['4'])
             data_amount = sprintf('%.2f', form_fields['4'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(12-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(12-(data_amount.to_s[0..12].length)))+data_amount.to_s[0..12]
         else 
             returned_data += "0"*12 
         end #Payment Amount  4-Federal income tax withheld (backup withholding) '4'
          if (form_fields['5'])
             data_amount = sprintf('%.2f', form_fields['5'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(12-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(12-(data_amount.to_s[0..12].length)))+data_amount.to_s[0..12]
         else 
             returned_data += "0"*12 
         end #Payment Amount  5-Investment expenses '5'
          if (form_fields['6'])
             data_amount = sprintf('%.2f', form_fields['6'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(12-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(12-(data_amount.to_s[0..12].length)))+data_amount.to_s[0..12]
         else 
             returned_data += "0"*12 
         end #Payment Amount  6-Foreign tax paid '6'
@@ -3107,28 +3287,28 @@ def exportForm1099int(form_fields)
          if (form_fields['8'])
             data_amount = sprintf('%.2f', form_fields['8'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(12-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(12-(data_amount.to_s[0..12].length)))+data_amount.to_s[0..12]
         else 
             returned_data += "0"*12 
         end #Payment Amount 8-Tax-exempt interest '8'
          if (form_fields['9'])
             data_amount = sprintf('%.2f', form_fields['9'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(12-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(12-(data_amount.to_s[0..12].length)))+data_amount.to_s[0..12]
         else 
             returned_data += "0"*12 
         end #Payment Amount 9-Specified private activity bond '9'
          if (form_fields['10'])
             data_amount = sprintf('%.2f', form_fields['10'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(12-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(12-(data_amount.to_s[0..12].length)))+data_amount.to_s[0..12]
         else 
             returned_data += "0"*12 
         end #Payment Amount A-Market discount '10'
          if (form_fields['11'])
             data_amount = sprintf('%.2f', form_fields['11'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(12-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(12-(data_amount.to_s[0..12].length)))+data_amount.to_s[0..12]
         else 
             returned_data += "0"*12 
         end #Payment Amount B-Bond premium '11'
@@ -3136,14 +3316,14 @@ def exportForm1099int(form_fields)
          if (form_fields['13'])
             data_amount = sprintf('%.2f', form_fields['13'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(12-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(12-(data_amount.to_s[0..12].length)))+data_amount.to_s[0..12]
         else 
             returned_data += "0"*12 
         end #Payment Amount D-Bond premium on tax exempt bond '13'
          if (form_fields['12'])
             data_amount = sprintf('%.2f', form_fields['12'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(12-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(12-(data_amount.to_s[0..12].length)))+data_amount.to_s[0..12]
         else 
             returned_data += "0"*12 
         end #Payment Amount E-Bond Premium on Treasury Obligation '12'
@@ -3156,7 +3336,7 @@ def exportForm1099int(form_fields)
         else
             data_payee_name = ''
         end
-        returned_data +=  data_payee_name + (" "*(40-(data_payee_name.to_s.length))) #40 First payee name line -employees_name
+        returned_data +=  data_payee_name + (" "*(40-(data_payee_name.to_s[0..40].length))) #40 First payee name line -employees_name
         returned_data += " "*40 #40 Second payee name line
         returned_data += " "*40 #40 blanks
         if (form_fields['street_address']) 
@@ -3164,7 +3344,7 @@ def exportForm1099int(form_fields)
         else
             street_address = ' ';
         end
-        returned_data +=  street_address + (" "*(40-(street_address.to_s.length))) #40 Payee mailing address
+        returned_data +=  street_address + (" "*(40-(street_address.to_s[0..40].length))) #40 Payee mailing address
         returned_data += " "*40 #40 blanks
                 
         if (form_fields['city_town_state']) 
@@ -3184,9 +3364,9 @@ def exportForm1099int(form_fields)
         city = city_town_state_sliced.slice! state  
         city = " " if city.blank?  
        
-        returned_data +=  city + (" "*(40-(city.to_s.length))) #40 payee city , town or postal office (do not enter zip)
-        returned_data +=  state + (" "*(2-(state.to_s.length)))#2 valid U.S Postal Service state
-        returned_data +=  zip + (" "*(9-(zip.to_s.length)))#9 Payee ZIP code
+        returned_data +=  city + (" "*(40-(city.to_s[0..40].length))) #40 payee city , town or postal office (do not enter zip)
+        returned_data +=  state.to_s[0..2] + (" "*(2-(state.to_s[0..2].length)))#2 valid U.S Postal Service state
+        returned_data +=  zip.to_s[0..9] + (" "*(9-(zip.to_s[0..9].length)))#9 Payee ZIP code
         returned_data += " " # blank
 
         returned_data += "00000003" #8 Record Sequence Number
@@ -3199,8 +3379,8 @@ else
 end 
 returned_data += data #1 Second TIN Notice (Optional) '2nd_tin_not' can be 2 or blank
 returned_data += " "*2 #2 blanks
-returned_data += form_fields['7'] + (" "*(40-(form_fields['7'].to_s.length))) #40 Foreign Country or U.S. Possession '7' the name of the country or US possession or blank
-returned_data += (" "*(13-(form_fields['14'].to_s.length)))+form_fields['14'] + #13 CUSIP Number '14' If the tax-exempt interest is reported in the aggregate for multiple bonds or accounts, enter VARIOUS. Right justify the information and fill unused positions with blanks.
+returned_data += form_fields['7'] + (" "*(40-(form_fields['7'].to_s[0..40].length))) #40 Foreign Country or U.S. Possession '7' the name of the country or US possession or blank
+returned_data += (" "*(13-(form_fields['14'].to_s[0..13].length)))+form_fields['14'].to_s[0..13] + #13 CUSIP Number '14' If the tax-exempt interest is reported in the aggregate for multiple bonds or accounts, enter VARIOUS. Right justify the information and fill unused positions with blanks.
 if (form_fields['fatca_filing_req']=='checked') 
     data = '1';
 else
@@ -3209,10 +3389,10 @@ end
 returned_data += data #1 FATCA Filing Requirement Indicator 'fatca_filing_req' one or blank
 returned_data += " "*62 #62 Blank
 returned_data += " "*60 #60 Special Data Entries
-returned_data +=  ("0"*(12-(form_fields['17'].to_s.length)))+form_fields['17'] #12 State Income Tax Withheld '17' 
+returned_data +=  ("0"*(12-(form_fields['17'].to_s[0..12].length)))+form_fields['17'].to_s[0..12] #12 State Income Tax Withheld '17' 
 returned_data += " "*12 #12 Local Income Tax Withheld
 returned_data += " "*2 #2 Combined Federal/State Code
-returned_data += " "*2 #2 blanks
+returned_data += "\r\n"
 
 # Payer C record (control record)
 
@@ -3224,42 +3404,42 @@ returned_data += " "*2 #2 blanks
         if (form_fields['1'])
             data_amount = sprintf('%.2f', form_fields['1'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(18-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(18-(data_amount.to_s[0..18].length)))+data_amount.to_s[0..18]
         else 
             returned_data += "0"*18 
         end #Payment Amount  1-Interest income not included in Amount Code 3 '1'
          if (form_fields['2'])
             data_amount = sprintf('%.2f', form_fields['2'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(18-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(18-(data_amount.to_s[0..18].length)))+data_amount.to_s[0..18]
         else 
             returned_data += "0"*18 
         end #Payment Amount  2-Early withdrawal penalty '2'
          if (form_fields['3'])
             data_amount = sprintf('%.2f', form_fields['3'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(18-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(18-(data_amount.to_s[0..18].length)))+data_amount.to_s[0..18]
         else 
             returned_data += "0"*18
         end #Payment Amount  3-Interest on U.S. Savings Bonds and Treasury obligations '3'
          if (form_fields['4'])
             data_amount = sprintf('%.2f', form_fields['4'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(18-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(18-(data_amount.to_s[0..18].length)))+data_amount.to_s[0..18]
         else 
             returned_data += "0"*18
         end #Payment Amount  4-Federal income tax withheld (backup withholding) '4'
          if (form_fields['5'])
             data_amount = sprintf('%.2f', form_fields['5'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(18-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(18-(data_amount.to_s[0..18].length)))+data_amount.to_s[0..18]
         else 
             returned_data += "0"*18 
         end #Payment Amount  5-Investment expenses '5'
          if (form_fields['6'])
             data_amount = sprintf('%.2f', form_fields['6'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(18-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(18-(data_amount.to_s[0..18].length)))+data_amount.to_s[0..18]
         else 
             returned_data += "0"*18 
         end #Payment Amount  6-Foreign tax paid '6'
@@ -3267,28 +3447,28 @@ returned_data += " "*2 #2 blanks
          if (form_fields['8'])
             data_amount = sprintf('%.2f', form_fields['8'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(18-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(18-(data_amount.to_s[0..18].length)))+data_amount.to_s[0..18]
         else 
             returned_data += "0"*18 
         end #Payment Amount 8-Tax-exempt interest '8'
          if (form_fields['9'])
             data_amount = sprintf('%.2f', form_fields['9'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(18-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(18-(data_amount.to_s[0..18].length)))+data_amount.to_s[0..18]
         else 
             returned_data += "0"*18 
         end #Payment Amount 9-Specified private activity bond '9'
          if (form_fields['10'])
             data_amount = sprintf('%.2f', form_fields['10'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(18-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(18-(data_amount.to_s[0..18].length)))+data_amount.to_s[0..18]
         else 
             returned_data += "0"*18 
         end #Payment Amount A-Market discount '10'
          if (form_fields['11'])
             data_amount = sprintf('%.2f', form_fields['11'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(18-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(18-(data_amount.to_s[0..18].length)))+data_amount.to_s[0..18]
         else 
             returned_data += "0"*18 
         end #Payment Amount B-Bond premium '11'
@@ -3296,14 +3476,14 @@ returned_data += " "*2 #2 blanks
          if (form_fields['13'])
             data_amount = sprintf('%.2f', form_fields['13'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(18-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(18-(data_amount.to_s[0..18].length)))+data_amount.to_s[0..18]
         else 
             returned_data += "0"*18 
         end #Payment Amount D-Bond premium on tax exempt bond '13'
          if (form_fields['12'])
             data_amount = sprintf('%.2f', form_fields['12'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(18-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(18-(data_amount.to_s[0..18].length)))+data_amount.to_s[0..18]
         else 
             returned_data += "0"*18 
         end #Payment Amount E-Bond Premium on Treasury Obligation '12'
@@ -3313,7 +3493,7 @@ returned_data += " "*2 #2 blanks
         returned_data += ' '*196 #196 blanks
         returned_data += "00000004" #8 Record Sequence Number
         returned_data += ' '*241 #241 blanks
-        returned_data += ' '*2 #2 blanks
+        returned_data += "\r\n"
 # K record used only when state reporting approval has been granted
 # F record
         returned_data += 'F' #enter F
@@ -3324,7 +3504,7 @@ returned_data += " "*2 #2 blanks
         returned_data += ' '*442 #442 blanks
         returned_data += "00000005" #8 Record Sequence Number
         returned_data += ' '*241 #241 blanks
-        returned_data += ' '*2 #2 blanks
+        returned_data += "\r\n"
 #end of file
         return returned_data
     end
@@ -3362,23 +3542,29 @@ returned_data += " "*2 #2 blanks
         returned_data += ' ' # P if it is for prior year otherwise blank -lenght 1
 
         returned_data += '111111111';
-            returned_data += '11111' + (" "*(5-('11111'.to_s.length))) #5 characters - Transmitter Control Code
+            returned_data += '11111' + (" "*(5-('11111'.to_s[0..5].length))) #5 characters - Transmitter Control Code
         returned_data += " "*7 #7 characters - blank
         returned_data += 'T' # T if it is a test file otherwise blank -lenght 1
         returned_data += ' ' #Enter a “1” (one) if the transmitter is a foreign entity otherwise blank -lenght 1
         data = first_line.strip.truncate_words(2,omission: '')
-        returned_data += data + (" "*(40-(data.to_s.length))) #40 characters - transmitter name. Left justify.
+        returned_data += data + (" "*(40-(data.to_s[0..40].length))) #40 characters - transmitter name. Left justify.
         data2 = first_line
         data2.slice! data
         data2 = data2.strip
-        returned_data += data2 + (" "*(40-(data2.to_s.length))) #40 characters - transmitter aditional data. Left justify.
-
+        returned_data += data2 + (" "*(40-(data2.to_s[0..40].length))) #40 characters - transmitter aditional data. Left justify.
+        if form_fields['filers_name_street'].lines.first.blank?
+            first_line = "_"
+        else 
+            first_line = form_fields['filers_name_street'].lines.first
+        end
         data = first_line.strip.truncate_words(2,omission: '')
-        returned_data += data + (" "*(40-(data.to_s.length))) #40 characters - transmitter name. Left justify.
-        data2 = (first_line.slice! data).strip
-        returned_data += data2 + (" "*(40-(data2.to_s.length))) #40 characters - transmitter aditional data. Left justify. 
+        returned_data += data + (" "*(40-(data.to_s[0..40].length))) #40 characters - transmitter name. Left justify.
+        data2 = first_line
+        data2.slice! data
+        data2 = data2.strip
+        returned_data += data2 + (" "*(40-(data2.to_s[0..40].length))) #40 characters - transmitter aditional data. Left justify. 
         data = second_line.strip              
-        returned_data += data + (" "*(40-(data.to_s.length))) #40 characters Requered
+        returned_data += data + (" "*(40-(data.to_s[0..40].length))) #40 characters Requered
         data = third_line.strip 
         data = " " if data.blank?
         data_array =  data.split(/\W+/)   
@@ -3388,25 +3574,26 @@ returned_data += " "*2 #2 blanks
         data_state = data_array[-2]
         data_state = " " if data_state.blank?
         data_state = data_state[0..1] if data_state.length>2
-        data_sliced = data.slice! data_zip
-        data_city = data_sliced.slice! data_state  
+        data.slice! data_zip
+        data.slice! data_state  
+        data_city = data
         data_city = " " if data_city.blank?
-        returned_data += data_city + (" "*(40-(data_city.to_s.length))) #40 characters Requered
-        returned_data += data_state + (" "*(2-(data_state.to_s.length))) #2 characters Requered
-        returned_data += data_zip + (" "*(9-(data_zip.to_s.length))) #9 characters Requered
+        returned_data += data_city + (" "*(40-(data_city.to_s[0..40].length))) #40 characters Requered
+        returned_data += data_state.to_s[0..2] + (" "*(2-(data_state.to_s[0..2].length))) #2 characters Requered
+        returned_data += data_zip.to_s[0..9] + (" "*(9-(data_zip.to_s[0..9].length))) #9 characters Requered
         returned_data += " "*15 #15 blank characters 
         returned_data += '00000001' #8 characters Total Number of Payees
-        returned_data += 'Dejan Sabados                           ';#40 characters
+        returned_data += 'TEST TEST                               ';#40 characters
         returned_data += '1111111111     ' #15 characters Requered
     #359-408       
-        returned_data += 'dejansabados@yahoo.com                            ' #50 characters 
+        returned_data += 'albionpetrovic@gmail.com                          ' #50 characters 
     #409-499
         returned_data += " "*91 #91 characters - blank
     #500-507
         returned_data += "00000001"; # number of the record T record is always first 8 characters
     #508-517
-        returned_data += "I" #vendor indicator I if there are no vendor
         returned_data += " "*10 #blanks
+        returned_data += "I" #vendor indicator I if there are no vendor
         returned_data += " "*40 #used only if Vendors Software is used otherwise blanks
         returned_data += " "*40 #used only if Vendors Software is used otherwise blanks
         returned_data += " "*40 #used only if Vendors Software is used otherwise blanks
@@ -3417,13 +3604,13 @@ returned_data += " "*2 #2 blanks
         returned_data += " "*35 #blanks
         returned_data += " "*1 #used only if Vendors Software is used otherwise blanks
         returned_data += " "*8 #blanks
-        returned_data += " "*2 #blanks
+        returned_data += "\r\n" 
 #2nd 750 records - Payer "A" Record
         returned_data += 'A' #begining of the record -lenght 1
         returned_data += '2017' #lenght 4
         returned_data += ' ' #lenght 1 is this CF/SF Program ? 1 if it is otherwise blank
         returned_data += " "*5 #blanks
-        returned_data += form_fields['filers_fin'] + (" "*(9-(form_fields['filers_fin'].to_s.length))) #9 characters - TRANSFEROR'S federal identification number
+        returned_data += form_fields['filers_fin'].to_s[0..9] + (" "*(9-(form_fields['filers_fin'].to_s[0..9].length))) #9 characters - TRANSFEROR'S federal identification number
         #first four characters of the payer last name
         returned_data += " "*4 #blanks of first four characters of the payers last name
         returned_data += " " #blank if this is not last year the payer name will file info returns electro or on paper
@@ -3448,19 +3635,35 @@ returned_data += " "*2 #2 blanks
  
         returned_data += " "*8 #blanks
         returned_data += " " #blank if payer is US citizen 
+         if form_fields['filers_name_street'].lines.first.blank?
+            first_line = "_"
+        else 
+            first_line = form_fields['filers_name_street'].lines.first
+        end
+        if form_fields['filers_name_street'].lines.second.blank?
+            second_line = "_"
+        else 
+            second_line = form_fields['filers_name_street'].lines.second
+        end
+        if form_fields['filers_name_street'].lines.third.blank?
+            third_line = "_"
+        else 
+            third_line = form_fields['filers_name_street'].lines.third
+        end
         data5 = first_line.strip.truncate_words(2,omission: '')
-        returned_data += data5 + (" "*(40-(data5.to_s.length))) #40 characters - transmitter name. Left justify.
+        returned_data += data5.to_s[0..40] + (" "*(40-(data5.to_s[0..40].length))) #40 characters - transmitter name. Left justify.
         returned_data += " "*40 #blanks if there is no transfer agent otherwise the agent name 
         returned_data += "0" #if there is no transfer agent
         data6 = second_line.strip              
-        returned_data += data6 + (" "*(40-(data6.to_s.length))) #the adress  of the payer if there is not transfer agent 40 characters Requered
-        returned_data += data_city + (" "*(40-(data_city.to_s.length))) #40 payers city if there is not transfer agent
-        returned_data += data_state + (" "*(2-(data_state.to_s.length))) #2 payers state if there is not transfer agent
-        returned_data += data_zip + (" "*(9-(data_zip.to_s.length))) #9 payers zip if there is not transfer agent
+        returned_data += data6 + (" "*(40-(data6.to_s[0..40].length))) #the adress  of the payer if there is not transfer agent 40 characters Requered
+        returned_data += data_city + (" "*(40-(data_city.to_s[0..40].length))) #40 payers city if there is not transfer agent
+        returned_data += data_state.to_s[0..2] + (" "*(2-(data_state.to_s[0..2].length))) #2 payers state if there is not transfer agent
+        returned_data += data_zip.to_s[0..9] + (" "*(9-(data_zip.to_s[0..9].length))) #9 payers zip if there is not transfer agent
         returned_data += '5107062877     ' #15 payer’s telephone number - there are no such field in the form !!!
         returned_data += " "*260 #blanks
         returned_data += "00000002" #the second record
-        returned_data += " "*243 #blanks
+        returned_data += " "*241 #blanks
+        returned_data += "\r\n"
 #3th 750 records - Payer "B" Record - this Record contains the payment information from information returns.
         returned_data += 'B' #begining of the record -lenght 1
         returned_data += '2017' #lenght 4
@@ -3477,12 +3680,12 @@ returned_data += " "*2 #2 blanks
             data_tin = ''
         end
 
-        returned_data += data_tin + (" "*(9-(data_tin.to_s.length))) #Payee’s Taxpayer Identification Number (TIN)
+        returned_data += data_tin.to_s[0..9] + (" "*(9-(data_tin.to_s[0..9].length))) #Payee’s Taxpayer Identification Number (TIN)
         data_account = form_fields['account_num']
         if (!data_account) 
            data_account = rand(99999999999999999999).to_s #generate 20 random number 
         end
-        returned_data += data_account + (" "*(20-(data_account.to_s.length))) 
+        returned_data += data_account.to_s[0..20] + (" "*(20-(data_account.to_s[0..20].length))) 
         returned_data += " "*4 #blanks #Payer’s Office Code - you can enter blanks
         returned_data += " "*10 #blanks
         #payment amounts 12456789ABCDEFG 
@@ -3505,14 +3708,14 @@ returned_data += " "*2 #2 blanks
         if (form_fields['1a'])
             data_amount = sprintf('%.2f', form_fields['1a'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(12-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(12-(data_amount.to_s[0..12].length)))+data_amount.to_s[0..20]
         else 
             returned_data += "0"*12
         end #Payment Amount 1 Gross amount of payment card/third party network transactions '1a'
         if (form_fields['1b'])
             data_amount = sprintf('%.2f', form_fields['1b'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(12-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(12-(data_amount.to_s[0..12].length)))+data_amount.to_s[0..20]
         else 
             returned_data += "0"*12
         end #Payment Amount 2 Card not present transactions '1b'
@@ -3520,91 +3723,91 @@ returned_data += " "*2 #2 blanks
         if (form_fields['4'])
             data_amount = sprintf('%.2f', form_fields['4'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(12-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(12-(data_amount.to_s[0..12].length)))+data_amount.to_s[0..20]
         else 
             returned_data += "0"*12
         end #Payment Amount 4 Federal Income tax withheld '4'
         if (form_fields['5a'])
             data_amount = sprintf('%.2f', form_fields['5a'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(12-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(12-(data_amount.to_s[0..12].length)))+data_amount.to_s[0..20]
         else 
             returned_data += "0"*12
         end #Payment Amount 5 January payment '5a'
         if (form_fields['5b'])
             data_amount = sprintf('%.2f', form_fields['5b'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(12-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(12-(data_amount.to_s[0..12].length)))+data_amount.to_s[0..20]
         else 
             returned_data += "0"*12
         end #Payment Amount 6 February payments '5b'
         if (form_fields['5c'])
             data_amount = sprintf('%.2f', form_fields['5c'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(12-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(12-(data_amount.to_s[0..12].length)))+data_amount.to_s[0..20]
         else 
             returned_data += "0"*12
         end #Payment Amount 7 March payments '5c'
         if (form_fields['5d'])
             data_amount = sprintf('%.2f', form_fields['5d'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(12-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(12-(data_amount.to_s[0..12].length)))+data_amount.to_s[0..20]
         else 
             returned_data += "0"*12
         end #Payment Amount 8 April payments '5d'
         if (form_fields['5e'])
             data_amount = sprintf('%.2f', form_fields['5e'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(12-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(12-(data_amount.to_s[0..12].length)))+data_amount.to_s[0..20]
         else 
             returned_data += "0"*12
         end #Payment Amount 9 May payments '5e'
         if (form_fields['5f'])
             data_amount = sprintf('%.2f', form_fields['5f'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(12-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(12-(data_amount.to_s[0..12].length)))+data_amount.to_s[0..20]
         else 
             returned_data += "0"*12
         end #Payment Amount A June payments '5f'
         if (form_fields['5g'])
             data_amount = sprintf('%.2f', form_fields['5g'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(12-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(12-(data_amount.to_s[0..12].length)))+data_amount.to_s[0..20]
         else 
             returned_data += "0"*12
         end #Payment Amount B July payments '5g'
         if (form_fields['5h'])
             data_amount = sprintf('%.2f', form_fields['5h'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(12-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(12-(data_amount.to_s[0..12].length)))+data_amount.to_s[0..20]
         else 
             returned_data += "0"*12
         end #Payment Amount C August payments '5h'
         if (form_fields['5i'])
             data_amount = sprintf('%.2f', form_fields['5i'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(12-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(12-(data_amount.to_s[0..12].length)))+data_amount.to_s[0..20]
         else 
             returned_data += "0"*12
         end #Payment Amount D September payments '5i'
         if (form_fields['5j'])
             data_amount = sprintf('%.2f', form_fields['5j'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(12-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(12-(data_amount.to_s[0..12].length)))+data_amount.to_s[0..20]
         else 
             returned_data += "0"*12
         end #Payment Amount E October payments '5j'
         if (form_fields['5k'])
             data_amount = sprintf('%.2f', form_fields['5k'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(12-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(12-(data_amount.to_s[0..12].length)))+data_amount.to_s[0..20]
         else 
             returned_data += "0"*12
         end #Payment Amount F November payments '5k'
         if (form_fields['5l'])
             data_amount = sprintf('%.2f', form_fields['5l'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(12-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(12-(data_amount.to_s[0..12].length)))+data_amount.to_s[0..20]
         else 
             returned_data += "0"*12
         end #Payment Amount G December payments '5l'
@@ -3615,7 +3818,7 @@ returned_data += " "*2 #2 blanks
         else
             data_payee_name = ''
         end
-        returned_data +=  data_payee_name + (" "*(40-(data_payee_name.to_s.length))) #40 First payee name line -employees_name
+        returned_data +=  data_payee_name + (" "*(40-(data_payee_name.to_s[0..40].length))) #40 First payee name line -employees_name
         returned_data += " "*40 #40 Second payee name line
         returned_data += " "*40 #40 blanks
         if (form_fields['street_address_XXXX']) 
@@ -3623,7 +3826,7 @@ returned_data += " "*2 #2 blanks
         else
             street_address = ' ';
         end
-        returned_data +=  street_address + (" "*(40-(street_address.to_s.length))) #40 Payee mailing address
+        returned_data +=  street_address + (" "*(40-(street_address.to_s[0..40].length))) #40 Payee mailing address
         returned_data += " "*40 #40 blanks
                 
         if (form_fields['city_town_state_XXXX']) 
@@ -3643,13 +3846,14 @@ returned_data += " "*2 #2 blanks
         city = city_town_state_sliced.slice! state  
         city = " " if city.blank?  
        
-        returned_data +=  city + (" "*(40-(city.to_s.length))) #40 payee city , town or postal office (do not enter zip)
-        returned_data +=  state + (" "*(2-(state.to_s.length)))#2 valid U.S Postal Service state
-        returned_data +=  zip + (" "*(9-(zip.to_s.length)))#9 Payee ZIP code
+        returned_data +=  city + (" "*(40-(city.to_s[0..40].length))) #40 payee city , town or postal office (do not enter zip)
+        returned_data +=  state.to_s[0..2] + (" "*(2-(state.to_s[0..2].length)))#2 valid U.S Postal Service state
+        returned_data +=  zip.to_s[0..9] + (" "*(9-(zip.to_s[0..9].length)))#9 Payee ZIP code
         returned_data += " " # blank
 
         returned_data += "00000003" #8 Record Sequence Number
-        returned_data += " "*36 #36 blanks
+        returned_data += " "*34 #34 blanks
+        returned_data += "\r\n"
 #these records are specifed for form XXXX 
 =begin  returned_data += " "*3 #3 blanks
         if (form_fields['6']) 
@@ -3670,7 +3874,7 @@ returned_data += " "*2 #2 blanks
         if (form_fields['xxxx'])
             data_amount = sprintf('%.2f', form_fields['xxxx'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(18-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(18-(data_amount.to_s[0..18].length)))+data_amount.to_s[0..18]
         else 
             returned_data += "0"*18 #Payment Amount 2XXXX
         end
@@ -3691,7 +3895,7 @@ returned_data += " "*2 #2 blanks
         returned_data += ' '*196 #196 blanks
         returned_data += "00000004" #8 Record Sequence Number
         returned_data += ' '*241 #241 blanks
-        returned_data += ' '*2 #2 blanks
+        returned_data += "\r\n"
 # K record used only when state reporting approval has been granted
 # F record
         returned_data += 'F' #enter F
@@ -3702,7 +3906,7 @@ returned_data += " "*2 #2 blanks
         returned_data += ' '*442 #442 blanks
         returned_data += "00000005" #8 Record Sequence Number
         returned_data += ' '*241 #241 blanks
-        returned_data += ' '*2 #2 blanks
+        returned_data += "\r\n"
 #end of file
         return returned_data
     end
@@ -3743,25 +3947,31 @@ returned_data += " "*2 #2 blanks
         returned_data += '2017' #lenght 4
         returned_data += ' ' # P if it is for prior year otherwise blank -lenght 1
 
-        returned_data += form_fields['creditors_fin_XXXX'] + (" "*(9-(form_fields['creditors_fin_XXXX'].to_s.length))) #9 characters - TRANSFEROR'S federal identification number
+        returned_data += form_fields['creditors_fin_XXXX'].to_s[0..9] + (" "*(9-(form_fields['creditors_fin_XXXX'].to_s[0..9].length))) #9 characters - TRANSFEROR'S federal identification number
         
         returned_data += '111111111';
-            returned_data += '11111' + (" "*(5-('11111'.to_s.length))) #5 characters - Transmitter Control Code
+            returned_data += '11111' + (" "*(5-('11111'.to_s[0..5].length))) #5 characters - Transmitter Control Code
         returned_data += 'T' # T if it is a test file otherwise blank -lenght 1
         returned_data += ' ' #Enter a “1” (one) if the transmitter is a foreign entity otherwise blank -lenght 1
         data = first_line.strip.truncate_words(2,omission: '')
-        returned_data += data + (" "*(40-(data.to_s.length))) #40 characters - transmitter name. Left justify.
+        returned_data += data.to_s[0..40] + (" "*(40-(data.to_s[0..40].length))) #40 characters - transmitter name. Left justify.
         data2 = first_line
         data2.slice! data
         data2 = data2.strip
-        returned_data += data2 + (" "*(40-(data2.to_s.length))) #40 characters - transmitter aditional data. Left justify.
-
+        returned_data += data2 + (" "*(40-(data2.to_s[0..40].length))) #40 characters - transmitter aditional data. Left justify.
+        if form_fields['creditors_name_address_XXXXX'].lines.first.blank?
+            first_line = "_"
+        else 
+            first_line = form_fields['creditors_name_address_XXXXX'].lines.first
+        end
         data = first_line.strip.truncate_words(2,omission: '')
-        returned_data += data + (" "*(40-(data.to_s.length))) #40 characters - transmitter name. Left justify.
-        data2 = (first_line.slice! data).strip
-        returned_data += data2 + (" "*(40-(data2.to_s.length))) #40 characters - transmitter aditional data. Left justify. 
+        returned_data += data + (" "*(40-(data.to_s[0..40].length))) #40 characters - transmitter name. Left justify.
+        data2 = first_line
+        data2.slice! data
+        data2 = data2.strip
+        returned_data += data2 + (" "*(40-(data2.to_s[0..40].length))) #40 characters - transmitter aditional data. Left justify. 
         data = second_line.strip              
-        returned_data += data + (" "*(40-(data.to_s.length))) #40 characters Requered
+        returned_data += data + (" "*(40-(data.to_s[0..40].length))) #40 characters Requered
         data = third_line.strip 
         data = " " if data.blank?
         data_array =  data.split(/\W+/)   
@@ -3771,25 +3981,26 @@ returned_data += " "*2 #2 blanks
         data_state = data_array[-2]
         data_state = " " if data_state.blank?
         data_state = data_state[0..1] if data_state.length>2
-        data_sliced = data.slice! data_zip
-        data_city = data_sliced.slice! data_state  
+        data.slice! data_zip
+        data.slice! data_state  
+        data_city = data
         data_city = " " if data_city.blank?
-        returned_data += data_city + (" "*(40-(data_city.to_s.length))) #40 characters Requered
-        returned_data += data_state + (" "*(2-(data_state.to_s.length))) #2 characters Requered
-        returned_data += data_zip + (" "*(9-(data_zip.to_s.length))) #9 characters Requered
+        returned_data += data_city + (" "*(40-(data_city.to_s[0..40].length))) #40 characters Requered
+        returned_data += data_state.to_s[0..2] + (" "*(2-(data_state.to_s[0..2].length))) #2 characters Requered
+        returned_data += data_zip.to_s[0..9] + (" "*(9-(data_zip.to_s[0..9].length))) #9 characters Requered
         returned_data += " "*15 #15 blank characters 
         returned_data += '00000001' #8 characters Total Number of Payees
-        returned_data += 'Dejan Sabados                           ';#40 characters
+        returned_data += 'TEST TEST                               ';#40 characters
         returned_data += '1111111111     ' #15 characters Requered
     #359-408       
-        returned_data += 'dejansabados@yahoo.com                            ' #50 characters 
+        returned_data += 'albionpetrovic@gmail.com                          ' #50 characters 
     #409-499
         returned_data += " "*91 #91 characters - blank
     #500-507
         returned_data += "00000001"; # number of the record T record is always first 8 characters
     #508-517
-        returned_data += "I" #vendor indicator I if there are no vendor
         returned_data += " "*10 #blanks
+        returned_data += "I" #vendor indicator I if there are no vendor
         returned_data += " "*40 #used only if Vendors Software is used otherwise blanks
         returned_data += " "*40 #used only if Vendors Software is used otherwise blanks
         returned_data += " "*40 #used only if Vendors Software is used otherwise blanks
@@ -3800,13 +4011,13 @@ returned_data += " "*2 #2 blanks
         returned_data += " "*35 #blanks
         returned_data += " "*1 #used only if Vendors Software is used otherwise blanks
         returned_data += " "*8 #blanks
-        returned_data += " "*2 #blanks
+        returned_data += "\r\n" 
 #2nd 750 records - Payer "A" Record
         returned_data += 'A' #begining of the record -lenght 1
         returned_data += '2017' #lenght 4
         returned_data += ' ' #lenght 1 is this CF/SF Program ? 1 if it is otherwise blank
         returned_data += " "*5 #blanks
-        returned_data += form_fields['creditors_fin_XXXX'] + (" "*(9-(form_fields['creditors_fin_XXXX'].to_s.length))) #9 characters - TRANSFEROR'S federal identification number
+        returned_data += form_fields['creditors_fin_XXXX'].to_s[0..9] + (" "*(9-(form_fields['creditors_fin_XXXX'].to_s[0..9].length))) #9 characters - TRANSFEROR'S federal identification number
         #first four characters of the payer last name
         returned_data += " "*4 #blanks of first four characters of the payers last name
         returned_data += " " #blank if this is not last year the payer name will file info returns electro or on paper
@@ -3815,19 +4026,35 @@ returned_data += " "*2 #2 blanks
         returned_data += "237XXXX           " #16 amount codes
         returned_data += " "*8 #blanks
         returned_data += " " #blank if payer is US citizen 
+        if form_fields['creditors_name_address_XXXXX'].lines.first.blank?
+            first_line = "_"
+        else 
+            first_line = form_fields['creditors_name_address_XXXXX'].lines.first
+        end
+        if form_fields['creditors_name_address_XXXXXX'].lines.second.blank?
+            second_line = "_"
+        else 
+            second_line = form_fields['creditors_name_address_XXXXXX'].lines.second
+        end
+        if form_fields['creditors_name_address_XXXX'].lines.third.blank?
+            third_line = "_"
+        else 
+            third_line = form_fields['creditors_name_address_XXXX'].lines.third
+        end
         data5 = first_line.strip.truncate_words(2,omission: '')
-        returned_data += data5 + (" "*(40-(data5.to_s.length))) #40 characters - transmitter name. Left justify.
+        returned_data += data5 + (" "*(40-(data5.to_s[0..40].length))) #40 characters - transmitter name. Left justify.
         returned_data += " "*40 #blanks if there is no transfer agent otherwise the agent name 
         returned_data += "0" #if there is no transfer agent
         data6 = second_line.strip              
-        returned_data += data6 + (" "*(40-(data6.to_s.length))) #the adress  of the payer if there is not transfer agent 40 characters Requered
-        returned_data += data_city + (" "*(40-(data_city.to_s.length))) #40 payers city if there is not transfer agent
-        returned_data += data_state + (" "*(2-(data_state.to_s.length))) #2 payers state if there is not transfer agent
-        returned_data += data_zip + (" "*(9-(data_zip.to_s.length))) #9 payers zip if there is not transfer agent
+        returned_data += data6 + (" "*(40-(data6.to_s[0..40].length))) #the adress  of the payer if there is not transfer agent 40 characters Requered
+        returned_data += data_city + (" "*(40-(data_city.to_s[0..40].length))) #40 payers city if there is not transfer agent
+        returned_data += data_state.to_s[0..2] + (" "*(2-(data_state.to_s[0..2].length))) #2 payers state if there is not transfer agent
+        returned_data += data_zip.to_s[0..9] + (" "*(9-(data_zip.to_s[0..9].length))) #9 payers zip if there is not transfer agent
         returned_data += '5107062877     ' #15 payer’s telephone number - there are no such field in the form !!!
         returned_data += " "*260 #blanks
         returned_data += "00000002" #the second record
-        returned_data += " "*243 #blanks
+        returned_data += " "*241 #blanks
+        returned_data += "\r\n"
 #3th 750 records - Payer "B" Record - this Record contains the payment information from information returns.
         returned_data += 'B' #begining of the record -lenght 1
         returned_data += '2017' #lenght 4
@@ -3844,12 +4071,12 @@ returned_data += " "*2 #2 blanks
             data_tin = ''
         end
 
-        returned_data += data_tin + (" "*(9-(data_tin.to_s.length))) #Payee’s Taxpayer Identification Number (TIN)
+        returned_data += data_tin.to_s[0..9] + (" "*(9-(data_tin.to_s[0..9].length))) #Payee’s Taxpayer Identification Number (TIN)
         data_account = form_fields['account_num_XXXX']
         if (!data_account) 
            data_account = rand(99999999999999999999).to_s #generate 20 random number 
         end
-        returned_data += data_account + (" "*(20-(data_account.to_s.length))) 
+        returned_data += data_account.to_s[0..20] + (" "*(20-(data_account.to_s[0..20].length))) 
         returned_data += " "*4 #blanks #Payer’s Office Code - you can enter blanks
         returned_data += " "*10 #blanks
         #payment amounts 237XXXXX
@@ -3857,7 +4084,7 @@ returned_data += " "*2 #2 blanks
         if (form_fields['xxxx'])
             data_amount = sprintf('%.2f', form_fields['xxxx'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(12-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(12-(data_amount.to_s[0..12].length)))+data_amount.to_s[0..12]
         else 
             returned_data += "0"*12 #Payment Amount 2XXXX
         end
@@ -3881,7 +4108,7 @@ returned_data += " "*2 #2 blanks
         else
             data_payee_name = ''
         end
-        returned_data +=  data_payee_name + (" "*(40-(data_payee_name.to_s.length))) #40 First payee name line -employees_name
+        returned_data +=  data_payee_name.to_s[0..40] + (" "*(40-(data_payee_name.to_s[0..40].length))) #40 First payee name line -employees_name
         returned_data += " "*40 #40 Second payee name line
         returned_data += " "*40 #40 blanks
         if (form_fields['street_address_XXXX']) 
@@ -3889,7 +4116,7 @@ returned_data += " "*2 #2 blanks
         else
             street_address = ' ';
         end
-        returned_data +=  street_address + (" "*(40-(street_address.to_s.length))) #40 Payee mailing address
+        returned_data +=  street_address + (" "*(40-(street_address.to_s[0..40].length))) #40 Payee mailing address
         returned_data += " "*40 #40 blanks
                 
         if (form_fields['city_town_state_XXXX']) 
@@ -3909,13 +4136,14 @@ returned_data += " "*2 #2 blanks
         city = city_town_state_sliced.slice! state  
         city = " " if city.blank?  
        
-        returned_data +=  city + (" "*(40-(city.to_s.length))) #40 payee city , town or postal office (do not enter zip)
-        returned_data +=  state + (" "*(2-(state.to_s.length)))#2 valid U.S Postal Service state
-        returned_data +=  zip + (" "*(9-(zip.to_s.length)))#9 Payee ZIP code
+        returned_data +=  city + (" "*(40-(city.to_s[0..40].length))) #40 payee city , town or postal office (do not enter zip)
+        returned_data +=  state.to_s[0..2] + (" "*(2-(state.to_s[0..2].length)))#2 valid U.S Postal Service state
+        returned_data +=  zip.to_s[0..9] + (" "*(9-(zip.to_s[0..9].length)))#9 Payee ZIP code
         returned_data += " " # blank
 
         returned_data += "00000003" #8 Record Sequence Number
-        returned_data += " "*36 #36 blanks
+        returned_data += " "*34 #34 blanks
+        returned_data += "\r\n"
 #these records are specifed for form XXXX 
 =begin  returned_data += " "*3 #3 blanks
         if (form_fields['6']) 
@@ -3936,7 +4164,7 @@ returned_data += " "*2 #2 blanks
         if (form_fields['xxxx'])
             data_amount = sprintf('%.2f', form_fields['xxxx'])
             data_amount = data_amount.tr('.', '')
-            returned_data += ("0"*(18-(data_amount.to_s.length)))+data_amount
+            returned_data += ("0"*(18-(data_amount.to_s[0..18].length)))+data_amount
         else 
             returned_data += "0"*18 #Payment Amount 2XXXX
         end
@@ -3957,7 +4185,7 @@ returned_data += " "*2 #2 blanks
         returned_data += ' '*196 #196 blanks
         returned_data += "00000004" #8 Record Sequence Number
         returned_data += ' '*241 #241 blanks
-        returned_data += ' '*2 #2 blanks
+        returned_data += "\r\n"
 # K record used only when state reporting approval has been granted
 # F record
         returned_data += 'F' #enter F
@@ -3968,7 +4196,7 @@ returned_data += " "*2 #2 blanks
         returned_data += ' '*442 #442 blanks
         returned_data += "00000005" #8 Record Sequence Number
         returned_data += ' '*241 #241 blanks
-        returned_data += ' '*2 #2 blanks
+        returned_data += "\r\n"
 #end of file
         return returned_data
     end
