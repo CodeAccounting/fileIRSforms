@@ -41,23 +41,23 @@ class AdminController < ApplicationController
     
   #  @form_fields.each{ |s| s.kind_of?(String) ? s.upcase! : s }
   #  @form_fields { |k, v| v.kind_of?(String) ? (@form_fields[k] = v.upcase) : (@form_fields[k] = v)} 
-    @form_fields.each { |k, v| @form_fields[k] = v.upcase.to_s[0..40] } 
+  @form_fields.each { |k, v| @form_fields[k] = v.upcase.to_s } #[0...40]
     case @form_fields['form_id']
       when "3921"
         data = helpers.exportForm3921(@form_fields)
-      when "1099a"
+      when "1099A"
         data = helpers.exportForm1099a(@form_fields)
-      when "1099b"
+      when "1099B"
         data = helpers.exportForm1099b(@form_fields)
-      when "1099c"
+      when "1099C"
         data = helpers.exportForm1099c(@form_fields)
-      when "1099cap"
+      when "1099CAP"
         data = helpers.exportForm1099cap(@form_fields)
-      when "1099div"
+      when "1099DIV"
         data = helpers.exportForm1099div(@form_fields)
-      when "1099g"
+      when "1099G"
         data = helpers.exportForm1099g(@form_fields)
-      when "1099h"
+      when "1099H"
         data = helpers.exportForm1099h(@form_fields)
       when "1099INT"
         data = helpers.exportForm1099int(@form_fields)
