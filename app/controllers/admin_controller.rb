@@ -6,7 +6,9 @@ class AdminController < ApplicationController
   layout "adminshow", only: [:show]
   def index   
     @submissions = Field.paginate_by_sql("SELECT * FROM (SELECT DISTINCT ON (unique_id) unique_id, form_id , updated_at FROM Fields) t ORDER BY updated_at DESC", page: params[:page], per_page: 10)
-  
+    #write SQL to retrive status of the submission
+    statuses = Payment.all
+    @statuses_grouped = statuses.group_by(&:unique_id)
   end
   def show
     if params.has_key?(:unique_id)

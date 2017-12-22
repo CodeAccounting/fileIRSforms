@@ -7,6 +7,7 @@ Rails.application.routes.draw do
   get 'dashboard', to:"pages#home"
   get 'form/new' , to: "forms#show" 
   get 'form/checkout' , to: "forms#checkout" 
+  get 'form/declined' , to: "forms#declined" 
   post 'form/payment' , to: "forms#payment" 
   get 'form/save' , to: "forms#create"
   get 'form/all' , to: "forms#all"

@@ -13,6 +13,7 @@
             <th style="text-align:center;">Unique ID</th>
             <th style="text-align:center;">Created At</th>
             <th style="text-align:center;">Form Name</th>
+            <th style="text-align:center;">Status</th>
           </tr>
           </thead>
           <tbody>
@@ -32,6 +33,15 @@
                     <%= link_to({controller: "admin", action: "show", unique_id: submission.unique_id, formname: submission.form_id}) do %>
                       <%= submission.form_id %>  
                     <% end %>        
+                </td>
+                <td style="text-align:left;"> 
+                  <% if (@statuses_grouped[submission.unique_id]) %>
+                       <% if  (@statuses_grouped[submission.unique_id][0][:status]='succeeded') %>
+                          <span style='color:green'>Payed</span>
+                       <% end %>
+                  <% else %>
+                      <span>Submitted</span>
+                  <% end %>
                 </td>
               </tr>
           <% end %>

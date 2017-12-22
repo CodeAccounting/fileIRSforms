@@ -11,7 +11,6 @@ class FormsController < ApplicationController
   # GET /forms.json
   def index
     @submissions = Field.find_by_sql("SELECT DISTINCT ON (unique_id) unique_id, form_id , updated_at FROM Fields WHERE user_id= #{current_user.id}")
-
   end
 
   # GET /forms/1
@@ -39,6 +38,33 @@ class FormsController < ApplicationController
     @colors.each do |color|
         @colors_array[color[0]] = color[1]
     end
+    #first calculate how many forms the user already paid 
+    
+    case @form_fields['form_id']
+      when "3921"
+        @stripe_amount="100"
+      when "1099A"
+        @stripe_amount="110"
+      when "1099B"
+        @stripe_amount="120"
+      when "1099C"
+        @stripe_amount="130"
+      when "1099CAP"
+        @stripe_amount="140"
+      when "1099DIV"
+        @stripe_amount="143"
+      when "1099G"
+        @stripe_amount="200"
+      when "1099H"
+        @stripe_amount="300"
+      when "1099INT"
+        @stripe_amount="400"
+      when "1099K"
+        @stripe_amount="600"
+      else
+        @stripe_amount="500"
+    end
+    
   end
 
   # GET /forms/new
@@ -116,11 +142,23 @@ class FormsController < ApplicationController
   end
 
   def checkout
+     @amount = params[:amount]
+  end
+
+  def declined
+
   end
 
   def payment
     # Amount in cents
-    @amount = 500
+    @amount = params[:amount]
+    #render text: params[:unique_id] .inspect
+    @found = Payment.where(unique_id: params[:unique_id] ) 
+    if (@found.present?) 
+      #render text: 'found!'
+      flash[:error] = 'Payment canceled.This form has been already paid!'
+      redirect_to form_declined_path and return
+    end
 
     customer = Stripe::Customer.create(
       :email => params[:stripeEmail],
@@ -133,11 +171,21 @@ class FormsController < ApplicationController
       :description => 'Rails Stripe customer',
       :currency    => 'usd'
     )
-    #flash.now[:notice] = "Thank you for submitting the form"
-    #render :action=>'show'
+    #render text: charge.inspect
     rescue Stripe::CardError => e
-    flash[:error] = e.message
-    redirect_to form_checkout_path
+      flash[:error] = e.message
+      redirect_to form_declined_path 
+    else
+    #save the payment in the database! --> see why I can't do this after charging bellow ?
+    @payment = Payment.new()
+    @payment.user_id = current_user.id
+    @payment.unique_id = params[:unique_id]
+    @payment.status = charge.status
+    @payment.save
+    #render text: @payment.inspect
+   # logger.debug @payment.errors.full_messages
+    #end saving in the database
+    #
   end
 
   private
