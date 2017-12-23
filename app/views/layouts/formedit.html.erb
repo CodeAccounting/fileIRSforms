@@ -27,18 +27,20 @@
             <button type="button" onclick="history.back();" class="btn btn-warning header-button">Cancel</button>
             <button type="button" class="btn btn-primary header-button" onclick="document.getElementById('form1').submit();">Save Form</button>
             <button type="button" class="btn btn-default">Print Form</button>
-            <%= form_tag form_payment_path, :class => 'submit_electronically_form' do %>
-               <input type="hidden" name="unique_id" value="<%= @form_fields['unique_id'] %>"/>
-               <input type="hidden" name="amount" value="<%= @stripe_amount %>"/>
-                <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-              data-key="<%= Rails.configuration.stripe[:publishable_key] %>"
-              data-description="Pay Submission Fee Via Stripe"
-              data-amount="<%= @stripe_amount %>"
-              data-locale="auto"
-              data-label="Submit Electronically">
-               </script>
-               <script>$(".stripe-button-el").attr('class', 'btn btn-default');
-               </script>
+            <%  if (params.has_key?(:unique_id)) %>
+                    <%= form_tag form_payment_path, :class => 'submit_electronically_form' do %>
+                       <input type="hidden" name="unique_id" value="<%= @form_fields['unique_id'] %>"/>
+                       <input type="hidden" name="amount" value="<%= @stripe_amount %>"/>
+                        <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                      data-key="<%= Rails.configuration.stripe[:publishable_key] %>"
+                      data-description="Pay Submission Fee Via Stripe"
+                      data-amount="<%= @stripe_amount %>"
+                      data-locale="auto"
+                      data-label="Submit Electronically">
+                       </script>
+                       <script>$(".stripe-button-el").attr('class', 'btn btn-default');
+                       </script>
+                    <% end %>
             <% end %>
             
 

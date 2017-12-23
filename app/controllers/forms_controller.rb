@@ -39,30 +39,84 @@ class FormsController < ApplicationController
         @colors_array[color[0]] = color[1]
     end
     #first calculate how many forms the user already paid 
-    
-    case @form_fields['form_id']
+    @num_already_paid  = Payment.where(user_id: current_user.id).count
+    #render text: @num_already_paid and return
+
+    case (@form_fields['form_id'])
+      when "1042-s"
+        @stripe_amount="200"
+        @stripe_amount="250" if (@num_already_paid<751)
+        @stripe_amount="300" if (@num_already_paid<251)
+        @stripe_amount="350" if (@num_already_paid<151)
+        @stripe_amount="400" if (@num_already_paid<101)
+        @stripe_amount="450" if (@num_already_paid<51)
+        @stripe_amount="495" if (@num_already_paid<26)
+      when "1097"
+        @stripe_amount="100"
+        @stripe_amount="150" if (@num_already_paid<751)
+        @stripe_amount="200" if (@num_already_paid<251)
+        @stripe_amount="250" if (@num_already_paid<151)
+        @stripe_amount="300" if (@num_already_paid<101)
+        @stripe_amount="350" if (@num_already_paid<51)
+        @stripe_amount="395" if (@num_already_paid<26)
+      when "1098"
+        @stripe_amount="100"
+        @stripe_amount="150" if (@num_already_paid<751)
+        @stripe_amount="200" if (@num_already_paid<251)
+        @stripe_amount="250" if (@num_already_paid<151)
+        @stripe_amount="300" if (@num_already_paid<101)
+        @stripe_amount="350" if (@num_already_paid<51)
+        @stripe_amount="395" if (@num_already_paid<26)
+      when "1099a" , "1099b" , "1099c" , "1099cap" , "1099misc" , "1099g" , "1099h" , "1099int" , "1099k" , "1099ltc" , "1099misc" , "1099oid" , "1099patr" , "1099q" , "1099r" , "1099s" , "1099sa" 
+        @stripe_amount="100"
+        @stripe_amount="125" if (@num_already_paid<751)
+        @stripe_amount="150" if (@num_already_paid<251)
+        @stripe_amount="175" if (@num_already_paid<151)
+        @stripe_amount="200" if (@num_already_paid<101)
+        @stripe_amount="250" if (@num_already_paid<51)
+        @stripe_amount="295" if (@num_already_paid<26)
       when "3921"
         @stripe_amount="100"
-      when "1099A"
-        @stripe_amount="110"
-      when "1099B"
-        @stripe_amount="120"
-      when "1099C"
-        @stripe_amount="130"
-      when "1099CAP"
-        @stripe_amount="140"
-      when "1099DIV"
-        @stripe_amount="143"
-      when "1099G"
-        @stripe_amount="200"
-      when "1099H"
-        @stripe_amount="300"
-      when "1099INT"
-        @stripe_amount="400"
-      when "1099K"
-        @stripe_amount="600"
+        @stripe_amount="150" if (@num_already_paid<751)
+        @stripe_amount="200" if (@num_already_paid<251)
+        @stripe_amount="250" if (@num_already_paid<151)
+        @stripe_amount="300" if (@num_already_paid<101)
+        @stripe_amount="350" if (@num_already_paid<51)
+        @stripe_amount="395" if (@num_already_paid<26)
+      when "3922"
+        @stripe_amount="100"
+        @stripe_amount="150" if (@num_already_paid<751)
+        @stripe_amount="200" if (@num_already_paid<251)
+        @stripe_amount="250" if (@num_already_paid<151)
+        @stripe_amount="300" if (@num_already_paid<101)
+        @stripe_amount="350" if (@num_already_paid<51)
+        @stripe_amount="395" if (@num_already_paid<26)
+      when "5498"
+        @stripe_amount="100"
+        @stripe_amount="150" if (@num_already_paid<751)
+        @stripe_amount="200" if (@num_already_paid<251)
+        @stripe_amount="250" if (@num_already_paid<151)
+        @stripe_amount="300" if (@num_already_paid<101)
+        @stripe_amount="350" if (@num_already_paid<51)
+        @stripe_amount="395" if (@num_already_paid<26)
+      when "8027"
+        @stripe_amount="100"
+        @stripe_amount="150" if (@num_already_paid<751)
+        @stripe_amount="200" if (@num_already_paid<251)
+        @stripe_amount="250" if (@num_already_paid<151)
+        @stripe_amount="300" if (@num_already_paid<101)
+        @stripe_amount="350" if (@num_already_paid<51)
+        @stripe_amount="395" if (@num_already_paid<26)
+      when "8955SSA"
+        @stripe_amount="100"
+        @stripe_amount="150" if (@num_already_paid<751)
+        @stripe_amount="200" if (@num_already_paid<251)
+        @stripe_amount="250" if (@num_already_paid<151)
+        @stripe_amount="300" if (@num_already_paid<101)
+        @stripe_amount="350" if (@num_already_paid<51)
+        @stripe_amount="395" if (@num_already_paid<26)    
       else
-        @stripe_amount="500"
+        @stripe_amount="395"
     end
     
   end
@@ -176,7 +230,7 @@ class FormsController < ApplicationController
       flash[:error] = e.message
       redirect_to form_declined_path 
     else
-    #save the payment in the database! --> see why I can't do this after charging bellow ?
+    #save the payment in the database! 
     @payment = Payment.new()
     @payment.user_id = current_user.id
     @payment.unique_id = params[:unique_id]
