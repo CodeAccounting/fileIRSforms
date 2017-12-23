@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   get 'admin', to:"admin#index"
   get 'admin/show', to:"admin#show"
   get '/admin/export', to:"admin#export"
+  get 'admin/changestatus/:status/:formname/:unique_id', to:"admin#changestatus"
   get 'dashboard', to:"pages#home"
   get 'form/new' , to: "forms#show" 
   get 'form/checkout' , to: "forms#checkout" 

@@ -25,12 +25,27 @@ class AdminController < ApplicationController
       @form_fields['unique_id'] = nul
     end  
     @labels = Field.where(user_id: current_user.id).where.not(label: nil,label: "" ).pluck(:label).uniq
+
     @colors = Field.where(user_id: current_user.id).where.not(label: nil,label: "" ).pluck(:label,:labelcolor).uniq
     @labels.push("other")
+    status = Payment.where(unique_id: params[:unique_id] ).first
+    if (status.blank?)
+      @status = 'submitted'
+    else
+      @status = status.status
+    end    
     @colors_array = Hash.new
     @colors.each do |color|
         @colors_array[color[0]] = color[1]
     end
+
+  end
+  def changestatus
+    @payment = Payment.where(unique_id: params[:unique_id]).first
+    @payment.status = params[:status]
+    @payment.save
+
+    redirect_to admin_show_path(formname: params[:formname], unique_id: params[:unique_id]) and return
   end
   def export 
     @form = Field.where(unique_id: params[:unique_id]).to_a

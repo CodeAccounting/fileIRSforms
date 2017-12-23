@@ -279,6 +279,21 @@
               </div>
            </div>
            <% end %>
+           <% if (@status != 'submitted') %>
+               Status: <%= @status %>
+               <!-- change status -->
+               <div class="dropdown">
+                  <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Change Status:
+                  <span class="caret"></span></button>
+                  <ul class="dropdown-menu">
+                    <li><a href="/admin/changestatus/marked_as_payed/<%= params[:formname] %>/<%= params[:unique_id] %>">Marked as Payed</a></li>
+                    <li><a href="/admin/changestatus/submitted_to_fire/<%= params[:formname] %>/<%= params[:unique_id] %>">Submitted to FIRE</a></li>
+                    <li><a href="/admin/changestatus/rejected_by_fire/<%= params[:formname] %>/<%= params[:unique_id] %>">Rejected by FIRE</a></li>
+                    <li><a href="/admin/changestatus/accepted_by_fire/<%= params[:formname] %>/<%= params[:unique_id] %>">Accepted by FIRE</a></li>
+                  </ul>
+                </div>
+               <!-- status changing end -->
+            <% end %>
             <%= yield %>
         </div>
         <!-- /#page-wrapper -->
