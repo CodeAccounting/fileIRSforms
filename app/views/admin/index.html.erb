@@ -37,7 +37,7 @@
                 <td style="text-align:left;"> 
                   <% if (@statuses_grouped[submission.unique_id]) %>
                        <% if  (@statuses_grouped[submission.unique_id][0][:status]=='succeeded') %>
-                          <span style='color:green'>Payed</span>
+                          <span style='color:green'>Paid</span>
                        <% else %>
                           <span style="font-weight:bold"><%= @statuses_grouped[submission.unique_id][0][:status] %></span>
                        <% end %>
