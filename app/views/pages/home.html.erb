@@ -126,11 +126,32 @@
                                   <% if (submission.updated_at.year == 2017) %>
                                         <%# link_to 'Form '+submission.form_id.to_s+' submitted at '+submission.updated_at.to_s, controller: "forms", action: "show", unique_id: submission.unique_id, formname: submission.form_id %>
                                          <%# link_to 'delete form', controller: "forms", action: "destroy", unique_id: submission.unique_id, class: 'delete_link' %>
-                                         
+
                                          <%= link_to({controller: "forms", action: "show", unique_id: submission.unique_id, formname: submission.form_id}, {class: 'metrostyle', style: 'background:'+ submission.labelcolor.to_s}) do %>
                                                        <span class="metro-icon fa fa-file" style=""></span>
                                                        <span class="metro-type" style=""><%= submission.form_id.to_s %></span>
-                                                       <span class="metro-date" style=""><%= submission.updated_at.to_s %></span>      
+                                                       <span class="metro-date" style="">
+                                                            <%= submission.updated_at.to_s %>
+                                                            <% if (@statuses_grouped[submission.unique_id]) %>
+                                                                 <% if  (@statuses_grouped[submission.unique_id][0][:status]=='succeeded') %>
+                                                                      <span style='color:green'>Paid</span>
+                                                                <% elsif (@statuses_grouped[submission.unique_id][0][:status]=='marked_as_paid') %>
+                                                                      <span>Paid</span>
+                                                                <% elsif (@statuses_grouped[submission.unique_id][0][:status]=='submitted_to_fire') %>
+                                                                      <span>Submitted to FIRE</span>
+                                                                <% elsif (@statuses_grouped[submission.unique_id][0][:status]=='rejected_by_fire') %>
+                                                                      <span>Submitted to FIRE</span>
+                                                                <% elsif (@statuses_grouped[submission.unique_id][0][:status]=='accepted_by_fire') %>
+                                                                      <span>Acecepted by FIRE</span>
+
+                                                                <% else %>
+                                                                      <span style="font-weight:bold"><%= @statuses_grouped[submission.unique_id][0][:status] %></span>
+                                                                <% end %>
+                                                            <% else %>
+                                                                <span>Submitted</span>
+                                                            <% end %>
+                                                       </span>    
+
                                          <% end %>
                                          <%= link_to '/form/'+submission.unique_id, method: :delete, data: {confirm: 'Are you sure?'}, class: 'delete_link', :remote => true do %>
                                                             <i class="fa fa-times-circle faa-vertical animated-hover" aria-hidden="true"></i> 
@@ -152,7 +173,6 @@
                                   <% if (submission.updated_at.year == 2018) %>
                                         <%# link_to 'Form '+submission.form_id.to_s+' submitted at '+submission.updated_at.to_s, controller: "forms", action: "show", unique_id: submission.unique_id, formname: submission.form_id %>
                                          <%# link_to 'delete form', controller: "forms", action: "destroy", unique_id: submission.unique_id, class: 'delete_link' %>
-                                         
                                          <%= link_to({controller: "forms", action: "show", unique_id: submission.unique_id, formname: submission.form_id}, {class: 'metrostyle metro'+submission.form_id.to_s}) do %>
                                                        <span class="metro-icon fa fa-file" style=""></span>
                                                        <span class="metro-type" style=""><%= submission.form_id.to_s %></span>

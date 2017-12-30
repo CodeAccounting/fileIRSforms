@@ -9,5 +9,7 @@ class PagesController < ApplicationController
         @selected_label = ''
     end
     @labels = Field.where(user_id: current_user.id).where.not(label: nil,label: "" ).pluck(:label,:labelcolor).uniq
+    statuses = Payment.where(user_id: current_user.id)
+    @statuses_grouped = statuses.group_by(&:unique_id)
   end
 end
