@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   devise_for :users
   root "pages#home"
+  get '/referfriend', to:"pages#referfriend"
   get 'admin', to:"admin#index"
   get 'admin/show', to:"admin#show"
   get '/admin/export', to:"admin#export"
@@ -15,6 +16,7 @@ Rails.application.routes.draw do
   get 'form/show' , to: "forms#show"
   get 'form/show/:formname' , to: "forms#show"
   get 'form/index' , to: "forms#index"
+  get 'form/submitted/:unique_id' , to: "forms#submitted"
   delete 'form/:unique_id', to: "forms#destroy"
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html

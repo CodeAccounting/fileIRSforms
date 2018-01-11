@@ -13,6 +13,31 @@ class FormsController < ApplicationController
     @submissions = Field.find_by_sql("SELECT DISTINCT ON (unique_id) unique_id, form_id , updated_at FROM Fields WHERE user_id= #{current_user.id}")
   end
 
+  def submitted
+    #check again do users has free bonuses?
+    bonus = current_user.bonus
+    if (bonus>0)
+      @found = Payment.where(unique_id: params[:unique_id] ) 
+      if (@found.present?) 
+        #render text: 'found!'
+        flash[:error] = 'Error. This form has been already submitted!'
+        redirect_to form_declined_path and return
+      end
+      #save the payment in the database! 
+      @payment = Payment.new()
+      @payment.user_id = current_user.id
+      @payment.unique_id = params[:unique_id]
+      @payment.status = 'submittedforfree'
+      @payment.save
+      #get one bonus 
+      current_user.bonus = bonus-1
+      current_user.save
+    else
+      flash[:error] = 'Some error ocured.'
+      redirect_to form_declined_path 
+    end
+  end
+
   # GET /forms/1
   # GET /forms/1.json
   def show
@@ -42,6 +67,7 @@ class FormsController < ApplicationController
     @num_already_paid  = Payment.where(user_id: current_user.id).count
     #render text: @num_already_paid and return
 
+    
     case (@form_fields['form_id'])
       when "1042-s"
         @stripe_amount="200"

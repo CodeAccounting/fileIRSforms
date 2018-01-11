@@ -12,4 +12,7 @@ class PagesController < ApplicationController
     statuses = Payment.where(user_id: current_user.id)
     @statuses_grouped = statuses.group_by(&:unique_id)
   end
+  def referfriend
+    
+  end
 end

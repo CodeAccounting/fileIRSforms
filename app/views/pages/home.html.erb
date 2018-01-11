@@ -132,23 +132,24 @@
                                                        <span class="metro-type" style=""><%= submission.form_id.to_s %></span>
                                                        <span class="metro-date" style="">
                                                             <%= submission.updated_at.to_s %>
+                                                            <br />
                                                             <% if (@statuses_grouped[submission.unique_id]) %>
                                                                  <% if  (@statuses_grouped[submission.unique_id][0][:status]=='succeeded') %>
-                                                                      <span style='color:green'>Paid</span>
+                                                                      <span style='color:green;font-size:0.8em;'>Paid</span>
                                                                 <% elsif (@statuses_grouped[submission.unique_id][0][:status]=='marked_as_paid') %>
-                                                                      <span>Paid</span>
+                                                                      <span style='font-size:0.8em;'>Paid</span>
                                                                 <% elsif (@statuses_grouped[submission.unique_id][0][:status]=='submitted_to_fire') %>
-                                                                      <span>Submitted to FIRE</span>
+                                                                      <span style='font-size:0.8em;'>Submitted to FIRE</span>
                                                                 <% elsif (@statuses_grouped[submission.unique_id][0][:status]=='rejected_by_fire') %>
-                                                                      <span>Submitted to FIRE</span>
+                                                                      <span style='font-size:0.8em;'>Submitted to FIRE</span>
                                                                 <% elsif (@statuses_grouped[submission.unique_id][0][:status]=='accepted_by_fire') %>
-                                                                      <span>Acecepted by FIRE</span>
+                                                                      <span style='font-size:0.8em;'>Acecepted by FIRE</span>
 
                                                                 <% else %>
                                                                       <span style="font-weight:bold"><%= @statuses_grouped[submission.unique_id][0][:status] %></span>
                                                                 <% end %>
                                                             <% else %>
-                                                                <span>Submitted</span>
+                                                                <span style='font-size:0.8em;'>Submitted</span>
                                                             <% end %>
                                                        </span>    
 
@@ -176,7 +177,27 @@
                                          <%= link_to({controller: "forms", action: "show", unique_id: submission.unique_id, formname: submission.form_id}, {class: 'metrostyle metro'+submission.form_id.to_s}) do %>
                                                        <span class="metro-icon fa fa-file" style=""></span>
                                                        <span class="metro-type" style=""><%= submission.form_id.to_s %></span>
-                                                       <span class="metro-date" style=""><%= submission.updated_at.to_s %></span>      
+                                                       <span class="metro-date" style="">
+                                                        <%= submission.updated_at.to_s %>
+                                                         <% if (@statuses_grouped[submission.unique_id]) %>
+                                                                 <% if  (@statuses_grouped[submission.unique_id][0][:status]=='succeeded') %>
+                                                                      <span style='color:green;font-size:0.8em;'>Paid</span>
+                                                                <% elsif (@statuses_grouped[submission.unique_id][0][:status]=='marked_as_paid') %>
+                                                                      <span style='font-size:0.8em;'>Paid</span>
+                                                                <% elsif (@statuses_grouped[submission.unique_id][0][:status]=='submitted_to_fire') %>
+                                                                      <span style='font-size:0.8em;'>Submitted to FIRE</span>
+                                                                <% elsif (@statuses_grouped[submission.unique_id][0][:status]=='rejected_by_fire') %>
+                                                                      <span style='font-size:0.8em;'>Submitted to FIRE</span>
+                                                                <% elsif (@statuses_grouped[submission.unique_id][0][:status]=='accepted_by_fire') %>
+                                                                      <span style='font-size:0.8em;'>Acecepted by FIRE</span>
+
+                                                                <% else %>
+                                                                      <span style="font-weight:bold"><%= @statuses_grouped[submission.unique_id][0][:status] %></span>
+                                                                <% end %>
+                                                            <% else %>
+                                                                <span style='font-size:0.8em;'>Submitted</span>
+                                                            <% end %>
+                                                       </span>      
                                          <% end %>
                                          <%= link_to '/form/'+submission.unique_id, method: :delete, data: {confirm: 'Are you sure?'}, class: 'delete_link', :remote => true do %>
                                                             <i class="fa fa-times-circle faa-vertical animated-hover" aria-hidden="true"></i> 
@@ -202,7 +223,27 @@
                                          <%= link_to({controller: "forms", action: "show", unique_id: submission.unique_id, formname: submission.form_id}, {class: 'metrostyle metro'+submission.form_id.to_s}) do %>
                                                        <span class="metro-icon fa fa-file" style=""></span>
                                                        <span class="metro-type" style=""><%= submission.form_id.to_s %></span>
-                                                       <span class="metro-date" style=""><%= submission.updated_at.to_s %></span>      
+                                                       <span class="metro-date" style="">
+                                                        <%= submission.updated_at.to_s %>
+                                                         <% if (@statuses_grouped[submission.unique_id]) %>
+                                                                 <% if  (@statuses_grouped[submission.unique_id][0][:status]=='succeeded') %>
+                                                                      <span style='color:green;font-size:0.8em;'>Paid</span>
+                                                                <% elsif (@statuses_grouped[submission.unique_id][0][:status]=='marked_as_paid') %>
+                                                                      <span style='font-size:0.8em;'>Paid</span>
+                                                                <% elsif (@statuses_grouped[submission.unique_id][0][:status]=='submitted_to_fire') %>
+                                                                      <span style='font-size:0.8em;'>Submitted to FIRE</span>
+                                                                <% elsif (@statuses_grouped[submission.unique_id][0][:status]=='rejected_by_fire') %>
+                                                                      <span style='font-size:0.8em;'>Submitted to FIRE</span>
+                                                                <% elsif (@statuses_grouped[submission.unique_id][0][:status]=='accepted_by_fire') %>
+                                                                      <span>Acecepted by FIRE</span>
+
+                                                                <% else %>
+                                                                      <span style="font-weight:bold"><%= @statuses_grouped[submission.unique_id][0][:status] %></span>
+                                                                <% end %>
+                                                            <% else %>
+                                                                <span style='font-size:0.8em;'>Submitted</span>
+                                                            <% end %>
+                                                       </span>      
                                          <% end %>
                                          <%= link_to '/form/'+submission.unique_id, method: :delete, data: {confirm: 'Are you sure?'}, class: 'delete_link', :remote => true do %>
                                                             <i class="fa fa-times-circle faa-vertical animated-hover" aria-hidden="true"></i> 
