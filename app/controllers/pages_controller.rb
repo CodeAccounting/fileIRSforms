@@ -13,6 +13,12 @@ class PagesController < ApplicationController
     @statuses_grouped = statuses.group_by(&:unique_id)
   end
   def referfriend
-    
+
+  end
+  def sendinviting
+    #now send an email with the cusotom register link 
+    mail(to: 'dejansabados@yahoo.com', subject: 'Sample Email')
+    flash[:notice] = 'Thank you for inviting a friend!'
+    redirect_to '/'
   end
 end

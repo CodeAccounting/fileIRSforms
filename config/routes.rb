@@ -2,6 +2,7 @@ Rails.application.routes.draw do
   devise_for :users
   root "pages#home"
   get '/referfriend', to:"pages#referfriend"
+  post '/sendinviting', to:"pages#sendinviting"
   get 'admin', to:"admin#index"
   get 'admin/show', to:"admin#show"
   get '/admin/export', to:"admin#export"
