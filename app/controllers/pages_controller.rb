@@ -15,9 +15,10 @@ class PagesController < ApplicationController
   def referfriend
 
   end
-  def sendinviting
+  def sendinviting 
+    #refering code is the user email
     #now send an email with the cusotom register link 
-    mail(to: 'dejansabados@yahoo.com', subject: 'Sample Email')
+    NotificationMailer.referfriend_email(params[:email],current_user.email,params[:name],params[:fiend_name]).deliver
     flash[:notice] = 'Thank you for inviting a friend!'
     redirect_to '/'
   end

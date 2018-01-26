@@ -87,4 +87,16 @@ Rails.application.configure do
 
   # devise settings
   config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
+
+  # SMTP settings for gmail
+  config.action_mailer.smtp_settings = {
+   :address              => "smtp.gmail.com",
+   :port                 => 587,
+   :user_name            => ENV['gmail_username'],
+   :password             => ENV['gmail_password'],
+   :authentication       => "plain",
+  :enable_starttls_auto => true
+  }
+  config.absolute_site_url = 'http://www.fileirsforms.com/' #call by Rails.application.config.absolute_site_url
+
 end

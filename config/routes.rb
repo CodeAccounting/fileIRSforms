@@ -1,5 +1,12 @@
 Rails.application.routes.draw do
-  devise_for :users
+  devise_for :users,
+             :controllers  => {
+                         :registrations => 'customized_devise/registrations',
+              }
+  devise_scope :user do
+      get '/users/sign_up/:referee_code', to:"customized_devise/registrations#new"
+  end
+    
   root "pages#home"
   get '/referfriend', to:"pages#referfriend"
   post '/sendinviting', to:"pages#sendinviting"

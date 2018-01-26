@@ -55,4 +55,17 @@ Rails.application.configure do
   # devise settings
   config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
 
+  config.action_mailer.delivery_method = :smtp
+  
+  # SMTP settings for gmail
+  config.action_mailer.smtp_settings = {
+   :address              => "smtp.gmail.com",
+   :port                 => 587,
+   :user_name            => 'dekimekidekimeki@gmail.com',
+   :password             => 'titodiktator',
+   :authentication       => "plain",
+  :enable_starttls_auto => true
+  }
+  config.absolute_site_url = 'http://192.168.0.12:3000/' #call by Rails.application.config.absolute_site_url
+
 end
