@@ -4203,6 +4203,7 @@ returned_data += "\r\n"
     #only for Form 1099s
     #1st 750 records - Transmitter “T” Record
         #set all form fields to blank if the are not exist
+        #TODO: put constant CodeAccounting info for transmitter info  after testing
         form_fields['filers_fid'] ||= " "       
 
         form_fields['filers_name_address'] ||= " "
@@ -4222,15 +4223,14 @@ returned_data += "\r\n"
             third_line = form_fields['filers_name_address'].lines.third
         end
         returned_data = 'T' #begining of the file -lenght 1
-        returned_data += '2017' #lenght 4
+        returned_data += Date.today.year.to_s #lenght 4 TODO: do this for other forms, also put an option later to choose the year then set the indicator about prior year bellow
         returned_data += ' ' # P if it is for prior year otherwise blank -lenght 1
 
         returned_data += form_fields['filers_fid'].to_s[0...9] + (" "*(9-(form_fields['filers_fid'].to_s[0...9].length))) #9 characters - TRANSFEROR'S federal identification number
-        
-        returned_data += '111111111';
-            returned_data += '11111' + (" "*(5-('11111'.to_s[0...5].length))) #5 characters - Transmitter Control Code
+        returned_data += '11111' + (" "*(5-('11111'.to_s[0...5].length))) #5 characters - Transmitter Control Code TODO: put real after testing
+        returned_data += ' '*7
         returned_data += 'T' # T if it is a test file otherwise blank -lenght 1
-        returned_data += ' ' #Enter a “1” (one) if the transmitter is a foreign entity otherwise blank -lenght 1
+        returned_data += ' ' #Enter a “1” (one) if the transmitter is a foreign entity otherwise blank -lenght 1 TODO: There is a field in the form for this use it !!! see what impact that 
         data = first_line.strip.truncate_words(2,omission: '')
         returned_data += data.to_s[0...40] + (" "*(40-(data.to_s[0...40].length))) #40 characters - transmitter name. Left justify.
         data2 = first_line
@@ -4268,10 +4268,10 @@ returned_data += "\r\n"
         returned_data += data_zip.to_s[0...9] + (" "*(9-(data_zip.to_s[0...9].length))) #9 characters Requered
         returned_data += " "*15 #15 blank characters 
         returned_data += '00000001' #8 characters Total Number of Payees
-        returned_data += 'TEST TEST                               ';#40 characters
-        returned_data += '1111111111     ' #15 characters Requered
+        returned_data += 'TEST TEST                               ';#40 characters #TODO: put real Sean name after testing 
+        returned_data += '1111111111     ' #15 characters Requered #TODO: put real Sean phone number after testing
     #359-408       
-        returned_data += 'albionpetrovic@gmail.com                          ' #50 characters 
+        returned_data += 'albionpetrovic@gmail.com                          ' #50 characters #TODO: put real Sean email after testing
     #409-499
         returned_data += " "*91 #91 characters - blank
     #500-507
@@ -4292,7 +4292,7 @@ returned_data += "\r\n"
         returned_data += "\r\n" 
 #2nd 750 records - Payer "A" Record
         returned_data += 'A' #begining of the record -lenght 1
-        returned_data += '2017' #lenght 4
+        returned_data += Date.today.year.to_s #lenght 4 TODO: do this for other forms, also put an option later to choose the year then set the indicator about prior year bellow
         returned_data += ' ' #lenght 1 is this CF/SF Program ? 1 if it is otherwise blank
         returned_data += " "*5 #blanks
         returned_data += form_fields['filers_fid'].to_s[0...9] + (" "*(9-(form_fields['filers_fid'].to_s[0...9].length))) #9 characters - TRANSFEROR'S federal identification number
@@ -4335,7 +4335,7 @@ returned_data += "\r\n"
         returned_data += "\r\n"
 #3th 750 records - Payer "B" Record - this Record contains the payment information from information returns.
         returned_data += 'B' #begining of the record -lenght 1
-        returned_data += '2017' #lenght 4
+        returned_data += Date.today.year.to_s #lenght 4 TODO: do this for other forms, also put an option later to choose the year then set the indicator about prior year bellow
         returned_data += ' ' #is this correction or not ? enter G or C if it is otherwise blank field
         if (form_fields['transferors_name'])
             returned_data += form_fields['transferors_name'].split.last[0...4] #employees_name the first four characters of the last name
@@ -4357,35 +4357,35 @@ returned_data += "\r\n"
         returned_data += data_account.to_s[0...20] + (" "*(20-(data_account.to_s[0...20].length))) 
         returned_data += " "*4 #blanks #Payer’s Office Code - you can enter blanks
         returned_data += " "*10 #blanks
-        #payment amounts 237XXXXX
-        returned_data += "0"*12 #Payment Amount 1*XXXX
+        #payment amounts 25
+        returned_data += "0"*12 #Payment Amount 1
         if (form_fields['2'])
             data_amount = sprintf('%.2f', form_fields['2'])
             data_amount = data_amount.tr('.', '')
             returned_data += ("0"*(12-(data_amount.to_s[0...12].length)))+data_amount.to_s[0...12]
         else 
-            returned_data += "0"*12 #Payment Amount 2XXXX
+            returned_data += "0"*12 #Payment Amount 2
         end
-        returned_data += "0"*12 #Payment Amount 3*XXXX
-        returned_data += "0"*12 #Payment Amount 4*XXXX
+        returned_data += "0"*12 #Payment Amount 3
+        returned_data += "0"*12 #Payment Amount 4
         if (form_fields['6'])
             data_amount = sprintf('%.2f', form_fields['6'])
             data_amount = data_amount.tr('.', '')
             returned_data += ("0"*(12-(data_amount.to_s[0...12].length)))+data_amount.to_s[0...12]
         else 
-            returned_data += "0"*12 #Payment Amount 2XXXX
+            returned_data += "0"*12 #Payment Amount 5
         end
-        returned_data += "0"*12 #Payment Amount 6*XXXX
-        returned_data += "0"*12 #Payment Amount 7*XXXX
-        returned_data += "0"*12 #Payment Amount 8*XXXX
-        returned_data += "0"*12 #Payment Amount 9*XXXX
-        returned_data += "0"*12 #Payment Amount A*XXXX
-        returned_data += "0"*12 #Payment Amount B*XXXX
-        returned_data += "0"*12 #Payment Amount C*XXXX
-        returned_data += "0"*12 #Payment Amount D*XXXX
-        returned_data += "0"*12 #Payment Amount E*XXXX
-        returned_data += "0"*12 #Payment Amount F*XXXX
-        returned_data += "0"*12 #Payment Amount G*XXXX
+        returned_data += "0"*12 #Payment Amount 6
+        returned_data += "0"*12 #Payment Amount 7
+        returned_data += "0"*12 #Payment Amount 8
+        returned_data += "0"*12 #Payment Amount 9
+        returned_data += "0"*12 #Payment Amount A
+        returned_data += "0"*12 #Payment Amount B
+        returned_data += "0"*12 #Payment Amount C
+        returned_data += "0"*12 #Payment Amount D
+        returned_data += "0"*12 #Payment Amount E
+        returned_data += "0"*12 #Payment Amount F
+        returned_data += "0"*12 #Payment Amount G
         returned_data += " " #blank if US citizen otherwise enter 1
         if (form_fields['transferors_name'])
             data_payee_name = form_fields['transferors_name'].split.last(2).join(" ") 
@@ -4410,24 +4410,26 @@ returned_data += "\r\n"
         end
         city_town_state = " " if city_town_state.blank?
         city_town_state_array =  city_town_state.split(/\W+/)   
+        city_town_state_joined = city_town_state_array.join(' ')
         zip = city_town_state_array[-1]
         zip = " " if zip.blank?
         zip = zip[0...8] if zip.length>9 
         state = city_town_state_array[-2]
         state = " " if state.blank?
         state = state[0...1] if state.length>2
-        city_town_state_sliced = city_town_state.slice! zip
-        city = city_town_state_sliced.slice! state  
+        city_town_state_joined.slice!(zip)
+        city_town_state_joined.slice!(city_town_state_array[-2])
+        city = city_town_state_joined
         city = " " if city.blank?  
-       
+        #TODO CHANGE ABOVE FOR ALL FORMS also make possibility for admins to change the Form and to save     
         returned_data +=  city + (" "*(40-(city.to_s[0...40].length))) #40 payee city , town or postal office (do not enter zip)
         returned_data +=  state.to_s[0...2] + (" "*(2-(state.to_s[0...2].length)))#2 valid U.S Postal Service state
         returned_data +=  zip.to_s[0...9] + (" "*(9-(zip.to_s[0...9].length)))#9 Payee ZIP code
         returned_data += " " # blank
 
         returned_data += "00000003" #8 Record Sequence Number
-        returned_data += " "*34 #36 blanks
-#these records are specifed for form XXXX 
+        returned_data += " "*36 #36 blanks
+#these records are specifed for form 1099s 
         returned_data += " "*3 #3 blanks
         #property of services indicator 1 or blank
         if (form_fields['4']=='checked') 
@@ -4437,46 +4439,53 @@ returned_data += "\r\n"
         end
         returned_data += data
         #date of closing 8 YYYYMMDD
-        returned_data += form_fields['1']
-        #address or Legal Description 39 left with blanks - ovde sam stao napravi i da skrati ako je duze od 39 ne samo da ispunjava - to je staranica 114
-        returned_data +=  form_fields['1'] + (" "*(39-(form_fields['1'].to_s[0...39].length)))
+        returned_data += form_fields['1'] 
+        #address or Legal Description 39 left with blanks
+        returned_data +=  form_fields['3'] + (" "*(39-(form_fields['3'].to_s[0...39].length)))
         #Blank 68
+        returned_data += " "*68 #68 blanks
         #special or blank 60
-        if (form_fields['6']) 
-            data = form_fields['6'];
-        else 
-            data = ' ';
-        end
+        returned_data += " "*60 #60 blanks
+        returned_data += " "*12 #12 blanks
+        returned_data += " "*12 #12 blanks
+        returned_data += " "*2 #2 blanks
+        returned_data += "\r\n"
+
 
 # Payer C record (control record)
         returned_data += 'C' # enter C
         returned_data += '00000001' #8 total number of payees
         returned_data += ' '*6 #6 blanks
 
-        #payment amounts 237XXX
-        #payment amounts 237XXXXX
-        returned_data += "0"*18 #Payment Amount 1*XXXX
-        if (form_fields['xxxx'])
-            data_amount = sprintf('%.2f', form_fields['xxxx'])
+        #payment amounts 25
+        returned_data += "0"*18 #Payment Amount 1
+        if (form_fields['2'])
+            data_amount = sprintf('%.2f', form_fields['2'])
             data_amount = data_amount.tr('.', '')
             returned_data += ("0"*(18-(data_amount.to_s[0...18].length)))+data_amount
         else 
             returned_data += "0"*18 #Payment Amount 2XXXX
         end
-        returned_data += "0"*18 #Payment Amount 3*XXXX
-        returned_data += "0"*18 #Payment Amount 4*XXXX
-        returned_data += "0"*18 #Payment Amount 5*XXXX
-        returned_data += "0"*18 #Payment Amount 6*XXXX
-        returned_data += "0"*18 #Payment Amount 7*XXXX
-        returned_data += "0"*18 #Payment Amount 8*XXXX
-        returned_data += "0"*18 #Payment Amount 9*XXXX
-        returned_data += "0"*18 #Payment Amount A*XXXX
-        returned_data += "0"*18 #Payment Amount B*XXXX
-        returned_data += "0"*18 #Payment Amount C*XXXX
-        returned_data += "0"*18 #Payment Amount D*XXXX
-        returned_data += "0"*18 #Payment Amount E*XXXX
-        returned_data += "0"*18 #Payment Amount F*XXXX
-        returned_data += "0"*18 #Payment Amount G*XXX
+        returned_data += "0"*18 #Payment Amount 3
+        returned_data += "0"*18 #Payment Amount 4
+        if (form_fields['6'])
+            data_amount = sprintf('%.2f', form_fields['6'])
+            data_amount = data_amount.tr('.', '')
+            returned_data += ("0"*(18-(data_amount.to_s[0...18].length)))+data_amount
+        else 
+            returned_data += "0"*18 #Payment Amount 5
+        end
+        returned_data += "0"*18 #Payment Amount 6
+        returned_data += "0"*18 #Payment Amount 7
+        returned_data += "0"*18 #Payment Amount 8
+        returned_data += "0"*18 #Payment Amount 9
+        returned_data += "0"*18 #Payment Amount A
+        returned_data += "0"*18 #Payment Amount B
+        returned_data += "0"*18 #Payment Amount C
+        returned_data += "0"*18 #Payment Amount D
+        returned_data += "0"*18 #Payment Amount E
+        returned_data += "0"*18 #Payment Amount F
+        returned_data += "0"*18 #Payment Amount G
         returned_data += ' '*196 #196 blanks
         returned_data += "00000004" #8 Record Sequence Number
         returned_data += ' '*241 #241 blanks
