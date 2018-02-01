@@ -4201,9 +4201,6 @@ returned_data += "\r\n"
     ######################### 1099s ##########################
     def exportForm1099s(form_fields)
     #only for Form 1099s
-    #1st 750 records - Transmitter “T” Record
-        #set all form fields to blank if the are not exist
-        #TODO: put constant CodeAccounting info for transmitter info  after testing
         form_fields['filers_fid'] ||= " "       
 
         form_fields['filers_name_address'] ||= " "
@@ -4222,34 +4219,42 @@ returned_data += "\r\n"
         else 
             third_line = form_fields['filers_name_address'].lines.third
         end
+    #1st 750 records - Transmitter “T” Record
+        #set all form fields to blank if the are not exist
+        
         returned_data = 'T' #begining of the file -lenght 1
-        returned_data += Date.today.year.to_s #lenght 4 TODO: do this for other forms, also put an option later to choose the year then set the indicator about prior year bellow
+        returned_data += ((Date.today.year)-1).to_s #lenght 4 TODO: do this for other forms, also put an option later to choose the year then set the indicator about prior year bellow
         returned_data += ' ' # P if it is for prior year otherwise blank -lenght 1
 
-        returned_data += form_fields['filers_fid'].to_s[0...9] + (" "*(9-(form_fields['filers_fid'].to_s[0...9].length))) #9 characters - TRANSFEROR'S federal identification number
+        returned_data += '473852932' #9 characters - Transmitter'S federal identification number
         returned_data += '11111' + (" "*(5-('11111'.to_s[0...5].length))) #5 characters - Transmitter Control Code TODO: put real after testing
         returned_data += ' '*7
         returned_data += 'T' # T if it is a test file otherwise blank -lenght 1
         returned_data += ' ' #Enter a “1” (one) if the transmitter is a foreign entity otherwise blank -lenght 1 TODO: There is a field in the form for this use it !!! see what impact that 
         data = first_line.strip.truncate_words(2,omission: '')
-        returned_data += data.to_s[0...40] + (" "*(40-(data.to_s[0...40].length))) #40 characters - transmitter name. Left justify.
+        #returned_data += data.to_s[0...40] + (" "*(40-(data.to_s[0...40].length))) #40 characters - transmitter name. Left justify.
+        returned_data += 'CODE ACCOUNTING'+ ' '*25
         data2 = first_line
         data2.slice! data
         data2 = data2.strip
-        returned_data += data2 + (" "*(40-(data2.to_s[0...40].length))) #40 characters - transmitter aditional data. Left justify.
+        #returned_data += data2 + (" "*(40-(data2.to_s[0...40].length))) #40 characters - transmitter aditional data. Left justify.
+        returned_data += ' '*40
         if form_fields['filers_name_address'].lines.first.blank?
-            first_line = "_"
+           first_line = "_"
         else 
-            first_line = form_fields['filers_name_address'].lines.first
+           first_line = form_fields['filers_name_address'].lines.first
         end
         data = first_line.strip.truncate_words(2,omission: '')
-        returned_data += data + (" "*(40-(data.to_s[0...40].length))) #40 characters - transmitter name. Left justify.
+        #returned_data += data + (" "*(40-(data.to_s[0...40].length))) #40 characters - transmitter name. Left justify.
+        returned_data += 'CODE ACCOUNTING'+ ' '*25
         data2 = first_line
         data2.slice! data
         data2 = data2.strip
-        returned_data += data2 + (" "*(40-(data2.to_s[0...40].length))) #40 characters - transmitter aditional data. Left justify. 
+        #returned_data += data2 + (" "*(40-(data2.to_s[0...40].length))) #40 characters - transmitter aditional data. Left justify. 
+        returned_data += ' '*40
         data = second_line.strip              
-        returned_data += data + (" "*(40-(data.to_s[0...40].length))) #40 characters Requered
+        #returned_data += data + (" "*(40-(data.to_s[0...40].length))) #40 characters Requered
+        returned_data += '249 W. JACKSON STREET STE 260'+' '*11
         data = third_line.strip 
         data = " " if data.blank?
         data_array =  data.split(/\W+/)   
@@ -4263,9 +4268,14 @@ returned_data += "\r\n"
         data.slice! data_state  
         data_city = data
         data_city = " " if data_city.blank?
-        returned_data += data_city + (" "*(40-(data_city.to_s[0...40].length))) #40 characters Requered
-        returned_data += data_state.to_s[0...2] + (" "*(2-(data_state.to_s[0...2].length))) #2 characters Requered
-        returned_data += data_zip.to_s[0...9] + (" "*(9-(data_zip.to_s[0...9].length))) #9 characters Requered
+        #returned_data += data_city + (" "*(40-(data_city.to_s[0...40].length))) #40 characters Requered
+        #returned_data += data_state.to_s[0...2] + (" "*(2-(data_state.to_s[0...2].length))) #2 characters Requered
+        #returned_data += data_zip.to_s[0...9] + (" "*(9-(data_zip.to_s[0...9].length))) #9 characters Requered
+        returned_data += 'Hayward'+' '*33
+        returned_data += 'CA'
+        returned_data += '94544'+' '*4
+
+
         returned_data += " "*15 #15 blank characters 
         returned_data += '00000001' #8 characters Total Number of Payees
         returned_data += 'TEST TEST                               ';#40 characters #TODO: put real Sean name after testing 
@@ -4292,7 +4302,7 @@ returned_data += "\r\n"
         returned_data += "\r\n" 
 #2nd 750 records - Payer "A" Record
         returned_data += 'A' #begining of the record -lenght 1
-        returned_data += Date.today.year.to_s #lenght 4 TODO: do this for other forms, also put an option later to choose the year then set the indicator about prior year bellow
+        returned_data += ((Date.today.year)-1).to_s #lenght 4 TODO: do this for other forms, also put an option later to choose the year then set the indicator about prior year bellow
         returned_data += ' ' #lenght 1 is this CF/SF Program ? 1 if it is otherwise blank
         returned_data += " "*5 #blanks
         returned_data += form_fields['filers_fid'].to_s[0...9] + (" "*(9-(form_fields['filers_fid'].to_s[0...9].length))) #9 characters - TRANSFEROR'S federal identification number
@@ -4335,7 +4345,7 @@ returned_data += "\r\n"
         returned_data += "\r\n"
 #3th 750 records - Payer "B" Record - this Record contains the payment information from information returns.
         returned_data += 'B' #begining of the record -lenght 1
-        returned_data += Date.today.year.to_s #lenght 4 TODO: do this for other forms, also put an option later to choose the year then set the indicator about prior year bellow
+        returned_data += ((Date.today.year)-1).to_s #lenght 4 TODO: do this for other forms, also put an option later to choose the year then set the indicator about prior year bellow
         returned_data += ' ' #is this correction or not ? enter G or C if it is otherwise blank field
         if (form_fields['transferors_name'])
             returned_data += form_fields['transferors_name'].split.last[0...4] #employees_name the first four characters of the last name
