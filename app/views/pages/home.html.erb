@@ -21,7 +21,7 @@
         $('div.bhoechie-tab>div.bhoechie-tab-content').eq(index).addClass('active');">
                   2016
                 </a>
-                <a href="#"  class="list-group-item active text-center" onclick="
+                <a href="#"  class="list-group-item text-center" onclick="
         event.preventDefault();
         $(this).siblings('a.active').removeClass('active');
         $(this).addClass('active');
@@ -30,7 +30,7 @@
         $('div.bhoechie-tab>div.bhoechie-tab-content').eq(index).addClass('active');">
                   2017
                 </a>
-                <a href="#"  class="list-group-item text-center" onclick="
+                <a href="#"  class="list-group-item active text-center" onclick="
         event.preventDefault();
         $(this).siblings('a.active').removeClass('active');
         $(this).addClass('active');
@@ -104,18 +104,19 @@
                         </div>
                     </div>
                 </div>
-                <div class="bhoechie-tab-content active">
+                <div class="bhoechie-tab-content">
                     <div></div>
-                    <div class="labels-container">
+                    <!-- <div class="labels-container">
                       <form action="/dashboard">
-                        <select name="label"  class="form-control" onchange="this.form.submit()">
+                       <select name="label"  class="form-control" onchange="this.form.submit()">
                               <option value="">Show all</option>
                         <% @labels.each do |label| %>
                               <option <%= 'selected' if (label[0]== @selected_label) %> value="<%= label[0] %>"><%= label[0] %></option>
                         <% end %>
+                      
                         </select> 
                       </form>         
-                    </div>
+                    </div>-->
                     <div></div>
                     <div class="row">
                         
@@ -166,7 +167,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="bhoechie-tab-content">
+                <div class="bhoechie-tab-content active">
                     <div class="row">
                         <div class="page">
                            <div class="metr">
@@ -199,7 +200,8 @@
                                                             <% end %>
                                                        </span>      
                                          <% end %>
-                                         <%= link_to '/form/'+submission.unique_id, method: :delete, data: {confirm: 'Are you sure?'}, class: 'delete_link', :remote => true do %>
+
+                                         <%= link_to '/form/'+submission.unique_id, method: :delete, data: {confirm: 'Are you sure?'}, class: 'delete_link', :remote => false do %>
                                                             <i class="fa fa-times-circle faa-vertical animated-hover" aria-hidden="true"></i> 
                                         <% end %>
                                   <% end %>
@@ -317,6 +319,10 @@ span.metro-date {
 }
 .labels-container select { 
     width:auto;
+}
+
+a.metro1099s {
+  background-color:#505db7;
 }
 
 

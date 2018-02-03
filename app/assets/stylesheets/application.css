@@ -122,3 +122,26 @@ a.navbar-brand {
 form.submit_electronically_form {
     display:inline;
 }
+label[for=form-type] , #form-type {
+    display:none;
+}
+.fixed-button {
+    position: fixed;
+    top: 8px;
+    left: 285px;
+    z-index: 3000;
+}
+.navbar-static-top {
+    position: fixed;
+    width: 100%;
+    top:0;
+}
+.abs:focus, .abs:visited {
+    border:none;
+}
+#page-wrapper {
+    margin-top:51px;
+}
+.stripe-button {
+    margin-left:98px;
+}

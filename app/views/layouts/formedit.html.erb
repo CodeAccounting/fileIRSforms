@@ -25,10 +25,16 @@
             </div>
             <!-- /.navbar-header -->
             <button type="button" onclick="history.back();" class="btn btn-warning header-button">Cancel</button>
-            <button type="button" class="btn btn-primary header-button" onclick="document.getElementById('form1').submit();">Save Form</button>
-            <button type="button" class="btn btn-default">Print Form</button>
+            <!--
+            <button type="button" class="btn btn-primary header-button" onclick="
+            
+                    document.getElementById('form1').submit();
+            ">Save Form
+            </button>
+        -->
+           <!-- <button type="button" class="btn btn-default">Print Form</button>-->
             <%  if (params.has_key?(:unique_id)) %>
-                    <% if (current_user.bonus==0) %>
+                    <% #if (current_user.bonus==0) %>
                         <%= form_tag form_payment_path, :class => 'submit_electronically_form' do %>
                            <input type="hidden" name="unique_id" value="<%= @form_fields['unique_id'] %>"/>
                            <input type="hidden" name="amount" value="<%= @stripe_amount %>"/>
@@ -39,12 +45,14 @@
                           data-locale="auto"
                           data-label="Submit Electronically">
                            </script>
-                           <script>$(".stripe-button-el").attr('class', 'btn btn-default');
+                           <script>$(".stripe-button-el").attr('class', 'btn btn-default stripe-button');
                            </script>
                         <% end %>
-                    <% else %>
+                    <% #else %>
+                    <!--
                         <button onclick="window.location.href = '/form/submitted/<%= @form_fields['unique_id'] %>';" type="submit" class="btn btn-default" style="visibility: visible;"><span style="display: block; min-height: 30px;">Submit Electronically <span style="color:blue;">for Free</span></span></button>
-                    <% end %>
+                    -->
+                    <% #end %>
             <% end %>
             
 
@@ -242,7 +250,7 @@
                 </li>
 -->
                 <!-- /.dropdown -->
-                <li><a href="/referfriend">Refer a Friend</a></li>
+               <!-- <li><a href="/referfriend">Refer a Friend</a></li> -->
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                         <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
@@ -276,7 +284,7 @@
             </ul>
             <!-- /.navbar-top-links -->
 
-            <div class="navbar-default sidebar" role="navigation">
+            <div class="navbar-default sidebar" role="navigation" style="margin-top:1px;">
                 <div class="sidebar-nav navbar-collapse">
                     <ul class="nav" id="side-menu">
 <!--
@@ -298,7 +306,7 @@
                             <a href="#"><i class="fa fa-asterisk fa-fw"></i> Forms<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level collapse in">
                                 <li>
-                                  <a href="/form/show/1099a">Form 1099</a>
+                                  <a href="/form/show/1099s">Form 1099-S</a>
                               </li>
                               <!--  <li>
                                     <a href="/form/show">Form 1042-S</a>

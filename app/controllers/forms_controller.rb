@@ -54,6 +54,7 @@ class FormsController < ApplicationController
       @editing = false;
       @form_fields = Hash.new
       @form_fields['unique_id'] = SecureRandom.uuid
+      params['formname'] = '1099s' if params['formname'].blank?
     end  
     #get labels 
     @labels = Field.where(user_id: current_user.id).where.not(label: nil,label: "" ).pluck(:label).uniq
@@ -217,7 +218,7 @@ class FormsController < ApplicationController
   def destroy
     Field.where(unique_id: params[:unique_id]).destroy_all
     respond_to do |format|
-      format.html { redirect_to '/', notice: 'Form was successfully deleted.' }
+      format.html { redirect_to '/dashboard', notice: 'Form was successfully deleted.' }
     end
   end
 

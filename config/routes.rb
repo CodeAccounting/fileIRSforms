@@ -7,8 +7,9 @@ Rails.application.routes.draw do
       get '/users/sign_up/:referee_code', to:"customized_devise/registrations#new"
   end
     
-  root "pages#home"
-  get '/referfriend', to:"pages#referfriend"
+  #root "pages#home"
+  root "forms#show"
+  #get '/referfriend', to:"pages#referfriend"
   post '/sendinviting', to:"pages#sendinviting"
   get 'admin', to:"admin#index"
   get 'admin/show', to:"admin#show"
