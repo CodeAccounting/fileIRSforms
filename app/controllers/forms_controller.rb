@@ -249,7 +249,7 @@ class FormsController < ApplicationController
     charge = Stripe::Charge.create(
       :customer    => customer.id,
       :amount      => @amount,
-      :description => 'Rails Stripe customer',
+      :description => 'File submitting fees',
       :currency    => 'usd'
     )
     #render text: charge.inspect

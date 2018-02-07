@@ -123,7 +123,7 @@ form.submit_electronically_form {
     display:inline;
 }
 label[for=form-type] , #form-type {
-    display:none;
+    /*display:none;*/
 }
 .fixed-button {
     position: fixed;
