@@ -373,6 +373,7 @@ module AdminHelper
         data = second_line.strip              
         #returned_data += data.to_s[0...40] + (" "*(40-(data.to_s[0...40].length))) #40 characters Requered
         returned_data += '249 W. JACKSON STREET STE 260'+' '*11
+        third_line.delete! ',/-'
         data = third_line.strip 
         data = " " if data.blank?
         data_array =  data.split(/\W+/)   
@@ -696,6 +697,7 @@ module AdminHelper
         data = second_line.strip              
         #returned_data += data.to_s[0...40] + (" "*(40-(data.to_s[0...40].length))) #40 characters Requered
         returned_data += '249 W. JACKSON STREET STE 260'+' '*11
+        third_line.delete! ',/-'
         data = third_line.strip 
         data = " " if data.blank?
         data_array =  data.split(/\W+/)   
@@ -1213,6 +1215,7 @@ module AdminHelper
         data = second_line.strip              
         #returned_data += data + (" "*(40-(data.to_s[0...40].length))) #40 characters Requered
         returned_data += '249 W. JACKSON STREET STE 260'+' '*11
+        third_line.delete! ',/-'
         data = third_line.strip 
         data = " " if data.blank?
         data_array =  data.split(/\W+/)   
@@ -1555,6 +1558,7 @@ module AdminHelper
         data = second_line.strip              
         #returned_data += data + (" "*(40-(data.to_s[0...40].length))) #40 characters Requered
         returned_data += '249 W. JACKSON STREET STE 260'+' '*11
+        third_line.delete! ',/-'
         data = third_line.strip 
         data = " " if data.blank?
         data_array =  data.split(/\W+/)   
@@ -1860,6 +1864,7 @@ def exportForm1099div(form_fields)
         data = second_line.strip              
         #returned_data += data + (" "*(40-(data.to_s[0...40].length))) #40 characters Requered
         returned_data += '249 W. JACKSON STREET STE 260'+' '*11
+        third_line.delete! ',/-'
         data = third_line.strip 
         data = " " if data.blank?
         data_array =  data.split(/\W+/)   
@@ -2342,6 +2347,7 @@ def exportForm1099g(form_fields)
         data = second_line.strip              
         #returned_data += data + (" "*(40-(data.to_s[0...40].length))) #40 characters Requered
         returned_data += '249 W. JACKSON STREET STE 260'+' '*11
+        third_line.delete! ',/-'
         data = third_line.strip 
         data = " " if data.blank?
         data_array =  data.split(/\W+/)   
@@ -2754,6 +2760,7 @@ def exportForm1099h(form_fields)
         data = second_line.strip              
         #returned_data += data + (" "*(40-(data.to_s[0...40].length))) #40 characters Requered
         returned_data += '249 W. JACKSON STREET STE 260'+' '*11
+        third_line.delete! ',/-'
         data = third_line.strip 
         data = " " if data.blank?
         data_array =  data.split(/\W+/)   
@@ -3196,6 +3203,7 @@ def exportForm1099int(form_fields)
         data = second_line.strip              
         #returned_data += data + (" "*(40-(data.to_s[0...40].length))) #40 characters Requered
         returned_data += '249 W. JACKSON STREET STE 260'+' '*11
+        third_line.delete! ',/-'
         data = third_line.strip 
         data = " " if data.blank?
         data_array =  data.split(/\W+/)   
@@ -3652,6 +3660,7 @@ returned_data += "\r\n"
         data = second_line.strip              
         #returned_data += data + (" "*(40-(data.to_s[0...40].length))) #40 characters Requered
         returned_data += '249 W. JACKSON STREET STE 260'+' '*11
+        third_line.delete! ',/-'
         data = third_line.strip 
         data = " " if data.blank?
         data_array =  data.split(/\W+/)   
@@ -4347,6 +4356,7 @@ returned_data += "\r\n"
         data = second_line.strip              
         #returned_data += data + (" "*(40-(data.to_s[0...40].length))) #40 characters Requered
         returned_data += '249 W. JACKSON STREET STE 260'+' '*11
+        third_line.delete! ',/-'
         data = third_line.strip 
         data = " " if data.blank?
         data_array =  data.split(/\W+/)   

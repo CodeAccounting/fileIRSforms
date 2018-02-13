@@ -28,19 +28,21 @@
                                 <div id="fields-container" class="form1099cap">
                                    <img width="100%" src="/media/1099cap.png" />
                                     <!-- fields -->
-                                    <textarea class="abs" style="top: 14%;left: 2%;width: 44%;height: 19%;" name="corporations_name_address"><%= @form_fields['corporations_name_address']%></textarea>
-                                    <input class="abs" style="top: 39%;left: 2%;width: 21%;height: 5%;" name="corporations_fin" value="<%= @form_fields['corporations_fin']%>" type="text">
-                                    <input class="abs" style="top: 39%;left: 25%;width: 21%;height: 5%;" name="shareholders_id" value="<%= @form_fields['shareholders_id']%>" type="text">
-                                    <input class="abs" style="top: 49%;left: 2%;width: 44%;height: 9%;" name="shareholders_name" value="<%= @form_fields['shareholders_name']%>" type="text">
-                                    <input class="abs" style="top: 63%;left: 2%;width: 44%;height: 5%;" name="street_address" value="<%= @form_fields['street_address']%>" type="text">
-                                    <input class="abs" style="top: 72.5%;left: 2%;width: 44%;height: 5%;" name="city_or_town" value="<%= @form_fields['city_or_town']%>" type="text">
-                                    <input class="abs" style="top: 82%;left: 2%;width: 44%;height: 5%;" name="account_number" value="<%= @form_fields['account_number']%>" type="text">
-                                    <input class="abs" style="top: 10%;left: 48%;width: 17%;height: 5%;" name="1" value="<%= @form_fields['1']%>" type="text">
-                                    <input class="abs" style="top: 20%;left: 49%;width: 16%;height: 5%;" name="2" value="<%= @form_fields['2']%>" type="text">
-                                    <input class="abs" style="top: 29%;left: 47%;width: 18%;height: 5%;" name="3" value="<%= @form_fields['3']%>" type="text">
-                                    <input class="abs" style="top: 29%;left: 66%;width: 18%;height: 5%;" name="4" value="<%= @form_fields['4']%>" type="text">
-                                    <input class="abs" style="top: 65%;left: 48%;width: 35%;height: 13%;" name="5" value="<%= @form_fields['5']%>" type="text">
+                                    <textarea required="true" class="abs" style="top: 14%;left: 2%;width: 44%;height: 19%;" name="corporations_name_address"><%= @form_fields['corporations_name_address']%></textarea>
+                                    <input required="true" class="abs" style="top: 39%;left: 2%;width: 21%;height: 5%;" name="corporations_fin" value="<%= @form_fields['corporations_fin']%>" type="text">
+                                    <input required="true" class="abs" style="top: 39%;left: 25%;width: 21%;height: 5%;" name="shareholders_id" value="<%= @form_fields['shareholders_id']%>" type="text">
+                                    <input required="true" class="abs" style="top: 49%;left: 2%;width: 44%;height: 9%;" name="shareholders_name" value="<%= @form_fields['shareholders_name']%>" type="text">
+                                    <input required="true" class="abs" style="top: 63%;left: 2%;width: 44%;height: 5%;" name="street_address" value="<%= @form_fields['street_address']%>" type="text">
+                                    <input required="true" class="abs" style="top: 72.5%;left: 2%;width: 44%;height: 5%;" name="city_or_town" value="<%= @form_fields['city_or_town']%>" type="text">
+                                    <input required="true" class="abs" style="top: 82%;left: 2%;width: 44%;height: 5%;" name="account_number" value="<%= @form_fields['account_number']%>" type="text">
                                     
+                <input type="text" required="true" readonly class="datepicker abs" name="1" value="<%= @form_fields['1']%>" style="top: 10%;left: 48%;width: 17%;height: 5%;">
+                                    <input required="true" class="abs" style="top: 20%;left: 49%;width: 16%;height: 5%;" name="2" value="<%= @form_fields['2']%>" type="text">
+                                    <input required="true" class="abs" style="top: 29%;left: 47%;width: 18%;height: 5%;" name="3" value="<%= @form_fields['3']%>" type="text">
+                                    <input required="true" class="abs" style="top: 29%;left: 66%;width: 18%;height: 5%;" name="4" value="<%= @form_fields['4']%>" type="text">
+                                    <input required="true" class="abs" style="top: 65%;left: 48%;width: 35%;height: 13%;" name="5" value="<%= @form_fields['5']%>" type="text">
+                                    <button class="btn btn-primary fixed-button" type="submit">Save Form</button>
+
                                   <!-- fields -->
                                     
                                     <input type="hidden" name="unique_id" value="<%= @form_fields['unique_id'] %>">
@@ -52,3 +54,8 @@
                           
                   </div>
                   <!-- /.row -->
+<script>
+jQuery('.datepicker').datepicker({
+    dateFormat: "yymmdd"
+  });
+</script>
