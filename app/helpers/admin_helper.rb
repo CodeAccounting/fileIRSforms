@@ -5,7 +5,6 @@ module AdminHelper
     #@questions : is payer TIN same as payer ID
     #@convert dates to date fields
     #only for Form 3921
-    #1st 750 records - Transmitter “T” Record
             form_fields['transferors_fin'] ||= " "
             form_fields['transferors_name_address'] ||= " "
             if form_fields['transferors_name_address'].lines.first.blank?
@@ -24,35 +23,41 @@ module AdminHelper
                 third_line = form_fields['transferors_name_address'].lines.third
             end
 
+    #1st 750 records - Transmitter “T” Record
             returned_data = 'T' #begining of the file -lenght 1
-            returned_data += '2017' #lenght 4
+            returned_data += ((Date.today.year)-1).to_s #lenght 4 TODO: do this for other forms, also put an option later to choose the year then set the indicator about prior year bellow
             returned_data += ' ' # P if it is for prior year otherwise blank -lenght 1
-            returned_data += '111111111';
-            returned_data += '11111' + (" "*(5-('11111'.to_s[0...5].length))) #5 characters - Transmitter Control Code
+            returned_data += '473852932' #9 characters - Transmitter'S federal identification number
+            #returned_data += '11111' + (" "*(5-('11111'.to_s[0...5].length))) #5 characters - Transmitter Control Code
+            returned_data += '93A66'
             returned_data += " "*7 #7 characters - blank
-            returned_data += 'T' # T if it is a test file otherwise blank -lenght 1
+            returned_data += ' ' # T if it is a test file otherwise blank -lenght 1
             returned_data += ' ' #Enter a “1” (one) if the transmitter is a foreign entity otherwise blank -lenght 1
             data = first_line.strip.truncate_words(2,omission: '')
-            returned_data += data.to_s[0...40] + (" "*(40-(data.to_s[0...40].length))) #40 characters - transmitter name. Left justify.
+            #returned_data += data.to_s[0...40] + (" "*(40-(data.to_s[0...40].length))) #40 characters - transmitter name. Left justify.
+            returned_data += 'CODE ACCOUNTING'+ ' '*25
             data2 = first_line
             data2.slice! data
             data2 = data2.strip
-
-            returned_data += data2.to_s[0...40] + (" "*(40-(data2.to_s[0...40].length))) #40 characters - transmitter aditional data. Left justify.
-
+            # returned_data += data2.to_s[0...40] + (" "*(40-(data2.to_s[0...40].length))) #40 characters - transmitter aditional data. Left justify.
+            returned_data += ' '*40
             if form_fields['transferors_name_address'].lines.first.blank?
                 first_line = "_"
             else 
                 first_line = form_fields['transferors_name_address'].lines.first
             end
             data = first_line.strip.truncate_words(2,omission: '')
-            returned_data += data.to_s[0...40] + (" "*(40-(data.to_s[0...40].length))) #40 characters - transmitter name. Left justify.
+            #returned_data += data.to_s[0...40] + (" "*(40-(data.to_s[0...40].length))) #40 characters - transmitter name. Left justify.
+            returned_data += 'CODE ACCOUNTING'+ ' '*25
             data2 = first_line
             data2.slice! data
             data2 = data2.strip
-            returned_data += data2.to_s[0...40] + (" "*(40-(data2.to_s[0...40].length))) #40 characters - transmitter aditional data. Left justify. 
+            #returned_data += data2.to_s[0...40] + (" "*(40-(data2.to_s[0...40].length))) #40 characters - transmitter aditional data. Left justify. 
+            returned_data += ' '*40
             data = second_line.strip              
-            returned_data += data.to_s[0...40] + (" "*(40-(data.to_s[0...40].length))) #40 characters Requered
+            #returned_data += data.to_s[0...40] + (" "*(40-(data.to_s[0...40].length))) #40 characters Requered
+            returned_data += '249 W. JACKSON STREET STE 260'+' '*11
+            third_line.delete! ',/-'
             data = third_line.strip 
             data = " " if data.blank?
             data_array =  data.split(/\W+/)   
@@ -66,16 +71,20 @@ module AdminHelper
             data.slice! data_state  
             data_city = data
             data_city = " " if data_city.blank?
-            returned_data += data_city.to_s[0...40] + (" "*(40-(data_city.to_s[0...40].length))) #40 characters Requered
-            returned_data += data_state.to_s[0...2] + (" "*(2-(data_state.to_s[0...2].length))) #2 characters Requered
+            #returned_data += data_city.to_s[0...40] + (" "*(40-(data_city.to_s[0...40].length))) #40 characters Requered
+            #returned_data += data_state.to_s[0...2] + (" "*(2-(data_state.to_s[0...2].length))) #2 characters Requered
             #@ need a validation here should be 9 digits :
-            returned_data += data_zip.to_s[0...9] + (" "*(9-(data_zip.to_s[0...9].length))) #9 characters Requered
+            #returned_data += data_zip.to_s[0...9] + (" "*(9-(data_zip.to_s[0...9].length))) #9 characters Requered
+            returned_data += 'Hayward'+' '*33
+            returned_data += 'CA'
+            returned_data += '94544'+' '*4
+
             returned_data += " "*15 #15 blank characters 
             returned_data += '00000001' #8 characters Total Number of Payees 
-            returned_data += 'TEST TEST                               ';#40 characters
-            returned_data += '1111111111     ' #15 characters Requered
+            returned_data += 'SEAN ALLABAND                           ';#40 characters
+            returned_data += '5107062877     ' #15 characters Requered
         #359-408       
-            returned_data += 'albionpetrovic@gmail.com                          ' #50 characters 
+            returned_data += 'sean@codeaccounting.com                           ' #50 characters 
         #409-499
             returned_data += " "*91 #91 characters - blank
         #500-507
@@ -345,9 +354,10 @@ module AdminHelper
         returned_data += ((Date.today.year)-1).to_s #lenght 4 TODO: do this for other forms, also put an option later to choose the year then set the indicator about prior year bellow
         returned_data += ' ' # P if it is for prior year otherwise blank -lenght 1
         returned_data += '473852932' #9 characters - Transmitter'S federal identification number
-        returned_data += '11111' + (" "*(5-('11111'.to_s[0...5].length))) #5 characters - Transmitter Control Code
+        #returned_data += '11111' + (" "*(5-('11111'.to_s[0...5].length))) #5 characters - Transmitter Control Code
+        returned_data += '93A66'        
         returned_data += " "*7 #7 characters - blank
-        returned_data += 'T' # T if it is a test file otherwise blank -lenght 1
+        returned_data += ' ' # T if it is a test file otherwise blank -lenght 1
         returned_data += ' ' #Enter a “1” (one) if the transmitter is a foreign entity otherwise blank -lenght 1
         data = first_line.strip.truncate_words(2,omission: '')
         #returned_data += data.to_s[0...40] + (" "*(40-(data.to_s[0...40].length))) #40 characters - transmitter name. Left justify.
@@ -396,10 +406,10 @@ module AdminHelper
 
         returned_data += " "*15 #15 blank characters 
         returned_data += '00000001' #8 characters Total Number of Payees there is no such field in Form 3921
-        returned_data += 'Dejan Sabados                           ';#40 characters
-        returned_data += '1111111111     ' #15 characters Requered
+        returned_data += 'SEAN ALLABAND                           ';#40 characters
+        returned_data += '5107062877     ' #15 characters Requered
     #359-408       
-        returned_data += 'albionpetrovic@gmail.com                          ' #50 characters 
+        returned_data += 'sean@codeaccounting.com                           ' #50 characters 
     #409-499
         returned_data += " "*91 #91 characters - blank
     #500-507
@@ -669,9 +679,10 @@ module AdminHelper
         returned_data += ((Date.today.year)-1).to_s #lenght 4 TODO: do this for other forms, also put an option later to choose the year then set the indicator about prior year bellow
         returned_data += ' ' # P if it is for prior year otherwise blank -lenght 1
         returned_data += '473852932' #9 characters - Transmitter'S federal identification number
-        returned_data += '11111' + (" "*(5-('11111'.to_s[0...5].length))) #5 characters - Transmitter Control Code
+        #returned_data += '11111' + (" "*(5-('11111'.to_s[0...5].length))) #5 characters - Transmitter Control Code
+        returned_data += '93A66'        
         returned_data += " "*7 #7 characters - blank
-        returned_data += 'T' # T if it is a test file otherwise blank -lenght 1
+        returned_data += ' ' # T if it is a test file otherwise blank -lenght 1
         returned_data += ' ' #Enter a “1” (one) if the transmitter is a foreign entity otherwise blank -lenght 1
         data = first_line.strip.truncate_words(2,omission: '')
         #returned_data += data.to_s[0...40] + (" "*(40-(data.to_s[0...40].length))) #40 characters - transmitter name. Left justify.
@@ -720,10 +731,11 @@ module AdminHelper
 
         returned_data += " "*15 #15 blank characters 
         returned_data += '00000001' #8 characters Total Number of Payees there is no such field in Form 3921
-        returned_data += 'TEST TEST                               ';#40 characters
-        returned_data += '1111111111     ' #15 characters Requered
+        returned_data += 'SEAN ALLABAND                           ';#40 characters
+
+        returned_data += '5107062877     ' #15 characters Requered
     #359-408       
-        returned_data += 'albionpetrovic@gmail.com                          ' #50 characters 
+        returned_data += 'sean@codeaccounting.com                           ' #50 characters 
     #409-499
         returned_data += " "*91 #91 characters - blank
     #500-507
@@ -1187,9 +1199,10 @@ module AdminHelper
         returned_data += ' ' # P if it is for prior year otherwise blank -lenght 1
 
         returned_data += '473852932' #9 characters - Transmitter'S federal identification number
-            returned_data += '11111' + (" "*(5-('11111'.to_s[0...5].length))) #5 characters - Transmitter Control Code
+        #returned_data += '11111' + (" "*(5-('11111'.to_s[0...5].length))) #5 characters - Transmitter Control Code
+        returned_data += '93A66'        
         returned_data += " "*7 #7 characters - blank
-        returned_data += 'T' # T if it is a test file otherwise blank -lenght 1
+        returned_data += ' ' # T if it is a test file otherwise blank -lenght 1
         returned_data += ' ' #Enter a “1” (one) if the transmitter is a foreign entity otherwise blank -lenght 1
         data = first_line.strip.truncate_words(2,omission: '')
         #returned_data += data + (" "*(40-(data.to_s[0...40].length))) #40 characters - transmitter name. Left justify.
@@ -1238,10 +1251,10 @@ module AdminHelper
 
         returned_data += " "*15 #15 blank characters 
         returned_data += '00000001' #8 characters Total Number of Payees there is no such field in Form 3921
-        returned_data += 'TEST TEST                               ';#40 characters #TODO: put real Sean name after testing 
-        returned_data += '1111111111     ' #15 characters Requered
+        returned_data += 'SEAN ALLABAND                           ';#40 characters
+        returned_data += '5107062877     ' #15 characters Requered
     #359-408       
-        returned_data += 'albionpetrovic@gmail.com                          ' #50 characters 
+        returned_data += 'sean@codeaccounting.com                           ' #50 characters 
     #409-499
         returned_data += " "*91 #91 characters - blank
     #500-507
@@ -1530,9 +1543,10 @@ module AdminHelper
         returned_data += ' ' # P if it is for prior year otherwise blank -lenght 1
 
         returned_data += '473852932' #9 characters - Transmitter'S federal identification number
-        returned_data += '11111' + (" "*(5-('11111'.to_s[0...5].length))) #5 characters - Transmitter Control Code
+        #returned_data += '11111' + (" "*(5-('11111'.to_s[0...5].length))) #5 characters - Transmitter Control Code
+        returned_data += '93A66'        
         returned_data += " "*7 #7 characters - blank
-        returned_data += 'T' # T if it is a test file otherwise blank -lenght 1
+        returned_data += ' ' # T if it is a test file otherwise blank -lenght 1
         returned_data += ' ' #Enter a “1” (one) if the transmitter is a foreign entity otherwise blank -lenght 1
         data = first_line.strip.truncate_words(2,omission: '')
         #returned_data += data + (" "*(40-(data.to_s[0...40].length))) #40 characters - transmitter name. Left justify.
@@ -1581,10 +1595,10 @@ module AdminHelper
 
         returned_data += " "*15 #15 blank characters 
         returned_data += '00000001' #8 characters Total Number of Payees
-        returned_data += 'TEST TEST                               ';#40 characters
-        returned_data += '1111111111     ' #15 characters Requered
+        returned_data += 'SEAN ALLABAND                           ';#40 characters
+        returned_data += '5107062877     ' #15 characters Requered
     #359-408       
-        returned_data += 'albionpetrovic@gmail.com                          ' #50 characters 
+        returned_data += 'sean@codeaccounting.com                           ' #50 characters 
     #409-499
         returned_data += " "*91 #91 characters - blank
     #500-507
@@ -1835,13 +1849,13 @@ def exportForm1099div(form_fields)
         returned_data += ' ' # P if it is for prior year otherwise blank -lenght 1
 
         returned_data += '473852932' #9 characters - Transmitter'S federal identification number
-            returned_data += '11111' + (" "*(5-('11111'.to_s[0...5].length))) #5 characters - Transmitter Control Code
+        #returned_data += '11111' + (" "*(5-('11111'.to_s[0...5].length))) #5 characters - Transmitter Control Code
+        returned_data += '93A66'        
         returned_data += " "*7 #7 characters - blank
-        returned_data += 'T' # T if it is a test file otherwise blank -lenght 1
+        returned_data += ' ' # T if it is a test file otherwise blank -lenght 1
         returned_data += ' ' #Enter a “1” (one) if the transmitter is a foreign entity otherwise blank -lenght 1
         data = first_line.strip.truncate_words(2,omission: '')
         #returned_data += data + (" "*(40-(data.to_s[0...40].length))) #40 characters - transmitter name. Left justify.
-        returned_data += ' '*40
         returned_data += 'CODE ACCOUNTING'+ ' '*25
         data2 = first_line
         data2.slice! data
@@ -1888,10 +1902,10 @@ def exportForm1099div(form_fields)
 
         returned_data += " "*15 #15 blank characters 
         returned_data += '00000001' #8 characters Total Number of Payees
-        returned_data += 'TEST TEST                               ';#40 characters
-        returned_data += '1111111111     ' #15 characters Requered
+        returned_data += 'SEAN ALLABAND                           ';#40 characters
+        returned_data += '5107062877     ' #15 characters Requered
     #359-408       
-        returned_data += 'albionpetrovic@gmail.com                          ' #50 characters 
+        returned_data += 'sean@codeaccounting.com                           ' #50 characters 
     #409-499
         returned_data += " "*91 #91 characters - blank
     #500-507
@@ -2319,9 +2333,10 @@ def exportForm1099g(form_fields)
         returned_data += ' ' # P if it is for prior year otherwise blank -lenght 1
 
         returned_data += '473852932' #9 characters - Transmitter'S federal identification number
-        returned_data += '11111' + (" "*(5-('11111'.to_s[0...5].length))) #5 characters - Transmitter Control Code
+        #returned_data += '11111' + (" "*(5-('11111'.to_s[0...5].length))) #5 characters - Transmitter Control Code
+        returned_data += '93A66'        
         returned_data += " "*7 #7 characters - blank
-        returned_data += 'T' # T if it is a test file otherwise blank -lenght 1
+        returned_data += ' ' # T if it is a test file otherwise blank -lenght 1
         returned_data += ' ' #Enter a “1” (one) if the transmitter is a foreign entity otherwise blank -lenght 1
         data = first_line.strip.truncate_words(2,omission: '')
         #returned_data += data + (" "*(40-(data.to_s[0...40].length))) #40 characters - transmitter name. Left justify.
@@ -2370,10 +2385,10 @@ def exportForm1099g(form_fields)
 
         returned_data += " "*15 #15 blank characters 
         returned_data += '00000001' #8 characters Total Number of Payees
-        returned_data += 'TEST TEST                               ';#40 characters
-        returned_data += '1111111111     ' #15 characters Requered
+        returned_data += 'SEAN ALLABAND                           ';#40 characters
+        returned_data += '5107062877     ' #15 characters Requered
     #359-408       
-        returned_data += 'albionpetrovic@gmail.com                          ' #50 characters 
+        returned_data += 'sean@codeaccounting.com                           ' #50 characters 
     #409-499
         returned_data += " "*91 #91 characters - blank
     #500-507
@@ -2732,9 +2747,10 @@ def exportForm1099h(form_fields)
         returned_data += ' ' # P if it is for prior year otherwise blank -lenght 1
 
         returned_data += '473852932';
-        returned_data += '11111' + (" "*(5-('11111'.to_s[0...5].length))) #5 characters - Transmitter Control Code
+        #returned_data += '11111' + (" "*(5-('11111'.to_s[0...5].length))) #5 characters - Transmitter Control Code
+        returned_data += '93A66'        
         returned_data += " "*7 #7 characters - blank
-        returned_data += 'T' # T if it is a test file otherwise blank -lenght 1
+        returned_data += ' ' # T if it is a test file otherwise blank -lenght 1
         returned_data += ' ' #Enter a “1” (one) if the transmitter is a foreign entity otherwise blank -lenght 1
         data = first_line.strip.truncate_words(2,omission: '')
         #returned_data += data + (" "*(40-(data.to_s[0...40].length))) #40 characters - transmitter name. Left justify.
@@ -2783,10 +2799,10 @@ def exportForm1099h(form_fields)
 
         returned_data += " "*15 #15 blank characters 
         returned_data += '00000001' #8 characters Total Number of Payees
-        returned_data += 'TEST TEST                               ';#40 characters
-        returned_data += '1111111111     ' #15 characters Requered
+        returned_data += 'SEAN ALLABAND                           ';#40 characters
+        returned_data += '5107062877     ' #15 characters Requered
     #359-408       
-        returned_data += 'albionpetrovic@gmail.com                          ' #50 characters 
+        returned_data += 'sean@codeaccounting.com                           ' #50 characters 
     #409-499
         returned_data += " "*91 #91 characters - blank
     #500-507
@@ -3175,9 +3191,10 @@ def exportForm1099int(form_fields)
         returned_data += ' ' # P if it is for prior year otherwise blank -lenght 1
 
         returned_data += '473852932' #9 characters - Transmitter'S federal identification number
-        returned_data += '11111' + (" "*(5-('11111'.to_s[0...5].length))) #5 characters - Transmitter Control Code
+        #returned_data += '11111' + (" "*(5-('11111'.to_s[0...5].length))) #5 characters - Transmitter Control Code
+        returned_data += '93A66'        
         returned_data += " "*7 #7 characters - blank
-        returned_data += 'T' # T if it is a test file otherwise blank -lenght 1
+        returned_data += ' ' # T if it is a test file otherwise blank -lenght 1
         returned_data += ' ' #Enter a “1” (one) if the transmitter is a foreign entity otherwise blank -lenght 1
         data = first_line.strip.truncate_words(2,omission: '')
         #returned_data += data + (" "*(40-(data.to_s[0...40].length))) #40 characters - transmitter name. Left justify.
@@ -3226,10 +3243,10 @@ def exportForm1099int(form_fields)
 
         returned_data += " "*15 #15 blank characters 
         returned_data += '00000001' #8 characters Total Number of Payees
-        returned_data += 'TEST TEST                               ';#40 characters
-        returned_data += '1111111111     ' #15 characters Requered
+        returned_data += 'SEAN ALLABAND                           ';#40 characters
+        returned_data += '5107062877     ' #15 characters Requered
     #359-408       
-        returned_data += 'albionpetrovic@gmail.com                          ' #50 characters 
+        returned_data += 'sean@codeaccounting.com                           ' #50 characters 
     #409-499
         returned_data += " "*91 #91 characters - blank
     #500-507
@@ -3632,9 +3649,10 @@ returned_data += "\r\n"
         returned_data += ' ' # P if it is for prior year otherwise blank -lenght 1
 
         returned_data += '473852932' #9 characters - Transmitter'S federal identification number
-        returned_data += '11111' + (" "*(5-('11111'.to_s[0...5].length))) #5 characters - Transmitter Control Code
+        #returned_data += '11111' + (" "*(5-('11111'.to_s[0...5].length))) #5 characters - Transmitter Control Code
+        returned_data += '93A66'        
         returned_data += " "*7 #7 characters - blank
-        returned_data += 'T' # T if it is a test file otherwise blank -lenght 1
+        returned_data += ' ' # T if it is a test file otherwise blank -lenght 1
         returned_data += ' ' #Enter a “1” (one) if the transmitter is a foreign entity otherwise blank -lenght 1
         data = first_line.strip.truncate_words(2,omission: '')
         #returned_data += data + (" "*(40-(data.to_s[0...40].length))) #40 characters - transmitter name. Left justify.
@@ -3683,10 +3701,10 @@ returned_data += "\r\n"
 
         returned_data += " "*15 #15 blank characters 
         returned_data += '00000001' #8 characters Total Number of Payees
-        returned_data += 'TEST TEST                               ';#40 characters
-        returned_data += '1111111111     ' #15 characters Requered
+        returned_data += 'SEAN ALLABAND                           ';#40 characters
+        returned_data += '5107062877     ' #15 characters Requered
     #359-408       
-        returned_data += 'albionpetrovic@gmail.com                          ' #50 characters 
+        returned_data += 'sean@codeaccounting.com                           ' #50 characters 
     #409-499
         returned_data += " "*91 #91 characters - blank
     #500-507
@@ -4042,8 +4060,8 @@ returned_data += "\r\n"
         returned_data += form_fields['creditors_fin_XXXX'].to_s[0...9] + (" "*(9-(form_fields['creditors_fin_XXXX'].to_s[0...9].length))) #9 characters - TRANSFEROR'S federal identification number
         
         returned_data += '111111111';
-            returned_data += '11111' + (" "*(5-('11111'.to_s[0...5].length))) #5 characters - Transmitter Control Code
-        returned_data += 'T' # T if it is a test file otherwise blank -lenght 1
+        returned_data += '11111' + (" "*(5-('11111'.to_s[0...5].length))) #5 characters - Transmitter Control Code
+        returned_data += ' ' # T if it is a test file otherwise blank -lenght 1
         returned_data += ' ' #Enter a “1” (one) if the transmitter is a foreign entity otherwise blank -lenght 1
         data = first_line.strip.truncate_words(2,omission: '')
         returned_data += data.to_s[0...40] + (" "*(40-(data.to_s[0...40].length))) #40 characters - transmitter name. Left justify.
@@ -4085,7 +4103,7 @@ returned_data += "\r\n"
         returned_data += 'TEST TEST                               ';#40 characters
         returned_data += '1111111111     ' #15 characters Requered
     #359-408       
-        returned_data += 'albionpetrovic@gmail.com                          ' #50 characters 
+        returned_data += 'sean@codeaccounting.com                           ' #50 characters 
     #409-499
         returned_data += " "*91 #91 characters - blank
     #500-507
@@ -4328,9 +4346,10 @@ returned_data += "\r\n"
         returned_data += ' ' # P if it is for prior year otherwise blank -lenght 1
 
         returned_data += '473852932' #9 characters - Transmitter'S federal identification number
-        returned_data += '11111' + (" "*(5-('11111'.to_s[0...5].length))) #5 characters - Transmitter Control Code TODO: put real after testing
+        #returned_data += '11111' + (" "*(5-('11111'.to_s[0...5].length))) #5 characters - Transmitter Control Code
+        returned_data += '93A66'        
         returned_data += ' '*7
-        returned_data += 'T' # T if it is a test file otherwise blank -lenght 1
+        returned_data += ' ' # T if it is a test file otherwise blank -lenght 1
         returned_data += ' ' #Enter a “1” (one) if the transmitter is a foreign entity otherwise blank -lenght 1 TODO: There is a field in the form for this use it !!! see what impact that 
         data = first_line.strip.truncate_words(2,omission: '')
         #returned_data += data.to_s[0...40] + (" "*(40-(data.to_s[0...40].length))) #40 characters - transmitter name. Left justify.
@@ -4380,10 +4399,10 @@ returned_data += "\r\n"
 
         returned_data += " "*15 #15 blank characters 
         returned_data += '00000001' #8 characters Total Number of Payees
-        returned_data += 'TEST TEST                               ';#40 characters #TODO: put real Sean name after testing 
-        returned_data += '1111111111     ' #15 characters Requered #TODO: put real Sean phone number after testing
+        returned_data += 'SEAN ALLABAND                           ';#40 characters
+        returned_data += '5107062877     ' #15 characters Requered
     #359-408       
-        returned_data += 'albionpetrovic@gmail.com                          ' #50 characters #TODO: put real Sean email after testing
+        returned_data += 'sean@codeaccounting.com                           ' #50 characters 
     #409-499
         returned_data += " "*91 #91 characters - blank
     #500-507

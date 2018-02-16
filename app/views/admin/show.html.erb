@@ -1,1 +1,9 @@
 <%= render :partial => "forms/form"+params['formname'] rescue render :partial => 'forms/form' %>
+<style>
+.fixed-button {
+    position: fixed;
+    top: 8px;
+    left: 369px;
+    z-index: 3000;
+}
+</style>
