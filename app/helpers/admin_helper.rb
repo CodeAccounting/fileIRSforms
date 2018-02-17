@@ -2418,14 +2418,14 @@ def exportForm1099g(form_fields)
         returned_data += " " #blank if this is not last year the payer name will file info returns electro or on paper
         returned_data += "F " #type of return F for 1099-g
 
-        returned_data += "1245678         " #16 amount codes
+        returned_data += "1245679         " #16 amount codes
         #-1 Unemployment compensation
         #-2 State or local income tax refunds,credits, or offsets
         #-4 Federal income tax withheld (backup withholding or voluntary withholding on unemployment compensation of Commodity Credit Corporation Loans or certain crop disaster payments)
         #-5 Reemployment Trade Adjustment Assistance (RTAA) programs
         #-6 Taxable grants
         #-7 Agriculture payments
-        #-8 Market gain
+        #-9 Market gain
 
         returned_data += " "*8 #blanks
         returned_data += " " #blank if payer is US citizen 
@@ -2533,14 +2533,14 @@ def exportForm1099g(form_fields)
         else 
             returned_data += "0"*12
         end  #Payment Amount 7*XXXX Agriculture payments '7'
+        returned_data += "0"*12 #Payment Amount 8*XXXX
         if (form_fields['9'])
             data_amount = sprintf('%.2f', form_fields['9'])
             data_amount = data_amount.tr('.', '')
             returned_data += ("0"*(12-(data_amount.to_s[0...12].length)))+data_amount.to_s[0...12]
         else 
             returned_data += "0"*12
-        end  #Payment Amount 8*XXXX Market gain '9'
-        returned_data += "0"*12 #Payment Amount 9*XXXX
+        end  #Payment Amount 9*XXXX Market gain '9'
         returned_data += "0"*12 #Payment Amount A*XXXX
         returned_data += "0"*12 #Payment Amount B*XXXX
         returned_data += "0"*12 #Payment Amount C*XXXX
@@ -2679,14 +2679,14 @@ def exportForm1099g(form_fields)
         else 
             returned_data += "0"*18
         end  #Payment Amount 7*XXXX Agriculture payments '7'
+        returned_data += "0"*18 #Payment Amount 8*XXXX
         if (form_fields['9'])
             data_amount = sprintf('%.2f', form_fields['9'])
             data_amount = data_amount.tr('.', '')
             returned_data += ("0"*(18-(data_amount.to_s[0...18].length)))+data_amount.to_s[0...18]
         else 
             returned_data += "0"*18
-        end  #Payment Amount 8*XXXX Market gain '9'
-        returned_data += "0"*18 #Payment Amount 9*XXXX
+        end  #Payment Amount 9*XXXX Market gain '9'
         returned_data += "0"*18 #Payment Amount A*XXXX
         returned_data += "0"*18 #Payment Amount B*XXXX
         returned_data += "0"*18 #Payment Amount C*XXXX
