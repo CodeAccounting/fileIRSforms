@@ -65,7 +65,7 @@
                                                        <span class="metro-type" style=""><%= submission.form_id.to_s %></span>
                                                        <span class="metro-date" style=""><%= submission.updated_at.to_s %></span>      
                                          <% end %>
-                                         <%= link_to '/form/'+submission.unique_id, method: :delete, data: {confirm: 'Are you sure?'}, class: 'delete_link', :remote => true do %>
+                                         <%= link_to '/form/'+submission.unique_id, method: :delete, data: {confirm: 'Are you sure?'}, class: 'delete_link', :remote => false do %>
                                                             <i class="fa fa-times-circle faa-vertical animated-hover" aria-hidden="true"></i> 
                                         <% end %>
                                   <% end %>
@@ -92,7 +92,7 @@
                                                        <span class="metro-type" style=""><%= submission.form_id.to_s %></span>
                                                        <span class="metro-date" style=""><%= submission.updated_at.to_s %></span>      
                                          <% end %>
-                                         <%= link_to '/form/'+submission.unique_id, method: :delete, data: {confirm: 'Are you sure?'}, class: 'delete_link', :remote => true do %>
+                                         <%= link_to '/form/'+submission.unique_id, method: :delete, data: {confirm: 'Are you sure?'}, class: 'delete_link', :remote => false do %>
                                                             <i class="fa fa-times-circle faa-vertical animated-hover" aria-hidden="true"></i> 
                                         <% end %>
                                   <% end %>
@@ -155,7 +155,7 @@
                                                        </span>    
 
                                          <% end %>
-                                         <%= link_to '/form/'+submission.unique_id, method: :delete, data: {confirm: 'Are you sure?'}, class: 'delete_link', :remote => true do %>
+                                         <%= link_to '/form/'+submission.unique_id, method: :delete, data: {confirm: 'Are you sure?'}, class: 'delete_link', :remote => false do %>
                                                             <i class="fa fa-times-circle faa-vertical animated-hover" aria-hidden="true"></i> 
                                         <% end %>
                                   <% end %>
@@ -247,7 +247,7 @@
                                                             <% end %>
                                                        </span>      
                                          <% end %>
-                                         <%= link_to '/form/'+submission.unique_id, method: :delete, data: {confirm: 'Are you sure?'}, class: 'delete_link', :remote => true do %>
+                                         <%= link_to '/form/'+submission.unique_id, method: :delete, data: {confirm: 'Are you sure?'}, class: 'delete_link', :remote => false do %>
                                                             <i class="fa fa-times-circle faa-vertical animated-hover" aria-hidden="true"></i> 
                                         <% end %>
                                   <% end %>
