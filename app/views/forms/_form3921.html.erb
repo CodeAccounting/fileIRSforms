@@ -41,8 +41,8 @@ In 'City or town, state or province ...' field you should enter eployee's city t
 media/3921.png" />
                               <!-- fields -->
                                     <textarea required="true" class="abs" style="top: 13%;left: 1.5%;width: 44%;height: 21%;position: absolute;" name="transferors_name_address"><%= @form_fields['transferors_name_address']%></textarea>                                    
-                                    <input required="true" class="abs" style="top: 39%;left: 1.5%;width: 21.5%;height: 5.5%;" name="transferors_fin" value="<%= @form_fields['transferors_fin']%>" type="text">
-                                    <input required="true" class="abs" style="top: 39%;left: 24%;width: 22%;height: 5.5%;" name="employees_id" value="<%= @form_fields['employees_id']%>" type="text">
+                                    <input required="true" class="abs" style="top: 39%;left: 1.5%;width: 21.5%;height: 5.5%;" name="transferors_fin" value="<%= @form_fields['transferors_fin']%>" type="text" data-toggle="tooltip" title="Enter the valid nine-digit taxpayer identification number assigned to the transferor. Do not enter blanks, hyphens, or alpha characters. Filling the field with all zeros, ones, twos, etc., will result in an incorrect data" pattern="\d{9}">
+                                    <input required="true" class="abs" style="top: 39%;left: 24%;width: 22%;height: 5.5%;" name="employees_id" value="<%= @form_fields['employees_id']%>" type="text" data-toggle="tooltip" title="Enter the valid nine-digit taxpayer identification number assigned to the employee. Do not enter blanks, hyphens, or alpha characters. Filling the field with all zeros, ones, twos, etc., will result in an incorrect data" pattern="\d{9}">
                                     <input required="true" class="abs" style="top: 49%;left: 1.5%;width: 44.5%;height: 10%;" name="employees_name" value="<%= @form_fields['employees_name']%>" type="text">
                                     <input required="true" class="abs" name="street_address" value="<%= @form_fields['street_address']%>" style="top: 64%;left: 1.5%;width: 44.5%;height: 5%;" type="text">
                                     <input required="true" class="abs" name="city_town_state" value="<%= @form_fields['city_town_state']%>" style="top: 74.2%;left: 1.5%;width: 44.5%;height: 5%;" type="text">
@@ -51,8 +51,8 @@ media/3921.png" />
                                    <!-- top: 10%;left: 47.5%;width: 17%;height: 9.3% -->
     <input required="true" type="text" readonly class="datepicker abs" name="2" value="<%= @form_fields['2']%>" style="top: 25%;left: 47.5%;width: 17%;height: 9.3%;">
                                    
-                                    <input required="true" class="abs" name="3" value="<%= @form_fields['3']%>" style="top: 40%;left: 48%;width: 16.5%;height: 9.3%;" type="text">
-                                    <input required="true" class="abs" name="4" value="<%= @form_fields['4']%>" style="top: 42%;left: 67%;width: 16.5%;height: 7.3%;" type="text">
+                                    <input required="true" class="abs" name="3" value="<%= @form_fields['3']%>" style="top: 40%;left: 48%;width: 16.5%;height: 9.3%;" type="number">
+                                    <input required="true" class="abs" name="4" value="<%= @form_fields['4']%>" style="top: 42%;left: 67%;width: 16.5%;height: 7.3%;" type="number">
                                     <input required="true" class="abs" name="5" value="<%= @form_fields['5']%>" style="top: 54%;left: 47%;width: 17.5%;height: 5.3%;" type="text">
                                     <input required="true" class="abs" name="6" value="<%= @form_fields['6']%>" style="top: 68%;left: 47%;width: 36.5%;height: 21.3%;" type="text">
                                     <button class="btn btn-primary fixed-button" type="submit">Save Form</button>

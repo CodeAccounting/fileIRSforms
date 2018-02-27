@@ -80,6 +80,8 @@ class AdminController < ApplicationController
         data = helpers.exportForm1099int(@form_fields)
       when "1099K"
         data = helpers.exportForm1099k(@form_fields)
+      when "1099MISC"
+        data = helpers.exportForm1099misc(@form_fields)
       when "1099S"
         data = helpers.exportForm1099s(@form_fields)
       else

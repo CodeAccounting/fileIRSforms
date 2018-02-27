@@ -1,6 +1,14 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.9/validator.min.js"></script>
 <div class="row">
                           <div class="rel col-lg-12">
-                             
+                             <div>
+                                Important Notes:
+<br/><br/>
+Please enter a data for the first left field  in three lines. A first line should contain your name, second line the address , third line should contain City , State code and ZIP in that order.<br/>
+Identification numbers (Federal ID) should contain only numbers.<br/>
+'Gross proceeds' should contain only amount without USD or $ sign.<br/>
+In 'City or town, state or province ...' field you should enter recipient's city then state code then zip code in that order.<br/>
+                              </div>
                              <form id="form1" action="/form/save">
                         <!-- Label part -->
                             <div id="label-container">
@@ -42,32 +50,32 @@
                       <input name="2nd_tin_not" value="unchecked" type="hidden">
                       <input class="abs" style="top:76.4%;left:42%;" name="2nd_tin_not" <%= @form_fields['2nd_tin_not']%> value="checked" type="checkbox">
 
-                                    <input required="true" class="abs" style="top: 7%;left: 49%;width: 15%;height: 7%;" name="1" value="<%= @form_fields['1']%>" type="text">
-                                    <input required="true" class="abs" name="2" value="<%= @form_fields['2']%>" style="top: 17%;left: 49%;width: 15%;height: 7%;" type="text">
-                                    <input required="true" class="abs" name="3" value="<%= @form_fields['3']%>" style="top: 26.5%;left: 49%;width: 15%;height: 4%;" type="text">
-                                    <input required="true" class="abs" name="4" value="<%= @form_fields['4']%>" style="top: 27%;left: 67%;width: 16%;height: 3.5%;" type="text">
-                                    <input required="true" class="abs" style="top: 34%;left: 49%;width: 15%;height: 9%;" name="5" value="<%= @form_fields['5']%>" type="text">
-                                    <input required="true" class="abs" name="6" value="<%= @form_fields['6']%>" style="top: 34%;left: 67%;width: 16%;height: 9%;" type="text">
-                                    <input required="true" class="abs" style="top: 47%;left: 49%;width: 15%;height: 9%;" name="7" value="<%= @form_fields['7']%>" type="text">
-                                    <input required="true" class="abs" name="8" value="<%= @form_fields['8']%>" style="top: 49%;left: 67%;width: 16%;height: 7%;" type="text">
+                                    <input required="true" class="abs" style="top: 7%;left: 49%;width: 15%;height: 7%;" name="1" value="<%= @form_fields['1']%>" type="number">
+                                    <input required="true" class="abs" name="2" value="<%= @form_fields['2']%>" style="top: 17%;left: 49%;width: 15%;height: 7%;" type="number">
+                                    <input required="true" class="abs" name="3" value="<%= @form_fields['3']%>" style="top: 26.5%;left: 49%;width: 15%;height: 4%;" type="number">
+                                    <input required="true" class="abs" name="4" value="<%= @form_fields['4']%>" style="top: 27%;left: 67%;width: 16%;height: 3.5%;" type="number">
+                                    <input required="true" class="abs" style="top: 34%;left: 49%;width: 15%;height: 9%;" name="5" value="<%= @form_fields['5']%>" type="number">
+                                    <input required="true" class="abs" name="6" value="<%= @form_fields['6']%>" style="top: 34%;left: 67%;width: 16%;height: 9%;" type="number">
+                                    <input required="true" class="abs" style="top: 47%;left: 49%;width: 15%;height: 9%;" name="7" value="<%= @form_fields['7']%>" type="number">
+                                    <input required="true" class="abs" name="8" value="<%= @form_fields['8']%>" style="top: 49%;left: 67%;width: 16%;height: 7%;" type="number">
 
                       <input name="9" value="unchecked" type="hidden">
                       <input class="abs" style="top:63%;left:62.8%;" name="9" <%= @form_fields['9']%> value="checked" type="checkbox">
 
-                                    <input required="true" class="abs" name="10" value="<%= @form_fields['10']%>" style="top: 59%;left: 67%;width: 15%;height: 7%;" type="text">
+                                    <input required="true" class="abs" name="10" value="<%= @form_fields['10']%>" style="top: 59%;left: 67%;width: 15%;height: 7%;" type="number">
                                     <input required="true" class="abs" name="11" value="<%= @form_fields['11']%>" style="top: 67%;left: 48.5%;width: 15%;height: 6%;" type="text">
                                     <input required="true" class="abs" name="12" value="<%= @form_fields['12']%>" style="top: 67%;left: 67%;width: 15%;height: 6%;" type="text">
 
 
-                                    <input required="true" class="abs" name="13" value="<%= @form_fields['13']%>" style="top: 78%;left: 48.5%;width: 15.5%;height: 4.5%;" type="text">
-                                    <input required="true" class="abs" name="14" value="<%= @form_fields['14']%>" style="top: 78%;left: 67.5%;width: 15.5%;height: 4.5%;" type="text">
-                                    <input required="true" class="abs" name="15a" value="<%= @form_fields['15a']%>" style="top: 85.5%;left: 3.5%;width: 19.5%;height: 6.5%;" type="text">
-                                    <input required="true" class="abs" name="15b" value="<%= @form_fields['15b']%>" style="top: 85.5%;left: 26%;width: 19.5%;height: 6.5%;" type="text">
-                                    <input required="true" class="abs" style="top: 85.5%;left: 48.5%;width: 16%;" name="16" value="<%= @form_fields['16']%>" type="text">
-                                    <input required="true" class="abs" name="16_2" value="<%= @form_fields['16_2']%>" style="top: 89.4%;left: 48.5%;width: 16%;height: 3%;" type="text">
-                                    <input required="true" class="abs" name="17" value="<%= @form_fields['17']%>" style="top: 85.5%;left: 65.5%;width: 17.5%;" type="text">
-                                    <input required="true" class="abs" name="18" value="<%= @form_fields['18']%>" style="top: 85.5%;left: 85.5%;width: 13.5%;height: 3.5%;" type="text"> 
-                                    <input required="true" class="abs" name="18_2" value="" style="top: 90%;left: 85.5%;width: 13.5%;height: 2.5%;" type="text">
+                                    <input required="true" class="abs" name="13" value="<%= @form_fields['13']%>" style="top: 78%;left: 48.5%;width: 15.5%;height: 4.5%;" type="number">
+                                    <input required="true" class="abs" name="14" value="<%= @form_fields['14']%>" style="top: 78%;left: 67.5%;width: 15.5%;height: 4.5%;" type="number">
+                                    <input required="true" class="abs" name="15a" value="<%= @form_fields['15a']%>" style="top: 85.5%;left: 3.5%;width: 19.5%;height: 6.5%;" type="number">
+                                    <input required="true" class="abs" name="15b" value="<%= @form_fields['15b']%>" style="top: 85.5%;left: 26%;width: 19.5%;height: 6.5%;" type="number">
+                                    <input required="false" class="abs" style="top: 85.5%;left: 48.5%;width: 16%;" name="16" value="<%= @form_fields['16']%>" type="text">
+                                    <input required="false" class="abs" name="16_2" value="<%= @form_fields['16_2']%>" style="top: 89.4%;left: 48.5%;width: 16%;height: 3%;" type="number">
+                                    <input required="false" class="abs" name="17" value="<%= @form_fields['17']%>" style="top: 85.5%;left: 65.5%;width: 17.5%;" type="number">
+                                    <input required="false" class="abs" name="18" value="<%= @form_fields['18']%>" style="top: 85.5%;left: 85.5%;width: 13.5%;height: 3.5%;" type="number"> 
+                                    <input required="false" class="abs" name="18_2" value="" style="top: 90%;left: 85.5%;width: 13.5%;height: 2.5%;" type="number">
                                     <button class="btn btn-primary fixed-button" type="submit">Save Form</button>
 
 
@@ -84,3 +92,8 @@
                           
                   </div>
                   <!-- /.row -->
+<script>
+jQuery('.datepicker').datepicker({
+    dateFormat: "yymmdd"
+  });
+</script>

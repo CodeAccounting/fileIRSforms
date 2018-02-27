@@ -39,15 +39,18 @@ In 'City or town, state or province ...' field you should enter transferor's cit
                                    <img width="100%" src="/media/1099s.png" />
                                     
                                     <!-- fields -->
-                                    <textarea required="true" class="abs" style="top: 13%;left: 1%;width: 45%;height: 21%;" name="filers_name_address"><%= @form_fields['filers_name_address']%></textarea>
-                                    <input required="true" class="abs" name="filers_fid" value="<%= @form_fields['filers_fid']%>" style="top: 39%;left: 1%;width: 22%;height: 5%;" type="text">
-                                    <input required="true" class="abs" name="transferors_id" value="<%= @form_fields['transferors_id']%>" style="top: 39%;left: 24%;width: 22%;height: 5%;" type="text">
+                                    <textarea required="true" class="abs" style="top: 13%;left: 1%;width: 45%;height: 21%;" name="filers_name_address" ><%= @form_fields['filers_name_address']%></textarea>
+                                          <div class="help-block with-errors"></div>
+
+                                    <input required="true" class="abs" name="filers_fid" value="<%= @form_fields['filers_fid']%>" style="top: 39%;left: 1%;width: 22%;height: 5%;" type="text" data-toggle="tooltip" title="Enter the valid nine-digit taxpayer identification number assigned to the filer. Do not enter blanks, hyphens, or alpha characters. Filling the field with all zeros, ones, twos, etc., will result in an incorrect data" pattern="\d{9}">
+                                    <input required="true" class="abs" name="transferors_id" value="<%= @form_fields['transferors_id']%>" style="top: 39%;left: 24%;width: 22%;height: 5%;" type="text" data-toggle="tooltip" title="Enter the valid nine-digit taxpayer identification number assigned to the transferor. Do not enter blanks, hyphens, or alpha characters. Filling the field with all zeros, ones, twos, etc., will result in an incorrect data" pattern="\d{9}">
                                     <input required="true" class="abs" name="transferors_name" value="<%= @form_fields['transferors_name']%>" style="top: 49%;left: 1%;width: 45%;height: 10%;" type="text">
-                                    <input required="true" class="abs" name="street_address" value="<%= @form_fields['street_address']%>" style="top: 64%;left: 1%;width: 45%;height: 5%;" type="text">
+                                    <input required="true" class="abs" name="street_address" value="<%= @form_fields['street_address']%>" style="top: 64%;left: 1%;width: 45%;height: 5%;" type="text" 
+                                    data-toggle="tooltip" title="Maximum numbers of characters is 40" pattern="{1,4}">
                                     <input required="true" class="abs" name="city_town_state" value="<%= @form_fields['city_town_state']%>" style="top: 74%;left: 1%;width: 45%;height: 5%;" type="text">
                                     <input required="true" class="abs" name="account_number" value="<%= @form_fields['account_number']%>" style="top: 84%;left: 1%;width: 45%;height: 5%;" type="text">
   <input type="text" required="true" readonly class="datepicker abs" name="1" value="<%= @form_fields['1']%>" style="top: 9%;left: 47%;width: 18%;height: 10%;">
-                                    <input required="true" class="abs" name="2" value="<%= @form_fields['2']%>" style="top: 24%;left: 48.5%;width: 16.5%;height: 10%;" type="text">
+                                    <input required="true" class="abs" name="2" value="<%= @form_fields['2']%>" style="top: 24%;left: 48.5%;width: 16.5%;height: 10%;" type="number">
                                     <input required="true" class="abs" name="3" value="<%= @form_fields['3']%>" style="top: 39%;left: 47%;width: 37%;height: 15%;" type="text">
                                    
                         <input name="4" value="unchecked" type="hidden">
@@ -57,7 +60,7 @@ In 'City or town, state or province ...' field you should enter transferor's cit
                         <input name="5" value="unchecked" type="hidden">
                         <input class="abs" style="top:70%;left:82.1%;" name="5" <%= @form_fields['5']%> value="checked" type="checkbox">
 
-                                    <input required="true" class="abs" name="6" value="<%= @form_fields['6']%>" style="top: 83.5%;left: 48.5%;width: 35.5%;height: 5%;" type="text">
+                                    <input required="true" class="abs" name="6" value="<%= @form_fields['6']%>" style="top: 83.5%;left: 48.5%;width: 35.5%;height: 5%;" type="number">
                                   <!-- fields -->
                                     
                                     <input type="hidden" name="unique_id" value="<%= @form_fields['unique_id'] %>">
@@ -75,4 +78,15 @@ In 'City or town, state or province ...' field you should enter transferor's cit
 jQuery('.datepicker').datepicker({
     dateFormat: "yymmdd"
   });
+jQuery('form[data-toggle="validator"]').validator({
+  custom: {
+    pattern: function ($el) {
+      var pattern = new RegExp($el.data('pattern'))
+      return pattern.test($el.val())
+    }
+  },
+  errors: {
+    pattern: "Did not match the correct pattern"
+  }
+})
 </script>
