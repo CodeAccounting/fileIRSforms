@@ -154,7 +154,7 @@ module AdminHelper
             else 
                 returned_data += "    "
             end
-            returned_data += "2" #Type of TIN 2 is for an individual 
+            returned_data += " " #Type of TIN 2 is for an individual 
             if (form_fields['employees_id'])
                 data_tin = form_fields['employees_id'].delete("^a-zA-Z0-9") 
             else 
@@ -481,7 +481,7 @@ module AdminHelper
         else 
             returned_data += "    "
         end
-        returned_data += "2" #Type of TIN 2 is for an individual 
+        returned_data += " " #Type of TIN 2 is for an individual 
         if (form_fields['borrowers_id'])
             data_tin = form_fields['borrowers_id'].delete("^a-zA-Z0-9") 
         else 
@@ -807,7 +807,7 @@ module AdminHelper
         else 
             returned_data += "    "
         end
-        returned_data += "2" #Type of TIN 2 is for an individual 
+        returned_data += " " #Type of TIN 2 is for an individual 
         if (form_fields['recipients_id'])
             data_tin = form_fields['recipients_id'].delete("^a-zA-Z0-9") 
         else 
@@ -1325,7 +1325,7 @@ module AdminHelper
         else 
             returned_data += "    "
         end
-        returned_data += "2" #Type of TIN 2 is for an individual 
+        returned_data += " " #Type of TIN 2 is for an individual 
         if (form_fields['debtors_id'])
             data_tin = form_fields['debtors_id'].delete("^a-zA-Z0-9") 
         else 
@@ -1669,7 +1669,7 @@ module AdminHelper
         else 
             returned_data += "    "
         end
-        returned_data += "2" #Type of TIN 2 is for an individual 
+        returned_data += " " #Type of TIN 2 is for an individual 
         if (form_fields['shareholders_id'])
             data_tin = form_fields['shareholders_id'].delete("^a-zA-Z0-9") 
         else 
@@ -1977,7 +1977,7 @@ def exportForm1099div(form_fields)
         else 
             returned_data += "    "
         end
-        returned_data += "2" #Type of TIN 2 is for an individual 
+        returned_data += " " #Type of TIN 2 is for an individual 
         if (form_fields['recipients_id'])
             data_tin = form_fields['recipients_id'].delete("^a-zA-Z0-9") 
         else 
@@ -2467,7 +2467,7 @@ def exportForm1099g(form_fields)
         else 
             returned_data += "    "
         end
-        returned_data += "2" #Type of TIN 2 is for an individual 
+        returned_data += " " #Type of TIN 2 is for an individual 
         if (form_fields['recipients_id'])
             data_tin = form_fields['recipients_id'].delete("^a-zA-Z0-9") 
         else 
@@ -2873,7 +2873,7 @@ def exportForm1099h(form_fields)
         else 
             returned_data += "    "
         end
-        returned_data += "2" #Type of TIN 2 is for an individual 
+        returned_data += " " #Type of TIN 2 is for an individual 
         if (form_fields['recipients_id'])
             data_tin = form_fields['recipients_id'].delete("^a-zA-Z0-9") 
         else 
@@ -3330,7 +3330,7 @@ def exportForm1099int(form_fields)
         else 
             returned_data += "    "
         end
-        returned_data += "2" #Type of TIN 2 is for an individual 
+        returned_data += " " #Type of TIN 2 is for an individual 
         if (form_fields['recipients_id'])
             data_tin = form_fields['recipients_id'].delete("^a-zA-Z0-9") 
         else 
@@ -3495,7 +3495,7 @@ end
 returned_data += ' ' #1 FATCA Filing Requirement Indicator 'fatca_filing_req' one or blank
 returned_data += " "*62 #62 Blank
 returned_data += " "*60 #60 Special Data Entries
-returned_data +=  ("0"*(12-(form_fields['17'].to_s[0...12].length)))+form_fields['17'].to_s[0...12] #12 State Income Tax Withheld '17' 
+returned_data += " "*12 #12 State Income Tax Withheld '17' 
 returned_data += " "*12 #12 Local Income Tax Withheld
 returned_data += " "*2 #2 Combined Federal/State Code
 returned_data += "\r\n"
@@ -3791,7 +3791,7 @@ returned_data += "\r\n"
         else 
             returned_data += "    "
         end
-        returned_data += "2" #Type of TIN 2 is for an individual 
+        returned_data += " " #Type of TIN 2 is for an individual 
         if (form_fields['payees_taxpayer'])
             data_tin = form_fields['payees_taxpayer'].delete("^a-zA-Z0-9") 
         else 
@@ -4208,7 +4208,7 @@ returned_data += "\r\n"
         else 
             returned_data += "    "
         end
-        returned_data += "2" #Type of TIN 2 is for an individual 
+        returned_data += " " #Type of TIN 2 is for an individual 
         if (form_fields['recipients_id'])
             data_tin = form_fields['recipients_id'].delete("^a-zA-Z0-9") 
         else 
@@ -4372,7 +4372,7 @@ returned_data += "\r\n"
 
         returned_data += "00000003" #8 Record Sequence Number
         returned_data += " "*36 #36 blanks
-#these records are specifed for form XXXX 
+#these records are specifed for form 1099misc 
         #1 Second TIN Notice (Optional) 2 or blank field 2nd_tin_not
         if (form_fields['2nd_tin_not']=='checked') 
             returned_data +='2'
@@ -4678,7 +4678,7 @@ returned_data += "\r\n"
         else 
             returned_data += "    "
         end
-        returned_data += "2" #Type of TIN 2 is for an individual 
+        returned_data += " " #Type of TIN 2 is for an individual 
         if (form_fields['debtors_id_XXXXX'])
             data_tin = form_fields['debtors_id_XXXX'].delete("^a-zA-Z0-9") 
         else 
@@ -4977,7 +4977,7 @@ returned_data += "\r\n"
         else 
             returned_data += "    "
         end
-        returned_data += "2" #Type of TIN 2 is for an individual 
+        returned_data += " " #Type of TIN 2 is for an individual 
         if (form_fields['transferors_id'])
             data_tin = form_fields['transferors_id'].delete("^a-zA-Z0-9") 
         else 
