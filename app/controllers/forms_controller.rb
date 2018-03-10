@@ -172,11 +172,11 @@ class FormsController < ApplicationController
         if value.kind_of?(Array)
           value = value[0]
         end 
-        found = Field.where(unique_id: params[:unique_id], field_name: key.to_s )
-        if found.blank?
+        @found = Field.where(unique_id: params[:unique_id], field_name: key.to_s )
+        if @found.blank?
           @field = Field.new()
         else
-          @field = found.first
+          @field = @found.first
         end
         @field.field_name = key.to_s
         @field.field_value = value.to_s
@@ -188,9 +188,12 @@ class FormsController < ApplicationController
         else 
           @field.label = params[:label]
         end
-        @field.labelcolor = params[:label_color]
+        @field.labelcolor = params[:label_color]  
         @field.save
       end
+    end
+    if @found.blank?
+      NotificationMailer.saved_email(current_user.email).deliver_now
     end
     @form = Field.where(unique_id: '9fc89d9e-5bcd-4c66-9e60-3ffb93503a88').to_a
     @form_fields = Hash.new
@@ -263,6 +266,7 @@ class FormsController < ApplicationController
     @payment.unique_id = params[:unique_id]
     @payment.status = charge.status
     @payment.save
+    NotificationMailer.paid_email(current_user.email).deliver_now
     #render text: @payment.inspect
    # logger.debug @payment.errors.full_messages
     #end saving in the database
